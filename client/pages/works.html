@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NecroPunk - Работы</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Roboto+Slab:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        /* Общие стили для консистентности */
+        body {
+            background-color: #1a1a1a;
+            color: #c7c7c7;
+            font-family: 'Roboto Slab', serif;
+            overflow-x: hidden;
+        }
+        .font-title {
+            font-family: 'Playfair Display', serif;
+        }
+        .card {
+            background-color: rgba(40, 40, 40, 0.8);
+            border: 1px solid #333;
+            backdrop-filter: blur(5px);
+            display: flex;
+            flex-direction: column;
+        }
+        .card-content {
+            flex-grow: 1;
+        }
+        .btn-secondary {
+            background-color: transparent;
+            color: #c7c7c7;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            border: 2px solid #555;
+        }
+        .btn-secondary:hover {
+            background-color: #8a6e2f;
+            color: #1a1a1a;
+            border-color: #8a6e2f;
+        }
+        .text-gold {
+            color: #8a6e2f;
+        }
+        .divider {
+            height: 1px;
+            background: linear-gradient(to right, transparent, #444, transparent);
+            margin: 2rem 0;
+        }
+        .page-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-image: url('https://images.unsplash.com/photo-1510024430419-f906f89e5fb8?q=80&w=1933&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
+            filter: grayscale(100%) brightness(0.2);
+            z-index: -1;
+        }
+    </style>
+</head>
+<body class="antialiased">
+<div class="page-background"></div>
+
+<!-- Навигация и заголовок страницы -->
+<header class="container mx-auto px-4 py-8">
+    <div class="flex justify-between items-center">
+        <h1 class="font-title text-4xl md:text-5xl text-white">Работы</h1>
+        <a href="index.html" class="btn-secondary py-2 px-6 rounded-sm text-lg uppercase tracking-widest">
+            Назад
+        </a>
+    </div>
+</header>
+
+<!-- Основной контент страницы -->
+<main class="container mx-auto px-4 py-8">
+
+    <div class="card p-6 md:p-8 rounded-sm mb-8">
+        <p class="text-lg text-center leading-relaxed">
+            Персонажи игроков до начала эпидемии могли быть кем угодно.
+            Но как только улицы поглотил туман, выбор работы стал вопросом выбора между жизнью и медленной смертью.
+            Каждая работа даёт бонус к Умениям, стартовые Лицензии, Доход и уникальную механику.
+        </p>
+    </div>
+
+    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+
+        <!-- Оперативник ГОМОНа -->
+        <div class="card p-6 rounded-sm">
+            <div class="card-content">
+                <h2 class="font-title text-2xl mb-3 border-b-2 border-[#444] pb-2 text-white">Оперативник ГОМОНа</h2>
+                <p class="mb-4">
+                    Первая и зачастую последняя линия обороны шаткого порядка.
+                    Вы — глаза, уши и карающий меч власти на улицах. Ваша задача — выявлять, контролировать,
+                    а при необходимости безжалостно «упокаивать» заражённых и живчиков.
+                </p>
+            </div>
+            <p class="mt-4 pt-4 border-t border-[#333]">
+                <strong class="text-gold">Умения:</strong> Меткость +5, Сила +5, Выдержка +5.
+                <strong class="text-gold">Уникальная механика:</strong> Журнал рапортов. Отчитывайтесь об итогах задания.
+            </p>
+        </div>
+
+        <!-- Санкционированный -->
+        <div class="card p-6 rounded-sm">
+            <div class="card-content">
+                <h2 class="font-title text-2xl mb-3 border-b-2 border-[#444] pb-2 text-white">Санкционированный</h2>
+                <p class="mb-4">
+                    Вы — заражённый, заключивший сделку с ГОМОНом. Для своих бывших собратьев вы — предатель,
+                    для коллег-живчиков — ходячая угроза. Вы служите системе, которая вас презирает, чтобы выжить в
+                    городе, не оставившего другого выбора.
+                </p>
+            </div>
+            <p class="mt-4 pt-4 border-t border-[#333]">
+                <strong class="text-gold">Умения:</strong> утроенное Умение Вида, Анализ +5.
+                <strong class="text-gold">Уникальная механика:</strong> Порог упокоения. Отсчитывайте минуты до своей смерти.
+            </p>
+        </div>
+
+        <!-- Воскреситель -->
+        <div class="card p-6 rounded-sm">
+            <div class="card-content">
+                <h2 class="font-title text-2xl mb-3 border-b-2 border-[#444] pb-2 text-white">Воскреситель</h2>
+                <p class="mb-4">
+                    Там, где смерть и распад поджидают за каждым углом, вы творите то, что граничит с чудом.
+                    Вы — хирург, терапевт и полевой медик в одном лице, латающий раны в любых условиях, рискуя собственной жизнью и рассудком.
+                </p>
+            </div>
+            <p class="mt-4 pt-4 border-t border-[#333]">
+                <strong class="text-gold">Умения:</strong> Анализ +5, Выносливость +5, Выдержка +5.
+                <strong class="text-gold">Уникальная механика:</strong> Операционное вмешательство. Исцеляйте смертельно больных.
+            </p>
+        </div>
+
+        <!-- Торговец плотью -->
+        <div class="card p-6 rounded-sm">
+            <div class="card-content">
+                <h2 class="font-title text-2xl mb-3 border-b-2 border-[#444] pb-2 text-white">Торговец плотью</h2>
+                <p class="mb-4">
+                    Вы — падальщик и делец, чья валюта — свежие человеческие останки. Вы презираемое, но
+                    необходимое зло в экосистеме выживания заражённых, единственный барьер между ними и безумным голодом.
+                </p>
+            </div>
+            <p class="mt-4 pt-4 border-t border-[#333]">
+                <strong class="text-gold">Умения:</strong> Сила +5, Хитрость +5, Выносливость +5.
+                <strong class="text-gold">Уникальная механика:</strong> Мясной счёт. Зарабатывайте на новой валюте города — трупах.
+            </p>
+        </div>
+
+        <!-- Подрядчик -->
+        <div class="card p-6 rounded-sm">
+            <div class="card-content">
+                <h2 class="font-title text-2xl mb-3 border-b-2 border-[#444] pb-2 text-white">Подрядчик</h2>
+                <p class="mb-4">
+                    Вы — вольный стрелок, тень, скользящая между фракциями. Наёмник, детектив и решатель проблем в
+                    одном лице, работающий вне закона. У вас могут быть свои принципы, но вы не задаёте лишних вопросов, пока шелестят торы.
+                </p>
+            </div>
+            <p class="mt-4 pt-4 border-t border-[#333]">
+                <strong class="text-gold">Умения:</strong> Меткость +5, Сила +5, Хитрость +5.
+                <strong class="text-gold">Уникальная механика:</strong> Контакты и Грехи. Используйте связи, чтобы за вами не пришли.
+            </p>
+        </div>
+
+        <!-- Учёный ГИИБ -->
+        <div class="card p-6 rounded-sm">
+            <div class="card-content">
+                <h2 class="font-title text-2xl mb-3 border-b-2 border-[#444] pb-2 text-white">Учёный ГИИБ</h2>
+                <p class="mb-4">
+                    Вы — луч надежды и маяк разума в океане распада. Интеллектуальная элита, пытающаяся понять природу
+                    заразы. Но наука не всегда гуманна, и ваши эксперименты могут оказаться опаснее самой болезни.
+                </p>
+            </div>
+            <p class="mt-4 pt-4 border-t border-[#333]">
+                <strong class="text-gold">Умения:</strong> Анализ +5, Хитрость +5, Выдержка +5.
+                <strong class="text-gold">Уникальная механика:</strong> Научный метод. Создавайте ранее невиданное и непредсказуемое.
+            </p>
+        </div>
+
+        <!-- Секция: Повышение и Разжалование -->
+
+    </div>
+
+</main>
+
+<!-- Подвал -->
+<footer class="bg-black bg-opacity-50 py-6 text-center text-gray-500 relative mt-16">
+    <p>~~92 год. 21 марта. Райков-центр</p>
+    <p class="text-sm mt-1">"Катя водит и пьёт"</p>
+</footer>
+</body>
+</html>

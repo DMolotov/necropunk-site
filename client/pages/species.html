@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NecroPunk - Виды и Заражения</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Roboto+Slab:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body { background-color: #1a1a1a; color: #c7c7c7; font-family: 'Roboto Slab', serif; overflow-x: hidden; }
+        .font-title { font-family: 'Playfair Display', serif; }
+        .card { background-color: rgba(40, 40, 40, 0.8); border: 1px solid #333; backdrop-filter: blur(5px); display: flex; flex-direction: column; }
+        .card-content { flex-grow: 1; }
+        .btn-secondary { background-color: transparent; color: #c7c7c7; font-weight: bold; transition: all 0.3s ease; border: 2px solid #555; }
+        .btn-secondary:hover { background-color: #8a6e2f; color: #1a1a1a; border-color: #8a6e2f; }
+        .text-gold { color: #8a6e2f; }
+        .page-background { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background-image: url('https://images.unsplash.com/photo-1510024430419-f906f89e5fb8?q=80&w=1933&auto=format&fit=crop'); background-size: cover; background-position: center; filter: grayscale(100%) brightness(0.2); z-index: -1; }
+    </style>
+</head>
+<body class="antialiased">
+<div class="page-background"></div>
+<header class="container mx-auto px-4 py-8">
+    <div class="flex justify-between items-center">
+        <h1 class="font-title text-4xl md:text-5xl text-white">Виды заражения</h1>
+        <a href="index.html" class="btn-secondary py-2 px-6 rounded-sm text-lg uppercase tracking-widest">Назад</a>
+    </div>
+</header>
+<main class="container mx-auto px-4 py-8">
+    <div class="card p-6 md:p-8 rounded-sm mb-8">
+        <p class="text-lg text-center leading-relaxed">Вам предстоит ответить на главный вопрос, определяющий всю вашу дальнейшую жизнь: задела ли вас болезнь? Это определение вашей сущности, ваших страхов, ваших потребностей и вашего места в пищевой цепи города. От вашего ответа зависит ваш Вид — фундаментальная черта персонажа.</p>
+    </div>
+    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div class="card p-6 rounded-sm">
+            <div class="card-content">
+                <h2 class="font-title text-2xl mb-3 border-b-2 border-[#444] pb-2 text-white">Живчик</h2>
+                <p class="mb-4">Вы (пока) не заражены. Вы — «нормальный» в мире, где норма постепенно исчезает. Каждый день вы живёте со страхом: не стал ли вчерашний кашель первым симптомом? Не притаилась ли зараза в густом тумане?</p>
+            </div>
+            <p class="mt-4 pt-4 border-t border-[#333]"><strong class="text-gold">Недостаток:</strong> Посредственность. Вы хороши во всём, но не идеальны ни в чём. Порог развития ваших Умений ограничен 70.</p>
+        </div>
+        <div class="card p-6 rounded-sm">
+            <div class="card-content">
+                <h2 class="font-title text-2xl mb-3 border-b-2 border-[#444] pb-2 text-white">Мертвяк</h2>
+                <p class="mb-4">Самый частый исход заражения. Ваше тело медленно гниёт, и остановить этот процесс может только незаражённая человеческая плоть. Несмотря на это, вы сохранили свой разум, память и личность, осознавая свою ужасную участь.</p>
+            </div>
+            <p class="mt-4 pt-4 border-t border-[#333]"><strong class="text-gold">Недостаток:</strong> Плоть от плоти. Ваш провиант должен состоять из мяса Живчиков, иначе вы начинаете нести Урон разложения.</p>
+        </div>
+        <div class="card p-6 rounded-sm">
+            <div class="card-content">
+                <h2 class="font-title text-2xl mb-3 border-b-2 border-[#444] pb-2 text-white">Упырь</h2>
+                <p class="mb-4">Ваше существование определяется неутолимой потребностью в человеческой крови. В отличие от Мертвяков, ваше тело меньше подвержено разложению, а разум сохраняет остроту, позволяя оставаться превосходным специалистом.</p>
+            </div>
+            <p class="mt-4 pt-4 border-t border-[#333]"><strong class="text-gold">Недостаток:</strong> Вечная жажда. Вкус человеческой крови пленил вас. Вы начинаете нести Урон деградации, если не употребляете кровь.</p>
+        </div>
+        <div class="card p-6 rounded-sm">
+            <div class="card-content">
+                <h2 class="font-title text-2xl mb-3 border-b-2 border-[#444] pb-2 text-white">Чучело</h2>
+                <p class="mb-4">Одна из самых редких и пугающих форм оспы. Вы обрели способность воздействовать на разум других, но платой за это стал патологический ужас перед собственным телом, которое вы вынуждены вечно скрывать под слоями одежды.</p>
+            </div>
+            <p class="mt-4 pt-4 border-t border-[#333]"><strong class="text-gold">Недостаток:</strong> Телесный стыд. Демонстрация тела вызывает у вас панический страх. Порог эффективности ваших физических Умений ограничен 50.</p>
+        </div>
+        <div class="card p-6 rounded-sm">
+            <div class="card-content">
+                <h2 class="font-title text-2xl mb-3 border-b-2 border-[#444] pb-2 text-white">Близнец</h2>
+                <p class="mb-4">Ваша природа двойственна. Днём вы можете ничем не отличаться от обычного Живчика. С наступлением ночи или в темноте ваша истинная, заражённая сущность проявляется, превращая вас в заражённого хищника.</p>
+            </div>
+            <p class="mt-4 pt-4 border-t border-[#333]"><strong class="text-gold">Недостаток:</strong> Ребро монеты. Ваша вторая половина мешает вам: днём ваши ментальные Умения уменьшаются на 20, ночью — физические.</p>
+        </div>
+        <div class="card p-6 rounded-sm">
+            <div class="card-content">
+                <h2 class="font-title text-2xl mb-3 border-b-2 border-[#444] pb-2 text-white">Голем</h2>
+                <p class="mb-4">Вы — не результат случайного заражения, а целенаправленное и жуткое творение ГИИБ. Вы — биомеханический конструкт, собранный из десятков тел. Вы невероятно сильны и стойки, но ваша жизнь и воля зависят от ваших создателей.</p>
+            </div>
+            <p class="mt-4 pt-4 border-t border-[#333]"><strong class="text-gold">Недостаток:</strong> Операционное отторжение. Ваше тело постоянно отторгает чужеродные органы, и вы еженедельно терпите Урон разложения.</p>
+        </div>
+    </div>
+</main>
+<footer class="bg-black bg-opacity-50 py-6 text-center text-gray-500 relative mt-16">
+    <p>~~92 год. 21 марта. Райков-центр</p>
+    <p class="text-sm mt-1">"Катя водит и пьёт"</p>
+</footer>
+</body>
+</html>

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NecroPunk — Протокол генерации</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Roboto+Slab:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    body { background-color: #1a1a1a; color: #c7c7c7; font-family: 'Roboto Slab', serif; }
+    .font-title { font-family: 'Playfair Display', serif; }
+    .card { background-color: rgba(40, 40, 40, 0.8); border: 1px solid #333; backdrop-filter: blur(5px); }
+    .text-gold { color: #8a6e2f; }
+    .fade-in { animation: fadeIn 0.8s ease-out; }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+  </style>
+</head>
+<body class="bg-[#1a1a1a]">
+<nav class="p-6 border-b border-[#333] bg-black bg-opacity-50">
+  <div class="max-w-6xl mx-auto flex justify-between items-center">
+    <a href="index.html" class="font-title text-2xl tracking-tighter">NECRO<span class="text-gold">PUNK</span></a>
+    <a href="create_char.html" class="text-sm uppercase tracking-widest hover:text-gold transition-colors">← К выбору метода</a>
+  </div>
+</nav>
+
+<main class="max-w-4xl mx-auto px-6 py-12 fade-in">
+  <header class="mb-8">
+    <h1 class="font-title text-4xl text-white">
+      Извлечение случайного профиля
+      Ручное заполнение досье
+    </h1>
+    <div class="h-1 w-20 bg-gold mt-4"></div>
+  </header>
+
+  <section class="card p-8 rounded-sm">
+    <p class="text-gray-400">Инициализация систем... Ожидание ввода данных.</p>
+  </section>
+</main>
+</body>
+</html>

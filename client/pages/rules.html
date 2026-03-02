@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NecroPunk — Правила</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Roboto+Slab:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        /* Общие стили, скопированные с главной страницы для консистентности */
+        body {
+            background-color: #1a1a1a;
+            color: #c7c7c7;
+            font-family: 'Roboto Slab', serif;
+            overflow-x: hidden;
+        }
+        .font-title {
+            font-family: 'Playfair Display', serif;
+        }
+        .card {
+            background-color: rgba(40, 40, 40, 0.8);
+            border: 1px solid #333;
+            backdrop-filter: blur(5px);
+        }
+        .btn-secondary {
+            background-color: transparent;
+            color: #c7c7c7;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            border: 2px solid #555;
+        }
+        .btn-secondary:hover {
+            background-color: #8a6e2f;
+            color: #1a1a1a;
+            border-color: #8a6e2f;
+        }
+        .text-gold {
+            color: #8a6e2f;
+        }
+        .divider {
+            height: 1px;
+            background: linear-gradient(to right, transparent, #444, transparent);
+            margin: 2rem 0;
+        }
+        /* Упрощенный фон для внутренних страниц */
+        .page-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-image: url('https://images.unsplash.com/photo-1510024430419-f906f89e5fb8?q=80&w=1933&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
+            filter: grayscale(100%) brightness(0.2);
+            z-index: -1;
+        }
+    /* Стили для костей */
+        .die {
+            width: 60px;
+            height: 60px;
+            background: radial-gradient(circle, #2a2a2a 0%, #1a1a1a 100%);
+            border: 2px solid #8a6e2f;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            color: #8a6e2f;
+            box-shadow: 0 0 15px rgba(0,0,0,0.5), inset 0 0 10px rgba(138, 110, 47, 0.2);
+            border-radius: 8px; /* Чуть скругленные углы для d10 стиля */
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            user-select: none;
+        }
+        .die:hover {
+            border-color: #c5a65e;
+            color: #c5a65e;
+        }
+    /* Класс для анимации вращения */
+        .rolling {
+            transform: rotate(360deg) scale(1.1);
+        }
+    </style>
+</head>
+<body class="antialiased">
+<div class="page-background"></div>
+
+<!-- Навигация и заголовок страницы -->
+<header class="container mx-auto px-4 py-8">
+    <div class="flex justify-between items-center">
+        <h1 class="font-title text-4xl md:text-5xl text-white">Основные Правила</h1>
+        <a href="index.html" class="btn-secondary py-2 px-6 rounded-sm text-lg uppercase tracking-widest">
+            Назад
+        </a>
+    </div>
+</header>
+
+<!-- Основной контент страницы -->
+<main class="container mx-auto px-4 py-8">
+
+    <!-- Секция: Основы игры -->
+    <section id="basics" class="card p-6 md:p-8 rounded-sm mb-8">
+        <div class="flex flex-col lg:flex-row gap-8 items-center lg:items-start">
+            <div class="flex-1">
+                <h2 class="font-title text-3xl mb-4 border-b-2 border-[#444] pb-2">Основы игры</h2>
+                <p class="mb-4">В NecroPunk персонажи регулярно совершают броски <strong class="text-[#8a6e2f]">1d100</strong>.
+                    Для успешной проверки, необходимо выбросить значение, которое будет меньше или равно значению
+                    вашего <strong class="text-[#8a6e2f]">Умения</strong>.</p>
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div>
+                        <h3 class="font-title text-xl text-gold mb-2">Модификатор Сложности (МС)</h3>
+                        <p>Это числовой показатель, усложняющий (+ к выпавшему результату) или упрощающий (-)
+                            вашу проверку.</p>
+                    </div>
+                    <div>
+                        <h3 class="font-title text-xl text-gold mb-2">Модификатор Умения (МУ)</h3>
+                        <p>Используется для расчёта некоторых игровых показателей. Это число десятков в Умении.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex gap-4 items-center bg-black/30 p-6 rounded-lg border border-[#444] self-center lg:self-start">
+                <div class="text-center">
+                    <div id="d100" class="die cursor-pointer" onclick="rollDice()">00</div>
+                    <p class="text-[10px] mt-2 uppercase tracking-widest text-gray-500">Десятки</p>
+                </div>
+                <div class="text-center">
+                    <div id="d10" class="die cursor-pointer" onclick="rollDice()">0</div>
+                    <p class="text-[10px] mt-2 uppercase tracking-widest text-gray-500">Единицы</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Секция: Умения -->
+    <section id="skills" class="card p-6 md:p-8 rounded-sm mb-8">
+        <h2 class="font-title text-3xl mb-4 border-b-2 border-[#444] pb-2">Умения</h2>
+        <div class="grid md:grid-cols-6 gap-6">
+            <div>
+                <h3 class="font-title text-xl text-gold mb-2">Сила</h3>
+                <p>Отвечает за нанесение ударов оружием ближнего боя, а также за подъём и перемещение тяжестей.</p>
+            </div>
+            <div>
+                <h3 class="font-title text-xl text-gold mb-2">Меткость</h3>
+                <p>Отвечает за стрельбу из дальнобойного оружия по движущимся мишеням и за метание предметов.</p>
+            </div>
+            <div>
+                <h3 class="font-title text-xl text-gold mb-2">Анализ</h3>
+                <p>Отвечает за умение понимать сложные термины, особенности заражённых и ориентироваться в пространстве.</p>
+            </div>
+            <div>
+                <h3 class="font-title text-xl text-gold mb-2">Хитрость</h3>
+                <p>Отвечает за умение манипулировать людьми, обманывать их и добиваться выгоды для себя.</p>
+            </div>
+            <div>
+                <h3 class="font-title text-xl text-gold mb-2">Выносливость</h3>
+                <p>Отвечает за ОЗ и умение переносить повреждения физического характера.</p>
+            </div>
+            <div>
+                <h3 class="font-title text-xl text-gold mb-2">Выдержка</h3>
+                <p>Отвечает за ОС и умение сопротивляться психологическим ужасам.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Секция: Пороги Умений -->
+    <section id="skills_cap" class="card p-6 md:p-8 rounded-sm mb-8">
+        <h2 class="font-title text-3xl mb-4 border-b-2 border-[#444] pb-2">Пороги Умений</h2>
+        <div class="grid md:grid-cols-2 gap-2">
+            <div>
+                <h3 class="font-title text-xl text-gold mb-2">Порог Развития</h3>
+                <p>Указывает на постоянное максимальное значение Умения. Обычно 70 или 95.</p>
+            </div>
+            <div>
+                <h3 class="font-title text-xl text-gold mb-2">Порог Эффективности</h3>
+                <p>Указывает на временное максимальное значение Умения. Зависит от Недостатков.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Секция: Разряд Сознания -->
+    <section id="consciousness-discharge" class="card p-6 md:p-8 rounded-sm mb-8">
+        <h2 class="font-title text-3xl mb-4 border-b-2 border-[#444] pb-2">Разряд Сознания</h2>
+        <p>Когда вы хотите получить преимущество, вы можете заявить об использовании «Разряда сознания».
+            Это позволяет вам совершить бросок монеты, заказав результат («орёл» или «решка»).
+            В случае успеха, проверка получает МС -20 и вы можете «флипнуть» результат своего броска d100,
+            то есть поменять местами значение десятков и единиц (например, <strong class="text-[#8a6e2f]">71</strong> становится <strong class="text-[#8a6e2f]">17</strong>).
+            Использовать «Разряд сознания» можно один раз за Контракт в социальной сцене и один раз — в боевой.</p>
+    </section>
+
+    <!-- Секция: Помощь -->
+
+    <!-- Секция: Характеристики -->
+    <section id="attributes" class="card p-6 md:p-8 rounded-sm mb-8">
+        <h2 class="font-title text-3xl mb-4 border-b-2 border-[#444] pb-2">Характеристики</h2>
+        <div class="grid md:grid-cols-3 gap-6">
+            <div>
+                <h3 class="font-title text-xl text-gold mb-2">Оценка Здоровья (ОЗ)</h3>
+                <p>Показывает, как много физического урона может перенести ваш персонаж. Полная трата ОЗ ведёт к смерти.</p>
+            </div>
+            <div>
+                <h3 class="font-title text-xl text-gold mb-2">Пункты Прочности (ПП)</h3>
+                <p>Аналог ОЗ для неодушевлённых объектов, укрытий, техники, а также для Големов. Полная трата ПП приводит к разрушению.</p>
+            </div>
+            <div>
+                <h3 class="font-title text-xl text-gold mb-2">Оценка Самочувствия (ОС)</h3>
+                <p>Показывает, как много ужасов, стресса и ментальных атак может вынести ваш персонаж. Полная трата ОС ведёт к безумию.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Секция: Боевые действия -->
+    <section id="combat" class="card p-6 md:p-8 rounded-sm mb-8">
+        <h2 class="font-title text-3xl mb-4 border-b-2 border-[#444] pb-2">Боевые действия</h2>
+        <p class="mb-4">Бой в городе N — быстр и смертелен. В начале своего хода вы получаете <strong class="text-[#8a6e2f]">3 Очка Действия (ОД)</strong>, которые можете потратить на любые активности.</p>
+        <ul class="list-disc list-inside space-y-2">
+            <li><strong class="text-gold">Атака (1 ОД):</strong> Проверка Меткости или Силы для нанесения урона.</li>
+            <li><strong class="text-gold">Уклонение (1 ОД):</strong> Увеличивает МС для атакующего вас противника на +10.</li>
+            <li><strong class="text-gold">Прицеливание (1 ОД):</strong> Уменьшает ваш МС для следующей атаки на -10.</li>
+            <li><strong class="text-gold">Передвижение (бесплатно):</strong> Вы можете переместиться на расстояние до 5 гексов (10 метров).</li>
+            <li><strong class="text-gold">Другие действия (1 ОД):</strong> Перезарядка, смена оружия, прыжок, обезоруживание.</li>
+        </ul>
+    </section>
+
+    <!-- Секция: Раны и Стресс -->
+    <section id="wounds-stress" class="card p-6 md:p-8 rounded-sm mb-8">
+        <h2 class="font-title text-3xl mb-4 border-b-2 border-[#444] pb-2">Раны и Стресс</h2>
+        <p class="mb-4">Получение урона оставляет отпечаток на вашем теле и разуме.
+            Когда ваши ОЗ или ОС опускаются ниже определённых порогов, вы получаете негативные эффекты.</p>
+        <div class="space-y-4">
+            <p><strong class="text-gold">Недомогание (менее 75% ОЗ/ОС):</strong> Вы получаете небольшие штрафы,
+                например, усложнение действия Уклонение или Прицеливание.</p>
+            <p><strong class="text-gold">Перегрузка (менее 50% ОЗ/ОС):</strong> Штрафы становятся серьёзнее,
+                например, снижение скорости передвижения или появление фобии.</p>
+            <p><strong class="text-gold">Организм отказывает (менее 25% ОЗ/ОС):</strong> Вы на грани смерти или безумия.
+                Любое действие требует огромных усилий, а некоторые становятся недоступны.</p>
+        </div>
+    </section>
+
+</main>
+
+<!-- Подвал -->
+<footer class="bg-black bg-opacity-50 py-6 text-center text-gray-500 relative">
+    <p>~~92 год. 21 марта. Райков-центр</p>
+    <p class="text-sm mt-1">"Катя водит и пьёт"</p>
+</footer>
+
+<script src="rules.js" defer></script>
+
+</body>
+</html>

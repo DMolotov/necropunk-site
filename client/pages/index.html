@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NecroPunk - База данных</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Roboto+Slab:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    /*Пользовательские стили для атмосферы NecroPunk*/
+    body {
+        background-color: #1a1a1a;
+        color: #c7c7c7;
+        font-family: 'Roboto Slab', serif;
+        overflow-x: hidden;
+    }
+    .font-title {
+        font-family: 'Playfair Display', serif;
+    }
+    .hero {
+        background-image: url('https://images.unsplash.com/photo-1510024430419-f906f89e5fb8?q=80&w=1933&auto=format&fit=crop');
+        background-size: cover;
+        background-position: center;
+        position: relative;
+    }
+    .hero-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: radial-gradient(ellipse at center, rgba(26, 26, 26, 0.4) 0%, rgba(26, 26, 26, 0.9) 80%);
+    }
+    .animated-fog {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 50%;
+        background: linear-gradient(to top, rgba(26, 26, 26, 1) 10%, rgba(26, 26, 26, 0));
+        animation: fog-drift 60s linear infinite alternate;
+    }
+    @keyframes fog-drift {
+        from { transform: translateX(-10%); }
+        to { transform: translateX(10%); }
+    }
+    .card {
+        background-color: rgba(40, 40, 40, 0.8);
+        border: 1px solid #333;
+        transition: all 0.3s ease;
+        backdrop-filter: blur(5px);
+    }
+    .card:hover {
+        background-color: rgba(50, 50, 50, 0.9);
+        border-color: #8a6e2f;
+        transform: translateY(-5px);
+    }
+    .btn-primary {
+        background-color: #8a6e2f;
+        color: #1a1a1a;
+        font-weight: bold;
+        transition: all 0.3s ease;
+        border: 2px solid #8a6e2f;
+    }
+    .btn-primary:hover {
+        background-color: transparent;
+        color: #c7c7c7;
+    }
+    .text-shadow-custom {
+        text-shadow: 0px 2px 4px rgba(0, 0, 0, 0.8);
+    }
+    .divider {
+        height: 1px;
+        background: linear-gradient(to right, transparent, #444, transparent);
+        margin: 2rem 0;
+    }
+    /* Анимация печатной машинки */
+    .typewriter h1 {
+        overflow: hidden;
+        border-right: .15em solid #8a6e2f;
+        white-space: nowrap;
+        margin: 0 auto;
+        letter-spacing: .1em;
+        animation:
+            typing 3.5s steps(30, end),
+            blink-caret .75s step-end infinite;
+    }
+    @keyframes typing {
+        from { width: 0 }
+        to { width: 100% }
+    }
+    @keyframes blink-caret {
+        from, to { border-color: transparent }
+        50% { border-color: #8a6e2f; }
+    }
+  </style>
+</head>
+<body class="antialiased">
+
+<!-- Hero-секция с заголовком -->
+<header class="hero h-screen w-screen flex items-center justify-center text-center text-white">
+  <div class="hero-overlay"></div>
+  <div class="animated-fog"></div>
+  <div class="relative z-10 p-4">
+    <div class="typewriter inline-block">
+      <h1 class="font-title text-5xl md:text-8xl mb-4 text-shadow-custom tracking-wider">NecroPunk</h1>
+    </div>
+    <p class="text-lg md:text-2xl max-w-3xl mx-auto text-shadow-custom">
+      Настольная ролевая игра о выживании в удалённом имперском наукополисе, который постигла страшная болезнь.
+    </p>
+    <a href="#database" class="btn-primary inline-block py-3 px-8 rounded-sm mt-8 text-lg uppercase tracking-widest">
+      Прибытие в город
+    </a>
+  </div>
+</header>
+
+<!-- Основной контент страницы -->
+<main class="container mx-auto px-4 py-16 md:py-24">
+
+  <!-- Секция "О Городе" -->
+  <section id="about" class="my-16">
+    <h2 class="font-title text-4xl text-center mb-4 text-[#c7c7c7]">Город N. --92 год.</h2>
+    <p class="max-w-4xl mx-auto text-center text-lg leading-relaxed">
+      Ваши вчерашние соседи заразились тлеющей оспой, прозванной в народе «тлейкой». Возможно, это задело и вас.
+      Но утренний гудок, как и прежде, будит на очередную заводскую смену, чтобы заработать немного хрустящих банкнот
+      и расплатиться ими за завтрашний день.
+    </p>
+    <div class="divider"></div>
+
+    <div class="grid md:grid-cols-2 gap-8 items-center">
+      <div>
+        <img src="https://images.unsplash.com/photo-1616012014077-df958e23f140?q=80&w=1964&auto=format&fit=crop"
+             alt="Иллюстрация города N"
+             class="rounded-sm shadow-lg border-2 border-[#333] w-full h-auto object-cover"
+             onerror="this.onerror=null;this.src='https://placehold.co/600x400/1a1a1a/c7c7c7?text=иллюстрация+города';">
+      </div>
+      <div>
+        <h3 class="font-title text-3xl mb-3 text-[#c7c7c7]">Тлеющая оспа</h3>
+        <p class="text-md leading-loose">
+          Оспа поражает только людей, заставляет их тела гнить заживо, не оставляя надежд на выздоровление.
+          Большинство заражённых не умерли от некроза конечностей и внутренних органов, но теперь вынуждены питаться
+          человеческим мясом, чтобы продлить себе жизнь. И именно в такой реальности вам предстоит жить. Люди привыкают
+          ко всему, привыкли и к этому, дав заражённым болезнью названия из фольклорных сказок.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- Секция "Ключевые Элементы" -->
+  <section class="my-16">
+    <h2 class="font-title text-4xl text-center mb-8 text-[#c7c7c7]">Основы выживания</h2>
+    <div class="grid md:grid-cols-3 gap-8">
+      <!-- Карточка 1: Работы -->
+      <div class="card p-6 rounded-sm">
+        <h3 class="font-title text-2xl mb-3 border-b-2 border-[#444] pb-2 text-[#c7c7c7]">Работы</h3>
+        <p>Станьте <strong class="text-[#8a6e2f]">Оперативником ГОМОНа</strong>, разрываясь между уставом и совестью.
+          Или <strong class="text-[#8a6e2f]">Санкционированным</strong> агентом, которого презирают здоровые и больные.
+          А может, вы — <strong class="text-[#8a6e2f]">Воскреситель</strong>, пытающийся сшить этот мир воедино?
+          Вы можете примерить на себя роль <strong class="text-[#8a6e2f]">Учёного ГИИБ</strong>, в надежде найти лекарс
+          тво или создать прорывное устройство.
+          Быть может вы знающий настоящую цену человеческой жизни <strong class="text-[#8a6e2f]">Торговец плотью</strong>.
+          Или посредник между криминалом и властью — <strong class="text-[#8a6e2f]">Подрядчик</strong>, готовый браться за любые задачи.
+          Каждая работа вооружит вас собственной механикой.</p>
+      </div>
+      <!-- Карточка 2: Заражения -->
+      <div class="card p-6 rounded-sm">
+        <h3 class="font-title text-2xl mb-3 border-b-2 border-[#444] pb-2 text-[#c7c7c7]">Виды</h3>
+        <p>Задела ли вас болезнь?
+          Останетесь ли вы <strong class="text-[#8a6e2f]">Живчиком</strong> — хрупким человеком в мире, где на вас охотятся?
+          Или станете <strong class="text-[#8a6e2f]">Мертвяком</strong> — гниющим заживо горожанином, который может питаться лишь плотью живчиков?
+          Сходящие с ума без крови <strong class="text-[#8a6e2f]">Упыри</strong>, менее подверженные распаду, нежели мертвяки.
+          Боящиеся собственного тела <strong class="text-[#8a6e2f]">Чучела</strong>, вызывающие припадки у горожан одной силой мысли.
+          Не отличимые на свету от живчиков <strong class="text-[#8a6e2f]">Близнецы</strong>, напоминающие ночью мертвяков.
+          И ужасающие конструкты ГИИБ — <strong class="text-[#8a6e2f]">Големы</strong>, собранные из заражённых тел.
+          От Вида вам достанется его ключевой Недостаток.
+        </p>
+      </div>
+      <!-- Карточка 3: Последствия -->
+      <div class="card p-6 rounded-sm">
+        <h3 class="font-title text-2xl mb-3 border-b-2 border-[#444] pb-2 text-[#c7c7c7]">Лицензии, Знания и Недостатки</h3>
+        <p>В городе N ничего не даётся просто так. Чтобы носить оружие нужна соответствующая <strong class="text-[#8a6e2f]">Лицензия</strong>,
+          чтобы водить карету — нужна лицензия, чтобы хранить деньги в местном банке — нужна лицензия.
+          Но лицензия может истечь, её могут аннулировать — этого не произойдёт со <strong class="text-[#8a6e2f]">Знаниями</strong>.
+          Это полученные и выученные вашим персонажем уроки жизни — где лучше спрятаться, как договариваться с ГОМОНом
+          и куда стрелять, чтобы убить наверняка. Увы, уроки не проходят бесследно — они становятся <strong class="text-[#8a6e2f]">Недостатками</strong>:
+          шрамами на теле, паническим страхом огня и кредиторами за спиной.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- Секция "База Данных" - основная навигация -->
+  <section id="database" class="my-16">
+    <h2 class="font-title text-4xl text-center mb-8 text-[#c7c7c7]">Архивы Города N</h2>
+    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
+
+      <!-- Заглушки для ссылок на будущие локальные HTML файлы -->
+      <a href="rules.html" class="card p-6 rounded-sm flex flex-col items-center justify-center aspect-square text-center">
+        <h3 class="font-title text-2xl">Правила</h3>
+        <p class="text-sm mt-2 text-gray-400">Основы системы и боя</p>
+      </a>
+      <a href="works.html" class="card p-6 rounded-sm flex flex-col items-center justify-center aspect-square text-center">
+        <h3 class="font-title text-2xl">Работы</h3>
+        <p class="text-sm mt-2 text-gray-400">Кем вы стали в этом городе</p>
+      </a>
+      <a href="species.html" class="card p-6 rounded-sm flex flex-col items-center justify-center aspect-square text-center">
+        <h3 class="font-title text-2xl">Виды</h3>
+        <p class="text-sm mt-2 text-gray-400">Ваша природа и проклятие</p>
+      </a>
+      <a href="bestiary.html" class="card p-6 rounded-sm flex flex-col items-center justify-center aspect-square text-center">
+        <h3 class="font-title text-2xl">Картотека</h3>
+        <p class="text-sm mt-2 text-gray-400">Враги и союзники</p>
+      </a>
+      <a href="weapons.html" class="card p-6 rounded-sm flex flex-col items-center justify-center aspect-square text-center">
+        <h3 class="font-title text-2xl">Оружие, Одежда и Имущество</h3>
+        <p class="text-sm mt-2 text-gray-400">Инструменты выживания</p>
+      </a>
+      <a href="map.html" class="card p-6 rounded-sm flex flex-col items-center justify-center aspect-square text-center">
+        <h3 class="font-title text-2xl">Карта города N</h3>
+        <p class="text-sm mt-2 text-gray-400">Районы и их тайны</p>
+      </a>
+      <a href="lore.html" class="card p-6 rounded-sm flex flex-col items-center justify-center aspect-square text-center">
+        <h3 class="font-title text-2xl">История</h3>
+        <p class="text-sm mt-2 text-gray-400">Как город дошёл до этого</p>
+      </a>
+      <a href="contracts.html" class="card p-6 rounded-sm flex flex-col items-center justify-center aspect-square text-center">
+        <h3 class="font-title text-2xl">Контракты</h3>
+        <p class="text-sm mt-2 text-gray-400">Обычно деньги не пахнут</p>
+      </a>
+
+    </div>
+  </section>
+
+  <!-- Секция: Создание персонажа -->
+  <section class="max-w-6xl mx-auto px-6 pb-12">
+    <a href="create_char.html" class="card p-8 rounded-sm flex flex-col items-center justify-center border-t-2 border-[#8a6e2f] hover:bg-[#222] transition-all group">
+      <h2 class="font-title text-3xl mb-1 group-hover:text-gold transition-colors">Личные досье</h2>
+      <p class="text-xs uppercase tracking-[0.2em] text-gray-500">Создание персонажа для игры</p>
+    </a>
+  </section>
+  
+</main>
+
+</main>
+
+<!-- Подвал -->
+<footer class="bg-black bg-opacity-50 py-6 text-center text-gray-500">
+  <p>~~92 год. 21 марта. Райков-центр</p>
+  <p class="text-sm mt-1">"Катя водит и пьёт"</p>
+</footer>
+
+<script  src="index.js" defer></script>
+
+</body>
+</html>

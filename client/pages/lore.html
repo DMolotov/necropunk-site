@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NecroPunk - История Города N</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Roboto+Slab:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body { background-color: #1a1a1a; color: #c7c7c7; font-family: 'Roboto Slab', serif; overflow-x: hidden; }
+        .font-title { font-family: 'Playfair Display', serif; }
+        .card { background-color: rgba(40, 40, 40, 0.8); border: 1px solid #333; backdrop-filter: blur(5px); }
+        .btn-secondary { background-color: transparent; color: #c7c7c7; font-weight: bold; transition: all 0.3s ease; border: 2px solid #555; }
+        .btn-secondary:hover { background-color: #8a6e2f; color: #1a1a1a; border-color: #8a6e2f; }
+        .text-gold { color: #8a6e2f; }
+        .page-background { position: fixed; top:0; left:0; width:100vw; height:100vh; background-image: url('https://images.unsplash.com/photo-1510024430419-f906f89e5fb8?q=80&w=1933&auto=format&fit=crop'); background-size:cover; background-position:center; filter:grayscale(100%) brightness(0.2); z-index:-1; }
+        .timeline-item::before { content: ''; position: absolute; left: -31px; top: 0; width: 20px; height: 20px; border-radius: 50%; background-color: #1a1a1a; border: 4px solid #8a6e2f; }
+    </style>
+</head>
+<body class="antialiased">
+<div class="page-background"></div>
+<header class="container mx-auto px-4 py-8">
+    <div class="flex justify-between items-center">
+        <h1 class="font-title text-4xl md:text-5xl text-white">Летопись Упадка</h1>
+        <a href="index.html" class="btn-secondary py-2 px-6 rounded-sm text-lg uppercase tracking-widest">Назад</a>
+    </div>
+</header>
+<main class="container mx-auto px-4 py-8">
+    <div class="card p-6 md:p-8 rounded-sm mb-12">
+        <p class="text-lg text-center leading-relaxed">Город N — памятник будущему, который стал своей собственной могилой. Его история написана не чернилами, а кровью, сажей и спорами тлеющей оспы. Здесь собраны ключевые события, которые привели Город к его нынешнему состоянию.</p>
+    </div>
+    <div class="relative pl-8 border-l-2 border-gray-700">
+        <div class="timeline-item mb-12">
+            <h2 class="font-title text-3xl text-gold mb-2">Основание Города N (~~52 г.)</h2>
+            <div class="card p-6 rounded-sm">
+                <p>На непригодных болотах четверо Отцов-основателей — гениальный изобретатель <strong class="text-white">Себастьян Вайборг</strong>, прагматичный политик <strong class="text-white">Евгений Райков</strong>, аристократ-финансист <strong class="text-white">Дмитрий Штенбург</strong> и филантроп <strong class="text-white">Харрисон Кроукин</strong> — заложили первый камень в основание города-мечты, символа превосходства над природой.</p>
+            </div>
+        </div>
+        <div class="timeline-item mb-12">
+            <h2 class="font-title text-3xl text-gold mb-2">Туманная Революция (~~82 г.)</h2>
+            <div class="card p-6 rounded-sm">
+                <p>Вайборг представляет миру своё величайшее творение: <strong class="text-white">туманный двигатель</strong>. Эта технология, преобразующая влагу из воздуха в энергию, навсегда меняет облик Города. Заводы, транспорт и дома начинают работать на тумане, который тяжёлым, сизым одеялом окутывает улицы, становясь неотъемлемой частью жизни... и смерти.</p>
+            </div>
+        </div>
+        <div class="timeline-item mb-12">
+            <h2 class="font-title text-3xl text-gold mb-2">Первая вспышка «Тлейки» (~~85 г.)</h2>
+            <div class="card p-6 rounded-sm">
+                <p>В районах с наибольшей плотностью тумана врачи фиксируют первые случаи странной болезни, получившей название <strong class="text-white">«тлеющая оспа»</strong>. Болезнь, заставляющая человеческую плоть гнить заживо, оказывается побочным продуктом туманной технологии. Основывается <strong class="text-white">Городской исследовательский институт инфекционных болезней (ГИИБ)</strong> для изучения заразы.</p>
+            </div>
+        </div>
+        <div class="timeline-item mb-12">
+            <h2 class="font-title text-3xl text-gold mb-2">Бунт рабочих и Кровавая Осень</h2>
+            <div class="card p-6 rounded-sm">
+                <p>Увольнения заражённых рабочих и жестокость властей приводят к массовому восстанию в Вайборг-ривер. Бунт жестоко подавлен силами, собранными Евгением Райковым. Спустя несколько лет попытка самоорганизации заражённых на Харрисоновском холме заканчивается тотальной зачисткой — <strong class="text-white">«Кровавая Осень»</strong>, в ходе которой ГИИБ впервые применяет химикат А-45, «алый пар».</p>
+            </div>
+        </div>
+        <div class="timeline-item mb-12">
+            <h2 class="font-title text-3xl text-gold mb-2">Основание ГОМОНа (~~89 г.)</h2>
+            <div class="card p-6 rounded-sm">
+                <p>Понимая, что старые методы не работают, Евгений Райков создаёт <strong class="text-white">Городской орган по мониторингу и надзору (ГОМОН)</strong>. Эта новая силовая структура, наделённая чрезвычайными полномочиями и включающая в себя как здоровых оперативников, так и заражённых «санкционированных», становится главным инструментом поддержания порядка в Городе, основанного на страхе и тотальном контроле.</p>
+            </div>
+        </div>
+        <div class="timeline-item">
+            <h2 class="font-title text-3xl text-gold mb-2">Наши дни (~~91 г.)</h2>
+            <div class="card p-6 rounded-sm">
+                <p>Город балансирует на грани коллапса. Туман стал гуще, число заражённых неуклонно растёт. ГОМОН закручивает гайки, ГИИБ проводит всё более сомнительные эксперименты, а в трущобах Харрисоновского холма и на заводах Вайборг-ривер зреет новое недовольство. Ваша история начинается здесь.</p>
+            </div>
+        </div>
+    </div>
+</main>
+<footer class="bg-black bg-opacity-50 py-6 text-center text-gray-500 relative mt-16">
+    <p>~~92 год. 21 марта. Райков-центр</p>
+    <p class="text-sm mt-1">"Катя водит и пьёт"</p>
+</footer>
+</body>
+</html>

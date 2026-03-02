@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Карта Города №</title>
+    <!-- Подключение Tailwind CSS (для разметки grid/flex и отступов) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Подключение шрифтов из ваших стилей -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@400;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+
+    <style>
+        /* --- Ваши стили NecroPunk --- */
+        body {
+            background-color: #1a1a1a;
+            color: #c7c7c7;
+            font-family: 'Roboto Slab', serif;
+            overflow-x: hidden;
+        }
+        .font-title {
+            font-family: 'Playfair Display', serif;
+        }
+        .hero {
+            /* Я использовал заглушку для URL, как и в прошлый раз */
+            background-image: url('https://placehold.co/1200x500/1a1a1a/444444?text=Панорама+Города+№');
+            background-size: cover;
+            background-position: center 30%;
+            position: relative;
+            border-bottom: 2px solid #333;
+        }
+        .hero-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(ellipse at center, rgba(26, 26, 26, 0.4) 0%, rgba(26, 26, 26, 0.9) 80%);
+        }
+        .animated-fog {
+            position: absolute;
+            bottom: -1px; /* Наложение на границу */
+            left: 0;
+            width: 100%;
+            height: 50%;
+            background: linear-gradient(to top, rgba(26, 26, 26, 1) 10%, rgba(26, 26, 26, 0));
+            animation: fog-drift 60s linear infinite alternate;
+            z-index: 3;
+        }
+        @keyframes fog-drift {
+            from { transform: translateX(-10%); }
+            to { transform: translateX(10%); }
+        }
+
+        /* .card - это наша .district-card */
+        .card {
+            background-color: rgba(40, 40, 40, 0.8);
+            border: 1px solid #333;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(5px);
+            position: relative;
+            z-index: 5;
+        }
+
+        /* ВОЗВРАЩАЕМ ЭФФЕКТ :hover, чтобы показать интерактивность
+        */
+        .card:hover {
+            background-color: rgba(50, 50, 50, 0.9);
+            border-color: #8a6e2f;
+            transform: translateY(-5px);
+            cursor: pointer; /* Явно указываем, что элемент кликабельный */
+        }
+
+        .btn-primary {
+            background-color: #8a6e2f;
+            color: #1a1a1a;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            border: 2px solid #8a6e2f;
+        }
+        .btn-primary:hover {
+            background-color: transparent;
+            color: #c7c7c7;
+        }
+        .btn-secondary {
+            background-color: transparent;
+            color: #c7c7c7;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            border: 2px solid #555;
+        }
+        .btn-secondary:hover {
+            background-color: #8a6e2f;
+            color: #1a1a1a;
+            border-color: #8a6e2f;
+        }
+        .text-shadow-custom {
+            text-shadow: 0px 2px 4px rgba(0, 0, 0, 0.8);
+        }
+        .divider {
+            height: 1px;
+            background: linear-gradient(to right, transparent, #444, transparent);
+            margin: 2rem 0;
+        }
+
+        /* Анимация печатной машинки */
+        .typewriter {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        .typewriter h1 {
+            overflow: hidden;
+            border-right: .15em solid #8a6e2f;
+            white-space: nowrap;
+            margin: 0;
+            letter-spacing: .1em;
+            animation:
+                typing 3.5s steps(30, end),
+                blink-caret .75s step-end infinite;
+            display: inline-block;
+            max-width: 100%;
+        }
+        @keyframes typing {
+            from { width: 0 }
+            to { width: 100% }
+        }
+        @keyframes blink-caret {
+            from, to { border-color: transparent }
+            50% { border-color: #8a6e2f; }
+        }
+
+        /* --- Стили для "Тумана" (теперь управляется JS) --- */
+        #fog-overlay {
+            position: fixed;
+            inset: 0;
+            background-color: rgba(26, 26, 26, 0.85); /* Фон из ваших стилей */
+            backdrop-filter: blur(5px);
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.4s ease-in-out, visibility 0.4s ease-in-out;
+            z-index: 40; /* Ниже лайтбокса, выше остальной страницы */
+            cursor: pointer; /* Намекает, что можно нажать для закрытия */
+        }
+        #fog-overlay.is-active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* --- Стили для нового Лайтбокса (Просмотр района) --- */
+        #district-viewer {
+            position: fixed;
+            inset: 0;
+            z-index: 50;
+            display: none; /* Управляется JS */
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
+            padding: 2rem;
+            overflow-y: auto;
+            /* Выравнивание по центру */
+            align-items: center;
+            justify-content: center;
+        }
+        #district-viewer.is-active {
+            display: flex;
+            opacity: 1;
+            visibility: visible;
+        }
+        #viewer-content {
+            position: relative;
+            background-color: rgba(40, 40, 40, 0.95); /* .card bg + opacity */
+            border: 1px solid #8a6e2f; /* .card:hover border */
+            backdrop-filter: blur(10px);
+            width: 100%;
+            max-width: 64rem; /* 1024px */
+            max-height: 90vh;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            z-index: 51;
+        }
+        #viewer-close-btn {
+            position: absolute;
+            top: 0.75rem;
+            right: 0.75rem;
+            font-family: 'Roboto Slab', serif;
+            font-size: 2rem;
+            line-height: 1;
+            color: #c7c7c7;
+            background: none;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            z-index: 52;
+        }
+        #viewer-close-btn:hover {
+            color: #8a6e2f;
+            transform: scale(1.2);
+        }
+        #viewer-image {
+            width: 100%;
+            height: 40vh; /* Больше места для иллюстрации */
+            object-fit: cover;
+            border-bottom: 1px solid #333;
+        }
+        #viewer-text-content {
+            padding: 1.5rem 2rem;
+        }
+        #viewer-title {
+            color: #8a6e2f; /* Золотой акцент */
+        }
+
+        /* Адаптивность для лайтбокса */
+        @media (min-width: 768px) {
+            #viewer-content {
+                flex-direction: row;
+                max-height: 80vh;
+            }
+            #viewer-image {
+                width: 50%; /* 50% ширины для изображения */
+                height: auto;
+                border-bottom: 0;
+                border-right: 1px solid #333;
+            }
+            #viewer-text-content {
+                width: 50%;
+                overflow-y: auto; /* Прокрутка только для текста */
+            }
+        }
+
+    </style>
+</head>
+<body>
+
+<!-- Оверлей тумана -->
+<div id="fog-overlay"></div>
+
+<!-- Лайтбокс / Модальное окно (скрыто по умолчанию) -->
+<div id="district-viewer">
+    <div id="viewer-content" class="rounded-lg shadow-2xl">
+        <button id="viewer-close-btn" title="Закрыть">&times;</button>
+        <img id="viewer-image" src="" alt="Иллюстрация района">
+        <div id="viewer-text-content">
+            <h2 id="viewer-title" class="text-3xl font-bold mb-4 font-title text-shadow-custom"></h2>
+            <p id="viewer-text" class="leading-relaxed"></p>
+        </div>
+    </div>
+</div>
+
+<!-- Hero-секция с главной картой -->
+<section class="hero">
+    <div class="hero-overlay"></div>
+    <div class="animated-fog"></div>
+
+    <!-- TODO: нормально разместить кнопку, разобраться, почему не подсвечивается и не выделяется блоком, возможно дело в стилях -->
+    <div class="container mx-auto p-4 py-16 md:py-24 relative z-10">
+        <!-- Заголовок-->
+        <header class="container mx-auto px-4 py-8">
+            <div class="flex justify-between items-center">
+            <h1 class="font-title text-4xl md:text-5xl text-white">География и Районы</h1>
+            <a href="index.html" class="btn-secondary py-2 px-6 rounded-sm text-lg uppercase tracking-widest">
+                Назад
+            </a>
+            </div>
+        </header>
+    </div>
+</section>
+
+<!-- Основной контент -->
+<div class="container mx-auto p-4 py-8 md:p-12 relative z-5">
+
+    <!-- Описание географии -->
+    <section class="mb-10 md:mb-12">
+        <p class="text-lg md:text-xl text-center max-w-4xl mx-auto leading-relaxed">
+            Город можно разделить на четыре больших района и не менее большой пригород. Районы носят названия отцов-основателей: Штенбургский променад; Вайборг-ривер; Райков-центр и Харрисоновский холм.
+        </p>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- Сетка районов -->
+    <main id="district-grid" class="district-grid grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
+
+        <!-- Карточка: Штенбургский променад -->
+        <article class="card district-card rounded-lg shadow-lg overflow-hidden">
+            <div class="flex flex-col md:flex-row items-start gap-5 p-5">
+                <img src="https://placehold.co/300x200/374151/E5E7EB?text=Швартовая+вышка"
+                     alt="Иллюстрация Штенбургского променада"
+                     class="w-full md:w-1/3 h-auto object-cover rounded-md flex-shrink-0 border border-gray-600"
+                     onerror="this.src='https://placehold.co/300x200/374151/E5E7EB?text=Изображение'">
+                <div class="flex-grow">
+                    <h2 class="text-2xl font-bold text-amber-300 mb-2 font-title text-shadow-custom">Штенбургский променад</h2>
+                    <p class="leading-relaxed">
+                        Променад всегда славился, как место проживания бомонда, дворянства и изысканных шоу. Здесь встречаются вековые особняки в готическом и римском стилях. Чуть ниже можно увидеть различные кафе, театры, ювелирные, ателье и танцевальные клубы. Заражённые здесь состоятельнее остальных и почти не пользуется туманными двигателями, предпочитая старый вид получения электричества, постулируя тем самым свою статусность. Район носит фамилию богатейшей семьи Города, чьи потомки до сих пор удерживают 52% акций муниципального банка.
+                    </p>
+                </div>
+            </div>
+        </article>
+
+        <!-- Карточка: Вайборг-ривер -->
+        <article class="card district-card rounded-lg shadow-lg overflow-hidden">
+            <div class="flex flex-col md:flex-row items-start gap-5 p-5">
+                <img src="https://placehold.co/300x200/4B5563/E5E7EB?text=Тумакон"
+                     alt="Иллюстрация Вайборг-ривер"
+                     class="w-full md:w-1/3 h-auto object-cover rounded-md flex-shrink-0 border border-gray-600"
+                     onerror="this.src='https://placehold.co/300x200/4B5563/E5E7EB?text=Изображение'">
+                <div class="flex-grow">
+                    <h2 class="text-2xl font-bold text-amber-300 mb-2 font-title text-shadow-custom">Вайборг-ривер</h2>
+                    <p class="leading-relaxed">
+                        Вайборг-ривер прилегает к променаду и центру на севере и востоке соответственно. Здесь же протекает самая крупная река низины, где расположился Город. Район взят в клещи заводами, лабораториями и больницами. Это сердце полиса, болезненно бьющееся ежедневно, стараясь удовлетворить нужды вымирающего населения. В районе также можно найти множественные общежития, коммунальные квартиры для рабочих и высокие бетонные коробки, где живут заводчане. Последний из семейства Вайборгов, тот, кого звали «мозгом Города», Себастьян, к великому сожалению, был упокоен два года назад, после нападения на оперативников ГОМОНа.
+                    </p>
+                </div>
+            </div>
+        </article>
+
+        <!-- Карточка: Райков-центр -->
+        <article class="card district-card rounded-lg shadow-lg overflow-hidden">
+            <div class="flex flex-col md:flex-row items-start gap-5 p-5">
+                <img src="https://placehold.co/300x200/3A4F5B/E5E7EB?text=Здание+ГОМОНа"
+                     alt="Иллюстрация Райков-центра"
+                     class="w-full md:w-1/3 h-auto object-cover rounded-md flex-shrink-0 border border-gray-600"
+                     onerror="this.src='https://placehold.co/300x200/3A4F5B/E5E7EB?text=Изображение'">
+                <div class="flex-grow">
+                    <h2 class="text-2xl font-bold text-amber-300 mb-2 font-title text-shadow-custom">Райков-центр</h2>
+                    <p class="leading-relaxed">
+                        Центр Города — его главная артерия, медленно превращающаяся в сонную, параллельно развитию районов по соседству. Сегодня центр живёт в основном благодаря муниципальным зданиям: банку, школам, трём университетам, и, пожалуй, в большей степени — штабу ГОМОНа. Их здание можно увидеть из многих районов: высокий шпиль, словно разрезающий туман, увенчан по краям шпиля литыми буквами «Закон и порядок». Центр плотно связан дорогами со всеми районами города. Он примыкает на западе к Вайборг-ривер, на северо-западе — к променаду, а с востока отрезает Харрисоновский холм.
+                    </p>
+                </div>
+            </div>
+        </article>
+
+        <!-- Карточка: Харрисоновский холм -->
+        <article class="card district-card rounded-lg shadow-lg overflow-hidden">
+            <div class="flex flex-col md:flex-row items-start gap-5 p-5">
+                <img src="https://placehold.co/300x200/7B3B3B/E5E7EB?text=Пылающий+холм"
+                     alt="Иллюстрация Харрисоновского холма"
+                     class="w-full md:w-1/3 h-auto object-cover rounded-md flex-shrink-0 border border-gray-600"
+                     onerror="this.src='https://placehold.co/300x200/7B3B3B/E5E7EB?text=Изображение'">
+                <div class="flex-grow">
+                    <h2 class="text-2xl font-bold text-amber-300 mb-2 font-title text-shadow-custom">Харрисоновский холм</h2>
+                    <p class="leading-relaxed">
+                        Харрисоновский холм. Можно ли представить себе место отвратительнее, чем дешёвые трущобы, сколоченные наспех из пожароопасных материалов? Это настоящий лабиринт из разрушенных строений, перекрытых дорог, вечных баррикад ГОМОНа, но также и мекка всей нелегальной торговли Города. Именно в этом районе большая часть кварталов признана «карантинными». Если бы не скоропостижная смерть мецената, искусного медика, географа и исследователя Харрисона Кроукина, холм ждала бы совсем другая судьба. Однако теперь у района появился неофициальный хозяин — главный торговец плотью (как он себя именует), живчик, по прозвищу Шива.
+                    </p>
+                </div>
+            </div>
+        </article>
+
+        <!-- Карточка: Пригород (растянута на 2 колонки) -->
+        <article class="card district-card rounded-lg shadow-lg overflow-hidden md:col-span-2">
+            <div class="flex flex-col md:flex-row items-start gap-5 p-5">
+                <img src="https://placehold.co/300x200/4B5D43/E5E7EB?text=Заросшее+поле"
+                     alt="Иллюстрация Пригорода"
+                     class="w-full md:w-1/3 h-auto object-cover rounded-md flex-shrink-0 border border-gray-600"
+                     onerror="this.src='https://placehold.co/300x200/4B5D43/E5E7EB?text=Изображение'">
+                <div class="flex-grow">
+                    <h2 class="text-2xl font-bold text-amber-300 mb-2 font-title text-shadow-custom">Пригород</h2>
+                    <p class="leading-relaxed">
+                        Пригород — это место, куда потихоньку протягивает свои щупальца город. Дикие и необжитые поля, старые здания, заросшие невысокими кустарниками, зыбкая и влажная почва, грозящая оказаться болотным омутом. В Пригороде стоят лаборатории Вайборга, ныне управляемые его правой рукой под бдительным присмотром оперативников ГОМОНа. Помимо функционирующих лабораторий среди растительности можно отыскать следы лагерей, куда вывозили первых заражённых, а также множественные заброшенные постройки ГИИБ и обчищенные военные склады. Здесь также ются несколько десятков частных домой небольших семейств купцов и две крупные оранжереи Штенбурга, обеспечивающие город свежими овощами и фруктами.
+                    </p>
+                </div>
+            </div>
+        </article>
+
+    </main>
+</div>
+
+<script src="map.js" defer></script>
+
+</body>
+</html>
