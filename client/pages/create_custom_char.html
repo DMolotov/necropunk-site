@@ -140,17 +140,17 @@
                         <label class="label-stamp">Род деятельности:</label>
                         <select class="w-full bg-transparent border-b border-black/20 font-typewriter text-[11px] focus:outline-none">
                             <option value="" disabled selected>---</option>
-                            <option>Чистильщик</option>
-                            <option>Учёный ГИИБ</option>
                             <option>Оперативник ГОМОНа</option>
-                            <option>Крыса трущоб</option>
-                            <option>Техник-самоучка</option>
-                            <option>Аристократ</option>
+                            <option>Санкционированный</option>
+                            <option>Учёный ГИИБ</option>
+                            <option>Воскереситель</option>
+                            <option>Торговец плотью</option>
+                            <option>Подрядчик</option>
                         </select>
                     </div>
                     <div>
                         <label class="label-stamp">Рег. номер ОСАНК:</label>
-                        <input type="text" class="font-typewriter text-[11px]">
+                        <input id="osank_reg" type="text" class="font-typewriter text-[11px]">
                     </div>
                     <div>
                         <label class="label-stamp">Доход:</label>
@@ -170,14 +170,14 @@
                 <h2 class="absolute -top-2.5 left-4 bg-black text-white px-2 py-0.5 text-[9px] font-bold uppercase">Вид заражения</h2>
 
                 <div class="w-full">
-                    <select class="w-full bg-transparent border-b-2 border-black font-typewriter text-base font-bold focus:outline-none py-1">
-                        <option value="" disabled selected>Выберите вид заражения...</option>
-                        <option>Человек (Чистый)</option>
-                        <option>Трупный шепот</option>
-                        <option>Зараженный</option>
+                    <select id="infection_type" class="w-full bg-transparent border-b-2 border-black font-typewriter text-base font-bold focus:outline-none py-1">
+                        <option value="" disabled selected>Вид заражения...</option>
+                        <option>Живчик</option>
+                        <option>Мертвяк</option>
+                        <option>Упырь</option>
+                        <option>Чучело</option>
+                        <option>Близнец</option>
                         <option>Голем</option>
-                        <option>Охотник</option>
-                        <option>Теневой близнец</option>
                     </select>
                 </div>
 
@@ -200,9 +200,9 @@
                     <div class="flex flex-col items-center justify-center border-r border-black/10">
                         <span class="label-stamp mb-1 text-[9px]">Оценка здоровья (ОЗ)</span>
                         <div class="flex items-center gap-1 mb-2">
-                            <input type="number" id="oz_max" min="1" max="9" value="3" oninput="calculate('oz')" class="w-9 h-9 border-2 border-black bg-white text-center text-xl font-bold">
-                            <span class="text-xl font-bold">/</span>
                             <input type="number" id="oz_cur" min="0" max="9" value="3" oninput="calculate('oz')" class="w-9 h-9 border-2 border-black bg-white text-center text-xl font-bold">
+                            <span class="text-xl font-bold">/</span>
+                            <input type="number" id="oz_max" min="1" max="9" value="3" oninput="calculate('oz')" class="w-9 h-9 border-2 border-black bg-white text-center text-xl font-bold">
                         </div>
                         <div class="flex gap-1">
                             <div id="oz_box_75" class="flex flex-col items-center border border-black/30 px-1 min-w-[28px]">
@@ -224,11 +224,11 @@
                             <div class="flex flex-col items-center justify-center">
                                 <span class="label-stamp mb-1 text-[9px]">Оценка самочувствия (ОС)</span>
                                 <div class="flex items-center gap-1 mb-2">
-                                    <input type="number" id="os_max" min="1" max="9" value="3"
+                                    <input type="number" id="os_cur" min="0" max="9" value="3"
                                            oninput="recalc('os')"
                                            class="w-9 h-9 border-2 border-black bg-white text-center text-xl font-bold">
                                     <span class="text-xl font-bold">/</span>
-                                    <input type="number" id="os_cur" min="0" max="9" value="3"
+                                    <input type="number" id="os_max" min="1" max="9" value="3"
                                            oninput="recalc('os')"
                                            class="w-9 h-9 border-2 border-black bg-white text-center text-xl font-bold">
                                 </div>
@@ -370,6 +370,7 @@
 
 </form>
 
+<script src="/lib/thresholds.js" defer></script>
 <script src="create_custom_char.js" defer></script>
 
 </body>

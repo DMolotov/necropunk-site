@@ -23,6 +23,7 @@ app.use(helmet());
 app.use(cors());
 app.use(morgan('dev'));
 app.use(express.static(path.join(__dirname, '..', 'client', 'pages')));
+app.use('/lib', express.static(path.join(__dirname, '..', 'lib')));
 app.use(express.json({ limit: '1mb' }));
 
 // If `statusRouter` is a simple handler function, mount it as GET handler.

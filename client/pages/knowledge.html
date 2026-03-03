@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NecroPunk - Знания</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Roboto+Slab:wght@400;700&display=swap" rel="stylesheet" />
+  <style>
+    body {
+      background-color: #1a1a1a;
+      color: #c7c7c7;
+      font-family: 'Roboto Slab', serif;
+      overflow-x: hidden;
+    }
+    .font-title {
+      font-family: 'Playfair Display', serif;
+    }
+    .card {
+      background-color: rgba(40, 40, 40, 0.85);
+      border: 1px solid #333;
+      backdrop-filter: blur(4px);
+    }
+    .text-gold {
+      color: #8a6e2f;
+    }
+    .btn-secondary {
+      background-color: transparent;
+      color: #c7c7c7;
+      font-weight: bold;
+      transition: all 0.2s ease;
+      border: 2px solid #555;
+    }
+    .btn-secondary:hover {
+      background-color: #8a6e2f;
+      color: #1a1a1a;
+      border-color: #8a6e2f;
+    }
+    .knowledge-trigger {
+      width: 100%;
+      text-align: left;
+      padding: 0.85rem 1rem;
+      border: 1px solid #444;
+      background: rgba(20, 20, 20, 0.65);
+      transition: border-color 0.2s ease;
+    }
+    .knowledge-trigger:hover {
+      border-color: #8a6e2f;
+    }
+    .knowledge-trigger[aria-expanded="true"] {
+      border-color: #8a6e2f;
+      border-bottom-left-radius: 0;
+      border-bottom-right-radius: 0;
+    }
+    .knowledge-panel {
+      display: none;
+      border: 1px solid #8a6e2f;
+      border-top: none;
+      background: rgba(12, 12, 12, 0.75);
+      padding: 0.9rem 1rem;
+    }
+    .knowledge-panel.open {
+      display: block;
+    }
+    .filter-box {
+      border: 1px dashed #555;
+      padding: 0.7rem;
+      border-radius: 0.25rem;
+      background: rgba(10, 10, 10, 0.3);
+    }
+  </style>
+</head>
+<body class="antialiased">
+  <header class="container mx-auto px-4 py-8">
+    <div class="flex justify-between items-center gap-4">
+      <h1 class="font-title text-4xl md:text-5xl text-white">Знания</h1>
+      <a href="index.html" class="btn-secondary py-2 px-6 rounded-sm text-sm md:text-base uppercase tracking-widest">Назад</a>
+    </div>
+  </header>
+
+  <main class="container mx-auto px-4 pb-12">
+    <section class="card rounded-sm p-5 md:p-6 mb-8">
+      <h2 class="font-title text-2xl md:text-3xl border-b border-[#444] pb-2 mb-4">О системе знаний</h2>
+      <p class="leading-relaxed text-gray-300">
+        В городе N недостаточно грубой силы и быстрых рефлексов для выживания. Знания — вот истинная валюта, определяющая, станете ли вы хищником или жертвой, инструментом в чужих руках или кукловодом. Это не просто абстрактные умения — это набор отточенных инстинктов, горького опыта, украденных секретов и специализированных навыков, позволяющих ориентироваться в хаосе и использовать его в своих интересах.
+      </p>
+      <p class="leading-relaxed text-gray-300 mt-3">
+        Персонажи NecroPunk постоянно развиваются и изучают новое, вгрызаясь в гранит науки или постигая премудрости улиц. Даже у самого занюханного рабочего из трущоб имеется какое-никакое образование или набор практических навыков, помогающих ему дотянуть до следующей получки. Знания — это отражение этого жизненного опыта, накопленного в стенах полуразрушенных университетов, в кровавых стычках на Харрисоновском холме, в тишине лабораторий ГИИБ или подпольных мастерских.
+        Они могут быть получены ценой пота и крови при выполнении опаснейших контрактов, стать наградой за верную службу и Повышение или даже проявиться как странный побочный эффект заражения тлеющей оспой.
+      </p>
+      <p class="leading-relaxed text-gray-300 mt-3">
+        Одно Знание игрок получает бесплатно на старте, определяя первоначальную специализацию или предысторию персонажа. Новые Знания можно обрести, достигнув Повышения на своей Работе или пережив контракт сложности «Невыполнимый». Часть Знаний даёт прямые бонусы к Умениям или восстановлению, часть работает нарративно, открывая связи, репутацию и нестандартные решения. Мастер и игрок также могут совместно придумать уникальное Знание подходящее предыстории персонажа.
+      </p>
+    </section>
+
+    <section class="grid gap-8 lg:grid-cols-2 items-start">
+      <section class="card rounded-sm p-5 md:p-6" data-knowledge-section="player">
+        <h2 class="font-title text-2xl md:text-3xl border-b border-[#444] pb-2">Знания персонажей игрока</h2>
+
+        <div class="mt-4 grid gap-4">
+          <label class="grid gap-2">
+            <span class="text-sm uppercase tracking-wider text-gray-400">Поиск</span>
+            <input
+              type="text"
+              data-knowledge-search
+              placeholder="Введите часть названия или описания"
+              class="w-full bg-black/40 border border-[#444] px-3 py-2 focus:outline-none focus:border-[#8a6e2f]"
+            />
+          </label>
+
+          <div class="filter-box">
+            <p class="text-xs uppercase tracking-wider text-gray-400 mb-2">Фильтры (заглушка)</p>
+            <div class="flex flex-wrap gap-4" data-knowledge-filters>
+              <label class="grid gap-1 text-sm min-w-[220px]">
+                <span>??? ?????????</span>
+                <select id="tag_infected_type" class="bg-black/40 border border-[#444] px-2 py-1 focus:outline-none focus:border-[#8a6e2f]">
+                  <option value="">?????</option>
+                  <option value="tag_livingboy">tag_livingboy</option>
+                  <option value="tag_deadman">tag_deadman</option>
+                  <option value="tag_ghoul">tag_ghoul</option>
+                  <option value="tag_scarecrow">tag_scarecrow</option>
+                  <option value="tag_twin">tag_twin</option>
+                  <option value="tag_golem">tag_golem</option>
+                </select>
+              </label>
+              <label class="inline-flex items-center gap-2 text-sm"><input type="checkbox" value="tag_source" /> Источник получения</label>
+              <label class="inline-flex items-center gap-2 text-sm"><input type="checkbox" value="tag_bonus" /> Даёт бонус к Умению</label>
+            </div>
+          </div>
+
+          <div class="grid gap-3" data-knowledge-list></div>
+          <p class="text-sm text-gray-400 hidden" data-knowledge-empty>Ничего не найдено.</p>
+        </div>
+      </section>
+
+      <section class="card rounded-sm p-5 md:p-6" data-knowledge-section="gm">
+        <h2 class="font-title text-2xl md:text-3xl border-b border-[#444] pb-2">Знания персонажей мастера</h2>
+
+        <div class="mt-4 grid gap-4">
+          <label class="grid gap-2">
+            <span class="text-sm uppercase tracking-wider text-gray-400">Поиск</span>
+            <input
+              type="text"
+              data-knowledge-search
+              placeholder="Введите часть названия или описания"
+              class="w-full bg-black/40 border border-[#444] px-3 py-2 focus:outline-none focus:border-[#8a6e2f]"
+            />
+          </label>
+
+          <div class="filter-box">
+            <p class="text-xs uppercase tracking-wider text-gray-400 mb-2">Фильтры (заглушка)</p>
+            <div class="flex flex-wrap gap-4" data-knowledge-filters>
+              <label class="grid gap-1 text-sm min-w-[220px]">
+                <span>??? ?????????</span>
+                <select id="tag_infected_type_gm" class="bg-black/40 border border-[#444] px-2 py-1 focus:outline-none focus:border-[#8a6e2f]">
+                  <option value="">?????</option>
+                  <option value="tag_livingboy">tag_livingboy</option>
+                  <option value="tag_deadman">tag_deadman</option>
+                  <option value="tag_ghoul">tag_ghoul</option>
+                  <option value="tag_scarecrow">tag_scarecrow</option>
+                  <option value="tag_twin">tag_twin</option>
+                  <option value="tag_golem">tag_golem</option>
+                </select>
+              </label>
+              <label class="inline-flex items-center gap-2 text-sm"><input type="checkbox" value="tag_source" /> Источник получения</label>
+              <label class="inline-flex items-center gap-2 text-sm"><input type="checkbox" value="tag_bonus" /> Даёт бонус к Умению</label>
+            </div>
+          </div>
+
+          <div class="grid gap-3" data-knowledge-list></div>
+          <p class="text-sm text-gray-400 hidden" data-knowledge-empty>Ничего не найдено.</p>
+        </div>
+      </section>
+    </section>
+  </main>
+
+  <script src="knowledge.js" defer></script>
+</body>
+</html>
