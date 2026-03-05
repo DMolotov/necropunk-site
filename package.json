@@ -6,7 +6,10 @@
     "manage:start": "node scripts/manage.js start",
     "manage:stop": "node scripts/manage.js stop",
     "manage:restart": "node scripts/manage.js restart",
-    "manage:status": "node scripts/manage.js status"
+    "manage:status": "node scripts/manage.js status",
+    "pdf:to-html": "node scripts/pdfjson-to-html.js",
+    "pdf2htmlex:convert": "node scripts/pdf2htmlex-convert.js",
+    "pdf2htmlex:npcl": "node scripts/pdf2htmlex-convert.js --input artifacts/pdf2html/input/NPCL_fillable.pdf --output-name NPCL_fillable.html"
   },
   "name": "my-repo",
   "version": "1.0.0",
@@ -32,7 +35,8 @@
     "helmet": "^8.1.0",
     "jsonwebtoken": "^9.0.3",
     "mongodb": "^5.1.0",
-    "morgan": "^1.10.1"
+    "morgan": "^1.10.1",
+    "pdf2json": "^4.0.2"
   },
   "devDependencies": {
     "nodemon": "^3.1.14"

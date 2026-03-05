@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
@@ -43,6 +43,17 @@
             width: 100%;
         }
         input:focus { outline: none; border-bottom: 2px solid var(--gold); }
+        textarea:focus { outline: none; border-bottom: 2px solid var(--gold); }
+
+        .sheet2-autogrow {
+            resize: none;
+            overflow-y: hidden;
+            width: 100%;
+            min-height: 1.8em;
+            line-height: 1.35;
+            white-space: pre-wrap;
+            overflow-wrap: break-word;
+        }
 
         .label-stamp {
             font-size: 0.7rem;
@@ -94,7 +105,7 @@
 
 <form id="characterForm" class="max-w-4xl mx-auto">
 
-    <div id="sheet1" class="sheet active p-10 border-t-[12px] border-black flex flex-col gap-[5px]">
+    <div id="sheet1" class="sheet active p-10 border-t-[12px] border-black space-y-[5px]">
 
         <div class="flex justify-between items-start border-b-2 border-black pb-4 mb-[5px]">
             <div>
@@ -122,22 +133,22 @@
                 <div class="p-3 pt-5 flex-1 border-b border-black">
                     <div class="grid grid-cols-12 gap-x-3 gap-y-2">
                         <div class="col-span-9">
-                            <label class="label-stamp">Имя, Фамилия:</label>
+                            <label id= "name" class="label-stamp">Имя, Фамилия:</label>
                             <input type="text" class="font-typewriter text-sm uppercase">
                         </div>
                         <div class="col-span-3">
-                            <label class="label-stamp">Возраст:</label>
+                            <label id="age" class="label-stamp">Возраст:</label>
                             <input type="number" min="0" max="99" class="font-typewriter text-center">
                         </div>
                         <div class="col-span-12">
-                            <label class="label-stamp">Отличительная черта:</label>
+                            <label id="distinctive_feature" class="label-stamp">Отличительная черта:</label>
                             <input type="text" class="font-typewriter italic text-xs">
                         </div>
                     </div>
                 </div>
                 <div class="p-3 flex-1 grid grid-cols-2 gap-x-4 gap-y-2 bg-black/5">
                     <div>
-                        <label class="label-stamp">Род деятельности:</label>
+                        <label id="works" class="label-stamp">Род деятельности:</label>
                         <select class="w-full bg-transparent border-b border-black/20 font-typewriter text-[11px] focus:outline-none">
                             <option value="" disabled selected>---</option>
                             <option>Оперативник ГОМОНа</option>
@@ -149,15 +160,15 @@
                         </select>
                     </div>
                     <div>
-                        <label class="label-stamp">Рег. номер ОСАНК:</label>
-                        <input id="osank_reg" type="text" class="font-typewriter text-[11px]">
-                    </div>
-                    <div>
-                        <label class="label-stamp">Доход:</label>
+                        <label id="osank_reg" class="label-stamp">Рег. номер ОСАНК:</label>
                         <input type="text" class="font-typewriter text-[11px]">
                     </div>
                     <div>
-                        <label class="label-stamp">Личная подпись:</label>
+                        <label id="income" class="label-stamp">Доход:</label>
+                        <input type="text" class="font-typewriter text-[11px]">
+                    </div>
+                    <div>
+                        <label id="signature" class="label-stamp">Личная подпись:</label>
                         <input type="text" class="font-typewriter italic" style="font-family: 'Brush Script MT', cursive;">
                     </div>
                 </div>
@@ -183,11 +194,11 @@
 
                 <div class="flex gap-4">
                     <div class="flex items-center gap-2">
-                        <span class="label-stamp leading-none">Степень<br>деградации:</span>
+                        <span id="level_degradation" class="label-stamp leading-none">Степень<br>деградации:</span>
                         <input type="number" min="0" max="9" class="w-8 h-8 border-2 border-black bg-white text-center font-bold text-lg" value="0">
                     </div>
                     <div class="flex items-center gap-2">
-                        <span class="label-stamp leading-none">Степень<br>разложения:</span>
+                        <span id="level_decomposition" class="label-stamp leading-none">Степень<br>разложения:</span>
                         <input type="number" min="0" max="9" class="w-8 h-8 border-2 border-black bg-white text-center font-bold text-lg" value="0">
                     </div>
                 </div>
@@ -254,53 +265,109 @@
             <div class="absolute bottom-10 right-10 label-stamp">Лист 1 из 4</div>
     </div>
 
-        <div class="mb-10">
-            <h2 class="border-b-2 border-black font-bold uppercase text-sm mb-4">Развитие по шкале Водова-Ликерта</h2>
-            <div class="grid grid-cols-2 gap-x-12 gap-y-4">
-                <div class="flex items-center justify-between border-b border-gray-400 pb-1">
-                    <span class="font-bold">МЕТКОСТЬ</span>
-                    <input type="number" class="w-16 text-center text-xl font-bold" value="0">
-                </div>
-                <div class="flex items-center justify-between border-b border-gray-400 pb-1">
-                    <span class="font-bold">АНАЛИЗ</span>
-                    <input type="number" class="w-16 text-center text-xl font-bold" value="0">
-                </div>
-                <div class="flex items-center justify-between border-b border-gray-400 pb-1">
-                    <span class="font-bold">СИЛА</span>
-                    <input type="number" class="w-16 text-center text-xl font-bold" value="0">
-                </div>
-                <div class="flex items-center justify-between border-b border-gray-400 pb-1">
-                    <span class="font-bold">ХИТРОСТЬ</span>
-                    <input type="number" class="w-16 text-center text-xl font-bold" value="0">
-                </div>
-                <div class="flex items-center justify-between border-b border-gray-400 pb-1">
-                    <span class="font-bold">ВЫНОСЛИВОСТЬ</span>
-                    <input type="number" class="w-16 text-center text-xl font-bold" value="0">
-                </div>
-                <div class="flex items-center justify-between border-b border-gray-400 pb-1">
-                    <span class="font-bold">ВЫДЕРЖКА</span>
-                    <input type="number" class="w-16 text-center text-xl font-bold" value="0">
-                </div>
+        <div class="mb-10 grid grid-cols-1 md:grid-cols-3 gap-6 items-start">
+            <div id="ability" class="md:col-span-2"></div>
+
+            <div id="states" class="md:col-span-1 space-y-4">
+                <section class="border-2 border-black bg-white/50 p-2">
+                    <h3 class="font-bold uppercase text-[11px] border-b border-black pb-1 mb-2">Текущее физическое состояние</h3>
+                    <table class="w-full border-collapse text-[10px]">
+                        <thead>
+                        <tr class="bg-black/10">
+                            <th class="border border-black p-1 text-left uppercase">Порог</th>
+                            <th class="border border-black p-1 text-left uppercase">Задокументированный эффект</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td id="phys_75" class="border border-black p-1 font-semibold">Недомогание (75%)</td>
+                            <td class="border border-black p-1"><input type="text" class="text-[10px]"></td>
+                        </tr>
+                        <tr>
+                            <td id="phys_50" class="border border-black p-1 font-semibold">Перегрузка (50%)</td>
+                            <td class="border border-black p-1"><input type="text" class="text-[10px]"></td>
+                        </tr>
+                        <tr>
+                            <td id="phys_25" class="border border-black p-1 font-semibold">Организм отказывает (25%)</td>
+                            <td class="border border-black p-1"><input type="text" class="text-[10px]"></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </section>
+
+                <section class="border-2 border-black bg-white/50 p-2">
+                    <h3 class="font-bold uppercase text-[11px] border-b border-black pb-1 mb-2">Текущее психологическое состояние</h3>
+                    <table class="w-full border-collapse text-[10px]">
+                        <thead>
+                        <tr class="bg-black/10">
+                            <th class="border border-black p-1 text-left uppercase">Порог</th>
+                            <th class="border border-black p-1 text-left uppercase">Задокументированный эффект</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td id="psych_75" class="border border-black p-1 font-semibold">Недомогание (75%)</td>
+                            <td class="border border-black p-1"><input type="text" class="text-[10px]"></td>
+                        </tr>
+                        <tr>
+                            <td id="psych_50" class="border border-black p-1 font-semibold">Перегрузка (50%)</td>
+                            <td class="border border-black p-1"><input type="text" class="text-[10px]"></td>
+                        </tr>
+                        <tr>
+                            <td id="psych_25" class="border border-black p-1 font-semibold">Организм отказывает (25%)</td>
+                            <td class="border border-black p-1"><input type="text" class="text-[10px]"></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </section>
             </div>
         </div>
 
-        <div class="grid grid-cols-2 gap-8">
-            <div class="border-2 border-black p-4">
-                <h3 class="font-bold text-center border-b border-black mb-2 uppercase">Здоровье (ОЗ)</h3>
-                <div class="flex justify-center gap-4">
-                    <input type="number" class="w-20 text-3xl text-center" placeholder="MAX">
-                    <span class="text-3xl">/</span>
-                    <input type="number" class="w-20 text-3xl text-center" placeholder="ТЕК">
+        <div class="mb-10 grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
+            <section id="experience_0" class="border-2 border-black bg-white/50 p-3 space-y-3">
+                <h3 class="font-bold uppercase text-[11px] border-b border-black pb-1">Опыт полевой работы</h3>
+                <p class="text-[10px]">Присуждён гражданину/гражданке за выполнение контрактов уровня оценки угроз</p>
+
+                <div class="flex items-center justify-between gap-3 text-[10px]">
+                    <span>ТРЕВОЖНЫЙ+ в количестве 3:</span>
+                    <div class="flex items-center gap-2">
+                        <input type="checkbox" aria-label="Тревожный плюс 1">
+                        <input type="checkbox" aria-label="Тревожный плюс 2">
+                        <input type="checkbox" aria-label="Тревожный плюс 3">
+                    </div>
                 </div>
-            </div>
-            <div class="border-2 border-black p-4">
-                <h3 class="font-bold text-center border-b border-black mb-2 uppercase">Самочувствие (ОС)</h3>
-                <div class="flex justify-center gap-4">
-                    <input type="number" class="w-20 text-3xl text-center" placeholder="MAX">
-                    <span class="text-3xl">/</span>
-                    <input type="number" class="w-20 text-3xl text-center" placeholder="ТЕК">
+
+                <div class="flex items-center justify-between gap-3 text-[10px]">
+                    <span>НЕВЫПОЛНИМЫЙ+ в количестве 1:</span>
+                    <input
+                        type="checkbox"
+                        aria-label="Невыполнимый плюс"
+                        class="w-4 h-4 appearance-none rounded-full border border-black checked:bg-black"
+                    >
                 </div>
-            </div>
+
+                <p class="text-[10px]">Убедитесь в актуальности соотв. награждений.</p>
+            </section>
+
+            <section id="getted_rewards_0" class="border-2 border-black bg-white/50 p-3">
+                <h3 class="font-bold uppercase text-[11px] border-b border-black pb-1 mb-3">Полученные награждения</h3>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-[10px]">
+                    <div class="space-y-2">
+                        <label class="flex items-center gap-2"><span class="w-4 text-right">1.</span><input type="text"></label>
+                        <label class="flex items-center gap-2"><span class="w-4 text-right">2.</span><input type="text"></label>
+                        <label class="flex items-center gap-2"><span class="w-4 text-right">3.</span><input type="text"></label>
+                        <label class="flex items-center gap-2"><span class="w-4 text-right">4.</span><input type="text"></label>
+                        <label class="flex items-center gap-2"><span class="w-4 text-right">5.</span><input type="text"></label>
+                    </div>
+                    <div class="space-y-2">
+                        <label class="flex items-center gap-2"><span class="w-4 text-right">6.</span><input type="text"></label>
+                        <label class="flex items-center gap-2"><span class="w-4 text-right">7.</span><input type="text"></label>
+                        <label class="flex items-center gap-2"><span class="w-4 text-right">8.</span><input type="text"></label>
+                        <label class="flex items-center gap-2"><span class="w-4 text-right">9.</span><input type="text"></label>
+                        <label class="flex items-center gap-2"><span class="w-4 text-right">10.</span><input type="text"></label>
+                    </div>
+                </div>
+            </section>
         </div>
 
         <div class="mt-12 text-[10px] text-gray-500 italic">
@@ -314,21 +381,23 @@
         <div class="grid grid-cols-1 gap-10">
             <section>
                 <h2 class="label-stamp text-lg mb-4">Выявленные ЗНАНИЯ</h2>
-                <div class="space-y-2">
-                    <input type="text" placeholder="1. __________________________________________________">
-                    <input type="text" placeholder="2. __________________________________________________">
-                    <input type="text" placeholder="3. __________________________________________________">
-                    <input type="text" placeholder="4. __________________________________________________">
-                    <input type="text" placeholder="5. __________________________________________________">
+                <div id="getted_knowledge" class="space-y-2">
+                    <textarea rows="1" class="sheet2-autogrow" placeholder="1. __________________________________________________"></textarea>
+                    <textarea rows="1" class="sheet2-autogrow" placeholder="2. __________________________________________________"></textarea>
+                    <textarea rows="1" class="sheet2-autogrow" placeholder="3. __________________________________________________"></textarea>
+                    <textarea rows="1" class="sheet2-autogrow" placeholder="4. __________________________________________________"></textarea>
+                    <textarea rows="1" class="sheet2-autogrow" placeholder="5. __________________________________________________"></textarea>
                 </div>
             </section>
 
             <section>
                 <h2 class="label-stamp text-lg mb-4 text-red-800">Выявленные НЕДОСТАТКИ</h2>
-                <div class="space-y-2">
-                    <input type="text" placeholder="1. __________________________________________________">
-                    <input type="text" placeholder="2. __________________________________________________">
-                    <input type="text" placeholder="3. __________________________________________________">
+                <div id="getted_flaw" class="space-y-2">
+                    <textarea rows="1" class="sheet2-autogrow" placeholder="1. __________________________________________________"></textarea>
+                    <textarea rows="1" class="sheet2-autogrow" placeholder="2. __________________________________________________"></textarea>
+                    <textarea rows="1" class="sheet2-autogrow" placeholder="3. __________________________________________________"></textarea>
+                    <textarea rows="1" class="sheet2-autogrow" placeholder="4. __________________________________________________"></textarea>
+                    <textarea rows="1" class="sheet2-autogrow" placeholder="5. __________________________________________________"></textarea>
                 </div>
             </section>
         </div>
