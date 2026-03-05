@@ -1,7 +1,9 @@
 function showSheet(num) {
     document.querySelectorAll('.sheet').forEach(s => s.classList.remove('active'));
     document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-    const sheet = document.getElementById('sheet' + num);
+    const sheet =
+        document.getElementById('sheet' + num) ||
+        document.getElementById('sheets' + num);
     const btn = document.getElementById('btn' + num);
     if (sheet) sheet.classList.add('active');
     if (btn) btn.classList.add('active');
@@ -57,12 +59,12 @@ function calculate(type) { recalc(type); }
 
 // Ability system (Водова-Ликерта)
 const ABILITIES = [
-    { key: 'metkost', name: 'МЕТКОСТЬ' },
-    { key: 'sila', name: 'СИЛА' },
-    { key: 'analiz', name: 'АНАЛИЗ' },
-    { key: 'hitrost', name: 'ХИТРОСТЬ' },
-    { key: 'vynoslivost', name: 'ВЫНОСЛИВОСТЬ' },
-    { key: 'vyderzhka', name: 'ВЫДЕРЖКА' },
+    { key: 'accuracy', name: 'МЕТКОСТЬ' },
+    { key: 'strength', name: 'СИЛА' },
+    { key: 'analysis', name: 'АНАЛИЗ' },
+    { key: 'cunning', name: 'ХИТРОСТЬ' },
+    { key: 'endurance', name: 'ВЫНОСЛИВОСТЬ' },
+    { key: 'composure', name: 'ВЫДЕРЖКА' },
 ];
 
 const ABILITY_KEYS = ABILITIES.map(a => a.key);
@@ -70,8 +72,10 @@ const EFF_THRESHOLD_EMPTY = '—';
 
 // Configuration for ability allocation
 const AB_BASE = 20;        // baseline value shown at start
-const AB_START_POINTS = 50; // total points available to distribute
-const AB_MAX_EXTRA = 20;   // max extra points per ability (on top of base)
+const AB_START_POINTS = 75; // total points available to distribute
+//TODO: выше поменять AB_START_POINTS на 50, чтобы вернуть базовую логику. Пока не трогать.
+const AB_MAX_EXTRA = 90;   // max extra points per ability (on top of base)
+//TODO: выше поменять AB_MAX_EXTRA на 20, чтобы вернуть базовую логику. Пока не трогать.
 
 function initThresholdRegistryConfigs() {
     const registry = window.ThresholdRegistry;
@@ -89,24 +93,24 @@ function initThresholdRegistryConfigs() {
         });
     }
 
-    if (!registry.get('temporary_weakness_sharp_than_steel')) {
+    if (!registry.get('temporary_weakness_sharper_than_steel')) {
         registry.registerConfig({
-            id: 'temporary_weakness_sharp_than_steel',
+            id: 'temporary_weakness_sharper_than_steel',
             when: {
                 ctxId: 'temporaryWeaknesses',
                 test: value => {
-                    if (Array.isArray(value)) return value.includes('SharpThanSteel');
-                    return value === 'SharpThanSteel';
+                    if (Array.isArray(value)) return value.includes('SharperThanSteel');
+                    return value === 'SharperThanSteel';
                 },
             },
             effects: [
                 {
                     chooseFrom: ABILITY_KEYS,
-                    chooseFromContextKey: 'sharpThanSteelAbility',
+                    chooseFromContextKey: 'sharperThanSteelAbility',
                     add: -20,
                 },
             ],
-            description: 'SharpThanSteel: выбранное Умение получает -20 к порогу эффективности',
+            description: 'SharperThanSteel: выбранное Умение получает -20 к порогу эффективности',
         });
     }
 
@@ -274,6 +278,21 @@ function updateRegForInfection() {
     }
 }
 
+function initSheet2AutoGrow() {
+    const fields = document.querySelectorAll('#getted_knowledge .sheet2-autogrow, #getted_flaw .sheet2-autogrow');
+    if (!fields.length) return;
+
+    const autoGrow = (el) => {
+        el.style.height = 'auto';
+        el.style.height = `${el.scrollHeight}px`;
+    };
+
+    fields.forEach((field) => {
+        autoGrow(field);
+        field.addEventListener('input', () => autoGrow(field));
+    });
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     initThresholdRegistryConfigs();
 
@@ -301,4 +320,5 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     setupAbilities();
+    initSheet2AutoGrow();
 });

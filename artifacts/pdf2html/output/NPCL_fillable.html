@@ -1,0 +1,238 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>NPCL Fillable</title>
+  <style>
+    :root {
+      --paper-width: min(96vw, 920px);
+      --field-border: rgba(22, 88, 160, 0.45);
+      --field-bg: rgba(255, 255, 255, 0.42);
+      --field-focus: #1352a6;
+      --page-shadow: 0 8px 24px rgba(19, 35, 68, 0.14);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      padding: 20px 12px 32px;
+      background: linear-gradient(180deg, #f0f2f5 0%, #dde2ea 100%);
+      font-family: "Segoe UI", Tahoma, sans-serif;
+      color: #1d2a3a;
+    }
+
+    .page-wrap { margin: 0 auto 18px; width: var(--paper-width); }
+
+    .page {
+      position: relative;
+      width: 100%;
+      background: #fff;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: var(--page-shadow);
+    }
+
+    .page-bg {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      user-select: none;
+      pointer-events: none;
+    }
+
+    .fields-layer {
+      position: absolute;
+      inset: 0;
+    }
+
+    .pdf-field {
+      position: absolute;
+      margin: 0;
+      border: 1px solid var(--field-border);
+      background: var(--field-bg);
+      border-radius: 2px;
+      padding: 0.2em 0.28em;
+      font-size: clamp(10px, 1.05vw, 14px);
+      line-height: 1.2;
+      color: #172333;
+      outline: none;
+      resize: none;
+    }
+
+    .pdf-field:focus {
+      border-color: var(--field-focus);
+      background: rgba(255, 255, 255, 0.92);
+      box-shadow: 0 0 0 2px rgba(19, 82, 166, 0.2);
+    }
+
+    .file-field {
+      padding: 0.2em;
+      font-size: clamp(9px, 0.9vw, 12px);
+      background: rgba(255, 255, 255, 0.72);
+    }
+  </style>
+</head>
+<body>
+  <section class="page-wrap">
+  <div class="page" style="aspect-ratio:595.276001/841.890015;">
+    <img class="page-bg" src="NPCL_fillable.page1.jpg" alt="NPCL page 1" loading="lazy" />
+    <div class="fields-layer">
+      <input id="name" class="pdf-field" type="text" name="field_p1_1" title="name" value="" style="left:49.074716%;top:10.561955%;width:44.139856%;height:2.713179%;" />
+      <input id="distinctive_feature" class="pdf-field" type="text" name="distinctive_feature" title="distinctive_feature" value="" style="left:49.074716%;top:16.715131%;width:44.139856%;height:2.616256%;" />
+      <input id="age" class="pdf-field" type="text" name="age" title="age" value="" style="left:32.282337%;top:16.715131%;width:15.284504%;height:2.616256%;" />
+      <input id="works" class="pdf-field" type="text" name="works" title="works" value="" style="left:32.282337%;top:23.982592%;width:26.182308%;height:2.616256%;" />
+      <input id="osank_reg" class="pdf-field" type="text" name="osank_reg" title="osank_reg" value="" style="left:60.794994%;top:23.982592%;width:32.419577%;height:2.616256%;" />
+      <input id="signature" class="pdf-field" type="text" name="signature" title="signature" value="" style="left:61.000613%;top:29.941800%;width:32.213958%;height:2.567915%;" />
+      <input id="income" class="pdf-field" type="text" name="income" title="income" value="" style="left:32.282337%;top:29.941800%;width:26.182308%;height:2.567915%;" />
+      <input id="infection_type" class="pdf-field" type="text" name="infection_type" title="infection_type" value="" style="left:6.031488%;top:38.372117%;width:39.342085%;height:2.713179%;" />
+      <input id="level_degradation" class="pdf-field" type="text" name="level_degradation" title="level_degradation" value="" style="left:17.820473%;top:42.151115%;width:7.402281%;height:2.713179%;" />
+      <input id="level_decomposition" class="pdf-field" type="text" name="_decomposition" title="_decomposition" value="" style="left:38.656690%;top:42.151115%;width:6.716883%;height:2.713179%;" />
+      <input id="oz_cur" class="pdf-field" type="text" name="oz_cur" title="oz_cur" value="" style="left:50.102809%;top:41.085296%;width:6.031487%;height:2.131754%;" />
+      <input id="oz_max" class="pdf-field" type="text" name="oz_max" title="oz_max" value="" style="left:60.315214%;top:41.085296%;width:5.894580%;height:2.131754%;" />
+      <input id="os_cur" class="pdf-field" type="text" name="os_cur" title="os_cur" value="" style="left:73.406455%;top:41.133761%;width:6.031487%;height:2.083289%;" />
+      <input id="os_max" class="pdf-field" type="text" name="os_max" title="os_max" value="" style="left:83.687397%;top:41.085296%;width:6.031656%;height:2.131754%;" />
+      <input id="phys_75" class="pdf-field" type="text" name="phys_75" title="phys_75" value="" style="left:65.318776%;top:53.536804%;width:29.060975%;height:2.519330%;" />
+      <input id="phys_50" class="pdf-field" type="text" name="phys_50" title="phys_50" value="" style="left:65.318776%;top:57.122073%;width:29.060975%;height:2.374063%;" />
+      <input id="phys_25" class="pdf-field" type="text" name="phys_25" title="phys_25" value="" style="left:65.318776%;top:60.562071%;width:29.060975%;height:2.373947%;" />
+      <input id="psych_75" class="pdf-field" type="text" name="psych_75" title="psych_75" value="" style="left:65.318776%;top:67.344898%;width:29.060975%;height:2.374070%;" />
+      <input id="psych_50" class="pdf-field" type="text" name="psych_50" title="psych_50" value="" style="left:65.318776%;top:70.784903%;width:29.060975%;height:2.374063%;" />
+      <input id="psych_25" class="pdf-field" type="text" name="psych_25" title="psych_25" value="" style="left:65.524394%;top:74.127855%;width:28.855357%;height:2.470993%;" />
+      <input id="accuracy_value" class="pdf-field" type="text" name="accuracy_value" title="accuracy_value" value="" style="left:22.481168%;top:54.844932%;width:6.922504%;height:2.519450%;" />
+      <input id="accuracy_eff" class="pdf-field" type="text" name="accuracy_eff" title="accuracy_eff" value="" style="left:31.048622%;top:54.990319%;width:7.059752%;height:2.374063%;" />
+      <input id="accuracy_dev" class="pdf-field" type="text" name="accuracy_dev" title="accuracy_dev" value="" style="left:39.616246%;top:54.844932%;width:6.922502%;height:2.519450%;" />
+      <input id="strength_value" class="pdf-field" type="text" name="strength_value" title="strength_value" value="" style="left:22.481168%;top:58.672511%;width:6.922504%;height:2.373940%;" />
+      <input id="analysis_value" class="pdf-field" type="text" name="analysis_value" title="analysis_value" value="" style="left:22.481168%;top:62.354702%;width:6.922504%;height:2.470869%;" />
+      <input id="analysis_eff" class="pdf-field" type="text" name="analysis_eff" title="analysis_eff" value="" style="left:31.048622%;top:62.451508%;width:7.059752%;height:2.374063%;" />
+      <input id="analysis_dev" class="pdf-field" type="text" name="analysis_dev" title="analysis_dev" value="" style="left:39.616246%;top:62.451508%;width:6.922502%;height:2.374063%;" />
+      <input id="cunning_dev" class="pdf-field" type="text" name="cunning_dev" title="cunning_dev" value="" style="left:39.616246%;top:66.279086%;width:6.922502%;height:2.470869%;" />
+      <input id="endurance_dev" class="pdf-field" type="text" name="endurance_dev" title="endurance_dev" value="" style="left:39.616246%;top:70.203471%;width:6.922502%;height:2.374063%;" />
+      <input id="composure_eff" class="pdf-field" type="text" name="composure_eff" title="composure_eff" value="" style="left:31.048622%;top:73.885662%;width:6.922671%;height:2.374063%;" />
+      <input id="composure_dev" class="pdf-field" type="text" name="composure_dev" title="composure_dev" value="" style="left:39.616246%;top:73.885662%;width:6.922502%;height:2.374063%;" />
+      <input id="endurance_eff" class="pdf-field" type="text" name="endurance_eff" title="endurance_eff" value="" style="left:31.048622%;top:70.203471%;width:7.059752%;height:2.374063%;" />
+      <input id="cunning_eff" class="pdf-field" type="text" name="cunning_eff" title="cunning_eff" value="" style="left:31.048622%;top:66.279086%;width:6.922671%;height:2.374063%;" />
+      <input id="cunning_value" class="pdf-field" type="text" name="cunning_value" title="cunning_value" value="" style="left:22.481168%;top:66.279086%;width:6.922504%;height:2.470869%;" />
+      <input id="endurance_value" class="pdf-field" type="text" name="endurance_value" title="endurance_value" value="" style="left:22.481168%;top:70.203471%;width:6.922504%;height:2.374063%;" />
+      <input id="composure_value" class="pdf-field" type="text" name="composure_value" title="composure_value" value="" style="left:22.481168%;top:73.885662%;width:6.922504%;height:2.374063%;" />
+      <input id="getted_rewards_1" class="pdf-field" type="text" name="getted_rewards_1" title="getted_rewards_1" value="" style="left:50.925284%;top:81.589160%;width:19.808122%;height:2.034831%;" />
+      <input id="getted_rewards_2" class="pdf-field" type="text" name="getted_rewards_2" title="getted_rewards_2" value="" style="left:51.267984%;top:83.720914%;width:19.465422%;height:2.131754%;" />
+      <input id="getted_rewards_3" class="pdf-field" type="text" name="getted_rewards_3" title="getted_rewards_3" value="" style="left:51.267984%;top:85.998054%;width:19.465422%;height:1.986483%;" />
+      <input id="getted_rewards_4" class="pdf-field" type="text" name="getted_rewards_4" title="getted_rewards_4" value="" style="left:51.336522%;top:88.129801%;width:19.396884%;height:2.034947%;" />
+      <input id="getted_rewards_5" class="pdf-field" type="text" name="getted_rewards_5" title="getted_rewards_5" value="" style="left:51.267984%;top:90.358477%;width:19.465422%;height:2.034947%;" />
+      <input id="getted_rewards_6" class="pdf-field" type="text" name="getted_rewards_6" title="getted_rewards_6" value="" style="left:74.914324%;top:81.589160%;width:19.328351%;height:2.034831%;" />
+      <input id="getted_rewards_7" class="pdf-field" type="text" name="getted_rewards_7" title="getted_rewards_7" value="" style="left:74.845786%;top:83.720914%;width:19.396889%;height:2.131754%;" />
+      <input id="getted_rewards_8" class="pdf-field" type="text" name="getted_rewards_8" title="getted_rewards_8" value="" style="left:74.914324%;top:85.998054%;width:19.328351%;height:1.986483%;" />
+      <input id="getted_rewards_9" class="pdf-field" type="text" name="getted_rewards_9" title="getted_rewards_9" value="" style="left:74.914324%;top:88.129801%;width:19.328351%;height:2.034947%;" />
+      <input id="getted_rewards_10" class="pdf-field" type="text" name="getted_rewards_10" title="getted_rewards_10" value="" style="left:75.599723%;top:90.358477%;width:18.642952%;height:2.034947%;" />
+      <input id="experience_check_1" class="pdf-field" type="text" name="experience_check_1" title="experience_check_1" value="" style="left:35.640778%;top:85.513545%;width:2.330516%;height:1.647251%;" />
+      <input id="experience_check_2" class="pdf-field" type="text" name="experience_check_2" title="experience_check_2" value="" style="left:39.479165%;top:85.513545%;width:2.330349%;height:1.647251%;" />
+      <input id="experience_check_3" class="pdf-field" type="text" name="experience_check_3" title="experience_check_3" value="" style="left:43.317386%;top:85.513545%;width:2.398887%;height:1.792638%;" />
+      <input id="oz_res_75" class="pdf-field" type="text" name="oz_res_75" title="oz_res_75" value="" style="left:52.912934%;top:44.767487%;width:3.221362%;height:1.308128%;" />
+      <input id="oz_res_50" class="pdf-field" type="text" name="oz_res_50" title="oz_res_50" value="" style="left:60.315214%;top:44.767487%;width:3.152993%;height:1.308128%;" />
+      <input id="oz_res_25" class="pdf-field" type="text" name="oz_res_25" title="oz_res_25" value="" style="left:67.717663%;top:44.767487%;width:3.015743%;height:1.308128%;" />
+      <input id="os_res_75" class="pdf-field" type="text" name="os_res_75" title="os_res_75" value="" style="left:76.422198%;top:44.767487%;width:3.221362%;height:1.308128%;" />
+      <input id="os_res_50" class="pdf-field" type="text" name="os_res_50" title="os_res_50" value="" style="left:83.824478%;top:44.767487%;width:3.015748%;height:1.308128%;" />
+      <input id="os_res_25" class="pdf-field" type="text" name="os_res_25" title="os_res_25" value="" style="left:91.021308%;top:44.767487%;width:3.221367%;height:1.308128%;" />
+      <input id="photo-input" class="pdf-field file-field" type="file" accept="image/*" name="photo-input" title="photo-input" style="left:5.071933%;top:9.738329%;width:24.468818%;height:23.885662%;" />
+      <input id="experience_round_check" class="pdf-field" type="text" name="experience_round_check" title="experience_round_check" value="" style="left:43.481848%;top:88.235278%;width:2.355039%;height:1.663759%;" />
+    </div>
+  </div>
+</section><section class="page-wrap">
+  <div class="page" style="aspect-ratio:595.276001/841.890015;">
+    <img class="page-bg" src="NPCL_fillable.page2.jpg" alt="NPCL page 2" loading="lazy" />
+    <div class="fields-layer">
+      <textarea id="field-p2-1" class="pdf-field" name="field_p2_1" title="field_p2_1" style="left:5.894409%;top:10.077568%;width:42.837607%;height:8.333272%;"></textarea>
+      <textarea id="field-p2-2" class="pdf-field" name="field_p2_2" title="field_p2_2" style="left:51.267984%;top:10.077568%;width:42.974691%;height:8.333272%;"></textarea>
+      <textarea id="field-p2-3" class="pdf-field" name="field_p2_3" title="field_p2_3" style="left:5.894409%;top:19.718968%;width:42.837607%;height:8.284930%;"></textarea>
+      <textarea id="field-p2-4" class="pdf-field" name="field_p2_4" title="field_p2_4" style="left:51.405065%;top:19.718968%;width:42.837610%;height:8.284930%;"></textarea>
+      <textarea id="field-p2-5" class="pdf-field" name="field_p2_5" title="field_p2_5" style="left:51.346770%;top:29.250853%;width:42.761003%;height:8.204516%;"></textarea>
+      <textarea id="field-p2-6" class="pdf-field" name="field_p2_6" title="field_p2_6" style="left:5.894409%;top:29.215097%;width:42.837607%;height:8.284930%;"></textarea>
+      <textarea id="field-p2-7" class="pdf-field" name="field_p2_7" title="field_p2_7" style="left:5.894409%;top:38.808155%;width:42.837607%;height:8.236473%;"></textarea>
+      <textarea id="field-p2-8" class="pdf-field" name="field_p2_8" title="field_p2_8" style="left:51.405065%;top:38.808155%;width:42.837610%;height:8.236473%;"></textarea>
+      <textarea id="field-p2-9" class="pdf-field" name="field_p2_9" title="field_p2_9" style="left:51.405065%;top:48.207369%;width:42.837610%;height:8.333272%;"></textarea>
+      <textarea id="field-p2-10" class="pdf-field" name="field_p2_10" title="field_p2_10" style="left:5.894409%;top:48.207369%;width:42.837607%;height:8.333272%;"></textarea>
+      <textarea id="field-p2-11" class="pdf-field" name="field_p2_11" title="field_p2_11" style="left:6.031488%;top:61.385696%;width:87.868483%;height:5.232513%;"></textarea>
+      <textarea id="field-p2-12" class="pdf-field" name="field_p2_12" title="field_p2_12" style="left:6.031488%;top:67.926330%;width:87.868483%;height:5.232636%;"></textarea>
+      <textarea id="field-p2-13" class="pdf-field" name="field_p2_13" title="field_p2_13" style="left:6.031488%;top:74.321707%;width:87.868483%;height:5.232513%;"></textarea>
+      <textarea id="field-p2-14" class="pdf-field" name="field_p2_14" title="field_p2_14" style="left:6.031488%;top:80.862348%;width:87.868483%;height:5.232629%;"></textarea>
+      <textarea id="field-p2-15" class="pdf-field" name="field_p2_15" title="field_p2_15" style="left:6.031488%;top:87.160912%;width:87.868483%;height:5.232513%;"></textarea>
+    </div>
+  </div>
+</section><section class="page-wrap">
+  <div class="page" style="aspect-ratio:595.276001/841.890015;">
+    <img class="page-bg" src="NPCL_fillable.page3.jpg" alt="NPCL page 3" loading="lazy" />
+    <div class="fields-layer">
+      <input id="field-p3-1" class="pdf-field" type="text" name="field_p3_1" title="field_p3_1" value="field-p3-1" style="left:5.551711%;top:13.517443%;width:14.941808%;height:2.374063%;" />
+      <input id="field-p3-2" class="pdf-field" type="text" name="field_p3_2" title="field_p3_2" value="field-p3-2" style="left:21.658693%;top:13.517443%;width:8.567454%;height:2.374063%;" />
+      <input id="field-p3-3" class="pdf-field" type="text" name="field_p3_3" title="field_p3_3" value="" style="left:31.596941%;top:13.517443%;width:17.614856%;height:2.374063%;" />
+      <input id="field-p3-4" class="pdf-field" type="text" name="field_p3_4" title="field_p3_4" value="" style="left:52.775853%;top:13.517443%;width:19.465427%;height:2.374063%;" />
+      <input id="field-p3-5" class="pdf-field" type="text" name="field_p3_5" title="field_p3_5" value="" style="left:73.063755%;top:13.517443%;width:21.315996%;height:2.374063%;" />
+      <input id="field-p3-6" class="pdf-field" type="text" name="field_p3_6" title="field_p3_6" value="" style="left:73.063755%;top:16.715131%;width:21.315996%;height:2.374063%;" />
+      <input id="field-p3-7" class="pdf-field" type="text" name="field_p3_7" title="field_p3_7" value="" style="left:53.118553%;top:16.715131%;width:19.122728%;height:2.374063%;" />
+      <input id="field-p3-8" class="pdf-field" type="text" name="field_p3_8" title="field_p3_8" value="" style="left:13.433937%;top:16.715131%;width:35.777860%;height:2.374063%;" />
+      <input id="field-p3-9" class="pdf-field" type="text" name="field_p3_9" title="field_p3_9" value="" style="left:5.620250%;top:20.300400%;width:14.941808%;height:2.374063%;" />
+      <input id="field-p3-10" class="pdf-field" type="text" name="field_p3_10" title="field_p3_10" value="" style="left:13.502476%;top:23.498082%;width:35.777858%;height:2.373947%;" />
+      <input id="field-p3-11" class="pdf-field" type="text" name="field_p3_11" title="field_p3_11" value="" style="left:21.727233%;top:20.300400%;width:8.567454%;height:2.374063%;" />
+      <input id="field-p3-12" class="pdf-field" type="text" name="field_p3_12" title="field_p3_12" value="" style="left:31.665478%;top:20.300400%;width:17.614856%;height:2.374063%;" />
+      <input id="field-p3-13" class="pdf-field" type="text" name="field_p3_13" title="field_p3_13" value="" style="left:5.551711%;top:27.180273%;width:14.941808%;height:2.373947%;" />
+      <input id="field-p3-14" class="pdf-field" type="text" name="field_p3_14" title="field_p3_14" value="" style="left:13.433937%;top:30.377838%;width:35.777860%;height:2.374063%;" />
+      <input id="field-p3-15" class="pdf-field" type="text" name="field_p3_15" title="field_p3_15" value="" style="left:21.658693%;top:27.180273%;width:8.567454%;height:2.373947%;" />
+      <input id="field-p3-16" class="pdf-field" type="text" name="field_p3_16" title="field_p3_16" value="" style="left:31.596941%;top:27.180273%;width:17.614856%;height:2.373947%;" />
+      <input id="field-p3-17" class="pdf-field" type="text" name="field_p3_17" title="field_p3_17" value="" style="left:5.551711%;top:33.866301%;width:14.941808%;height:2.373947%;" />
+      <input id="field-p3-18" class="pdf-field" type="text" name="field_p3_18" title="field_p3_18" value="" style="left:13.433937%;top:37.063989%;width:35.777860%;height:2.373943%;" />
+      <input id="field-p3-19" class="pdf-field" type="text" name="field_p3_19" title="field_p3_19" value="" style="left:21.658693%;top:33.866301%;width:8.567454%;height:2.373947%;" />
+      <input id="field-p3-20" class="pdf-field" type="text" name="field_p3_20" title="field_p3_20" value="" style="left:31.596941%;top:33.866301%;width:17.614856%;height:2.373947%;" />
+      <input id="field-p3-21" class="pdf-field" type="text" name="field_p3_21" title="field_p3_21" value="" style="left:53.050015%;top:20.300400%;width:19.054185%;height:2.374063%;" />
+      <input id="field-p3-22" class="pdf-field" type="text" name="field_p3_22" title="field_p3_22" value="" style="left:72.995217%;top:20.300400%;width:21.315991%;height:2.374063%;" />
+      <input id="field-p3-23" class="pdf-field" type="text" name="field_p3_23" title="field_p3_23" value="" style="left:53.050015%;top:23.401159%;width:19.122728%;height:2.374063%;" />
+      <input id="field-p3-24" class="pdf-field" type="text" name="field_p3_24" title="field_p3_24" value="" style="left:72.995217%;top:23.401159%;width:21.315991%;height:2.374063%;" />
+      <input id="field-p3-25" class="pdf-field" type="text" name="field_p3_25" title="field_p3_25" value="" style="left:52.912934%;top:27.034886%;width:19.122728%;height:2.374063%;" />
+      <input id="field-p3-26" class="pdf-field" type="text" name="field_p3_26" title="field_p3_26" value="" style="left:72.858136%;top:27.034886%;width:21.315996%;height:2.374063%;" />
+      <input id="field-p3-27" class="pdf-field" type="text" name="field_p3_27" title="field_p3_27" value="" style="left:52.981472%;top:30.232574%;width:19.122728%;height:2.374063%;" />
+      <input id="field-p3-28" class="pdf-field" type="text" name="field_p3_28" title="field_p3_28" value="" style="left:72.926674%;top:30.232574%;width:21.316001%;height:2.374063%;" />
+      <input id="field-p3-29" class="pdf-field" type="text" name="field_p3_29" title="field_p3_29" value="" style="left:53.050015%;top:33.866301%;width:19.122728%;height:2.373947%;" />
+      <input id="field-p3-30" class="pdf-field" type="text" name="field_p3_30" title="field_p3_30" value="" style="left:72.995217%;top:33.866301%;width:21.315991%;height:2.373947%;" />
+      <input id="field-p3-31" class="pdf-field" type="text" name="field_p3_31" title="field_p3_31" value="" style="left:53.050015%;top:37.160796%;width:19.122728%;height:2.374063%;" />
+      <input id="field-p3-32" class="pdf-field" type="text" name="field_p3_32" title="field_p3_32" value="" style="left:72.995217%;top:37.160796%;width:21.315991%;height:2.374063%;" />
+      <input id="field-p3-33" class="pdf-field" type="text" name="field_p3_33" title="field_p3_33" value="" style="left:5.551711%;top:47.044628%;width:34.064535%;height:2.373943%;" />
+      <input id="field-p3-34" class="pdf-field" type="text" name="field_p3_34" title="field_p3_34" value="" style="left:40.507261%;top:47.044628%;width:8.704535%;height:2.470869%;" />
+      <input id="field-p3-35" class="pdf-field" type="text" name="field_p3_35" title="field_p3_35" value="" style="left:13.433937%;top:50.242193%;width:35.777860%;height:2.374063%;" />
+      <input id="field-p3-36" class="pdf-field" type="text" name="field_p3_36" title="field_p3_36" value="" style="left:5.551711%;top:53.779117%;width:34.064535%;height:2.373943%;" />
+      <input id="field-p3-37" class="pdf-field" type="text" name="field_p3_37" title="field_p3_37" value="" style="left:13.433937%;top:56.976682%;width:35.777860%;height:2.374067%;" />
+      <input id="field-p3-38" class="pdf-field" type="text" name="field_p3_38" title="field_p3_38" value="" style="left:40.507261%;top:53.779117%;width:8.704535%;height:2.470869%;" />
+      <input id="field-p3-39" class="pdf-field" type="text" name="field_p3_39" title="field_p3_39" value="" style="left:5.483171%;top:60.707338%;width:34.064535%;height:2.374067%;" />
+      <input id="field-p3-40" class="pdf-field" type="text" name="field_p3_40" title="field_p3_40" value="" style="left:13.365396%;top:63.905023%;width:35.777857%;height:2.374063%;" />
+      <input id="field-p3-41" class="pdf-field" type="text" name="field_p3_41" title="field_p3_41" value="" style="left:40.438721%;top:60.707338%;width:8.704533%;height:2.470989%;" />
+      <input id="field-p3-42" class="pdf-field" type="text" name="field_p3_42" title="field_p3_42" value="" style="left:5.483171%;top:67.344898%;width:34.064535%;height:2.374070%;" />
+      <input id="field-p3-43" class="pdf-field" type="text" name="field_p3_43" title="field_p3_43" value="" style="left:13.365396%;top:70.542586%;width:35.777857%;height:2.374070%;" />
+      <input id="field-p3-44" class="pdf-field" type="text" name="field_p3_44" title="field_p3_44" value="" style="left:40.438721%;top:67.344898%;width:8.704533%;height:2.470993%;" />
+      <input id="field-p3-45" class="pdf-field" type="text" name="field_p3_45" title="field_p3_45" value="" style="left:52.775853%;top:47.044628%;width:19.465427%;height:2.373943%;" />
+      <input id="field-p3-46" class="pdf-field" type="text" name="field_p3_46" title="field_p3_46" value="" style="left:73.063755%;top:47.044628%;width:21.315996%;height:2.373943%;" />
+      <input id="field-p3-47" class="pdf-field" type="text" name="field_p3_47" title="field_p3_47" value="" style="left:53.118553%;top:50.242193%;width:19.122728%;height:2.374063%;" />
+      <input id="field-p3-48" class="pdf-field" type="text" name="field_p3_48" title="field_p3_48" value="" style="left:73.063755%;top:50.242193%;width:21.315996%;height:2.374063%;" /><textarea id="field-p3-49" class="pdf-field" name="field_p3_49" title="field_p3_49" style="left:6.728307%;top:77.183600%;width:41.799941%;height:14.735536%;"></textarea><textarea id="field-p3-50" class="pdf-field" name="field_p3_50" title="field_p3_50" style="left:52.060555%;top:77.183600%;width:41.042983%;height:14.735536%;"></textarea>
+      <input id="field-p3-51" class="pdf-field" type="text" name="field_p3_51" title="field_p3_51" value="" style="left:72.926674%;top:56.976682%;width:21.316001%;height:2.374067%;" />
+      <input id="field-p3-52" class="pdf-field" type="text" name="field_p3_52" title="field_p3_52" value="" style="left:72.926674%;top:53.779117%;width:21.316001%;height:2.373943%;" />
+      <input id="field-p3-53" class="pdf-field" type="text" name="field_p3_53" title="field_p3_53" value="" style="left:72.926674%;top:63.711295%;width:21.316001%;height:2.373940%;" />
+      <input id="field-p3-54" class="pdf-field" type="text" name="field_p3_54" title="field_p3_54" value="" style="left:72.926674%;top:60.513606%;width:21.316001%;height:2.373940%;" />
+      <input id="field-p3-55" class="pdf-field" type="text" name="field_p3_55" title="field_p3_55" value="" style="left:73.063755%;top:70.591051%;width:21.315996%;height:2.374063%;" />
+      <input id="field-p3-56" class="pdf-field" type="text" name="field_p3_56" title="field_p3_56" value="" style="left:73.063755%;top:67.393370%;width:21.315996%;height:2.374056%;" />
+      <input id="field-p3-57" class="pdf-field" type="text" name="field_p3_57" title="field_p3_57" value="" style="left:53.118553%;top:53.779117%;width:19.054190%;height:2.373943%;" />
+      <input id="field-p3-58" class="pdf-field" type="text" name="field_p3_58" title="field_p3_58" value="" style="left:53.050015%;top:60.513606%;width:19.054185%;height:2.373940%;" />
+      <input id="field-p3-59" class="pdf-field" type="text" name="field_p3_59" title="field_p3_59" value="" style="left:53.050015%;top:56.976682%;width:19.054185%;height:2.374067%;" />
+      <input id="field-p3-60" class="pdf-field" type="text" name="field_p3_60" title="field_p3_60" value="" style="left:53.118553%;top:67.296556%;width:19.054190%;height:2.373947%;" />
+      <input id="field-p3-61" class="pdf-field" type="text" name="field_p3_61" title="field_p3_61" value="" style="left:53.118553%;top:63.759636%;width:19.122728%;height:2.374063%;" />
+      <input id="field-p3-62" class="pdf-field" type="text" name="field_p3_62" title="field_p3_62" value="" style="left:53.187090%;top:70.639516%;width:19.054190%;height:2.374063%;" />
+    </div>
+  </div>
+</section><section class="page-wrap">
+  <div class="page" style="aspect-ratio:595.276001/841.890015;">
+    <img class="page-bg" src="NPCL_fillable.page4.jpg" alt="NPCL page 4" loading="lazy" />
+    <div class="fields-layer">
+      <textarea id="field-p4-1" class="pdf-field" name="field_p4_1" title="field_p4_1" style="left:5.650824%;top:9.700435%;width:43.693347%;height:82.810226%;"></textarea><textarea id="field-p4-2" class="pdf-field" name="field_p4_2" title="field_p4_2" style="left:50.454076%;top:9.771707%;width:43.794136%;height:82.738953%;"></textarea>
+    </div>
+  </div>
+</section>
+</body>
+</html>
