@@ -5,7 +5,7 @@ const path = require('path');
 const os = require('os');
 
 const PID_FILE = path.resolve(__dirname, '..', 'server.pid');
-const SERVER_JS = path.resolve(__dirname, '..', 'server.js');
+const SERVER_JS = path.resolve(__dirname, '..', 'server', 'server.js');
 
 function writePid(pid) {
   fs.writeFileSync(PID_FILE, String(pid), { encoding: 'utf8' });

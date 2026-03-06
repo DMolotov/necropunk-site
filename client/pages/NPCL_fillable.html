@@ -73,21 +73,119 @@
       font-size: clamp(9px, 0.9vw, 12px);
       background: rgba(255, 255, 255, 0.72);
     }
+
+    .pdf-check {
+      appearance: none;
+      -webkit-appearance: none;
+      padding: 0;
+      cursor: pointer;
+      background: rgba(255, 255, 255, 0.78);
+    }
+
+    .pdf-check:checked {
+      border-color: #1c4f95;
+      background: #1c4f95;
+      box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.88);
+    }
+
+    .pdf-check-round {
+      border-radius: 999px;
+    }
+
+    .sheet-toolbar {
+      width: var(--paper-width);
+      margin: 0 auto 14px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .tab-btn {
+      border: 1px solid #8aa5c9;
+      background: #f7fbff;
+      color: #27466d;
+      border-radius: 6px;
+      padding: 7px 12px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .tab-btn.active {
+      background: #2e5e9f;
+      border-color: #2e5e9f;
+      color: #fff;
+    }
+
+    .page-wrap.is-hidden { display: none; }
+
+    .photo-preview {
+      position: absolute;
+      left: 5.071933%;
+      top: 9.738329%;
+      width: 24.468818%;
+      height: 23.885662%;
+      border-radius: 2px;
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: cover;
+      pointer-events: none;
+    }
+
+    .pdf-field.hl-75 { border-color: #f2be5a; background: rgba(242, 190, 90, 0.18); }
+    .pdf-field.hl-50 { border-color: #f08f47; background: rgba(240, 143, 71, 0.18); }
+    .pdf-field.hl-25 { border-color: #dc4f4f; background: rgba(220, 79, 79, 0.2); }
+
+    .ability-points {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      background: rgba(255, 255, 255, 0.82);
+      border: 1px solid #8aa5c9;
+      border-radius: 6px;
+      padding: 5px 8px;
+      font-size: 11px;
+      line-height: 1.2;
+      color: #27466d;
+    }
   </style>
 </head>
 <body>
+  <nav class="sheet-toolbar">
+  <a href="create_char.html" class="text-sm uppercase tracking-widest hover:text-gold">← Назад к архиву</a>
+    <button type="button" id="btn1" class="tab-btn active" onclick="showSheet(1)">Лист 1</button>
+    <button type="button" id="btn2" class="tab-btn" onclick="showSheet(2)">Лист 2</button>
+    <button type="button" id="btn3" class="tab-btn" onclick="showSheet(3)">Лист 3</button>
+    <button type="button" id="btn4" class="tab-btn" onclick="showSheet(4)">Лист 4</button>
+  </nav>
   <section class="page-wrap">
   <div id="sheet1" class="page" style="aspect-ratio:595.276001/841.890015;">
-    <img class="page-bg" src="NPCL_fillable.page1.jpg" alt="NPCL page 1" loading="lazy" />
+    <img class="page-bg" src="../assets/npcl/NPCL_fillable.page1.jpg" alt="NPCL page 1" loading="lazy" />
     <div class="fields-layer">
       <input id="name" class="pdf-field" type="text" name="field_p1_1" title="name" value="" style="left:49.074716%;top:10.561955%;width:44.139856%;height:2.713179%;" />
       <input id="distinctive_feature" class="pdf-field" type="text" name="distinctive_feature" title="distinctive_feature" value="" style="left:49.074716%;top:16.715131%;width:44.139856%;height:2.616256%;" />
       <input id="age" class="pdf-field" type="text" name="age" title="age" value="" style="left:32.282337%;top:16.715131%;width:15.284504%;height:2.616256%;" />
-      <input id="works" class="pdf-field" type="text" name="works" title="works" value="" style="left:32.282337%;top:23.982592%;width:26.182308%;height:2.616256%;" />
+      <select id="works" class="pdf-field" name="works" title="works" style="left:32.282337%;top:23.982592%;width:26.182308%;height:2.616256%;">
+        <option value="" disabled selected>---</option>
+        <option>Оперативник ГОМОНа</option>
+        <option>Санкционированный</option>
+        <option>Учёный ГИИБ</option>
+        <option>Воскереситель</option>
+        <option>Торговец плотью</option>
+        <option>Подрядчик</option>
+      </select>
       <input id="osank_reg" class="pdf-field" type="text" name="osank_reg" title="osank_reg" value="" style="left:60.794994%;top:23.982592%;width:32.419577%;height:2.616256%;" />
       <input id="signature" class="pdf-field" type="text" name="signature" title="signature" value="" style="left:61.000613%;top:29.941800%;width:32.213958%;height:2.567915%;" />
       <input id="income" class="pdf-field" type="text" name="income" title="income" value="" style="left:32.282337%;top:29.941800%;width:26.182308%;height:2.567915%;" />
-      <input id="infection_type" class="pdf-field" type="text" name="infection_type" title="infection_type" value="" style="left:6.031488%;top:38.372117%;width:39.342085%;height:2.713179%;" />
+      <select id="infection_type" class="pdf-field" name="infection_type" title="infection_type" style="left:6.031488%;top:38.372117%;width:39.342085%;height:2.713179%;">
+        <option value="" disabled selected>---</option>
+        <option>Живчик</option>
+        <option>Мертвяк</option>
+        <option>Упырь</option>
+        <option>Чучело</option>
+        <option>Близнец</option>
+        <option>Голем</option>
+      </select>
       <input id="level_degradation" class="pdf-field" type="text" name="level_degradation" title="level_degradation" value="" style="left:17.820473%;top:42.151115%;width:7.402281%;height:2.713179%;" />
       <input id="level_decomposition" class="pdf-field" type="text" name="_decomposition" title="_decomposition" value="" style="left:38.656690%;top:42.151115%;width:6.716883%;height:2.713179%;" />
       <input id="oz_cur" class="pdf-field" type="text" name="oz_cur" title="oz_cur" value="" style="left:50.102809%;top:41.085296%;width:6.031487%;height:2.131754%;" />
@@ -128,22 +226,23 @@
       <input id="getted_rewards_8" class="pdf-field" type="text" name="getted_rewards_8" title="getted_rewards_8" value="" style="left:74.914324%;top:85.998054%;width:19.328351%;height:1.986483%;" />
       <input id="getted_rewards_9" class="pdf-field" type="text" name="getted_rewards_9" title="getted_rewards_9" value="" style="left:74.914324%;top:88.129801%;width:19.328351%;height:2.034947%;" />
       <input id="getted_rewards_10" class="pdf-field" type="text" name="getted_rewards_10" title="getted_rewards_10" value="" style="left:75.599723%;top:90.358477%;width:18.642952%;height:2.034947%;" />
-      <input id="experience_check_1" class="pdf-field" type="text" name="experience_check_1" title="experience_check_1" value="" style="left:35.640778%;top:85.513545%;width:2.330516%;height:1.647251%;" />
-      <input id="experience_check_2" class="pdf-field" type="text" name="experience_check_2" title="experience_check_2" value="" style="left:39.479165%;top:85.513545%;width:2.330349%;height:1.647251%;" />
-      <input id="experience_check_3" class="pdf-field" type="text" name="experience_check_3" title="experience_check_3" value="" style="left:43.317386%;top:85.513545%;width:2.398887%;height:1.792638%;" />
+      <input id="experience_check_1" class="pdf-field pdf-check" type="checkbox" name="experience_check_1" title="experience_check_1" style="left:35.640778%;top:85.513545%;width:2.330516%;height:1.647251%;" />
+      <input id="experience_check_2" class="pdf-field pdf-check" type="checkbox" name="experience_check_2" title="experience_check_2" style="left:39.479165%;top:85.513545%;width:2.330349%;height:1.647251%;" />
+      <input id="experience_check_3" class="pdf-field pdf-check" type="checkbox" name="experience_check_3" title="experience_check_3" style="left:43.317386%;top:85.513545%;width:2.398887%;height:1.792638%;" />
       <input id="oz_res_75" class="pdf-field" type="text" name="oz_res_75" title="oz_res_75" value="" style="left:52.912934%;top:44.767487%;width:3.221362%;height:1.308128%;" />
       <input id="oz_res_50" class="pdf-field" type="text" name="oz_res_50" title="oz_res_50" value="" style="left:60.315214%;top:44.767487%;width:3.152993%;height:1.308128%;" />
       <input id="oz_res_25" class="pdf-field" type="text" name="oz_res_25" title="oz_res_25" value="" style="left:67.717663%;top:44.767487%;width:3.015743%;height:1.308128%;" />
       <input id="os_res_75" class="pdf-field" type="text" name="os_res_75" title="os_res_75" value="" style="left:76.422198%;top:44.767487%;width:3.221362%;height:1.308128%;" />
       <input id="os_res_50" class="pdf-field" type="text" name="os_res_50" title="os_res_50" value="" style="left:83.824478%;top:44.767487%;width:3.015748%;height:1.308128%;" />
       <input id="os_res_25" class="pdf-field" type="text" name="os_res_25" title="os_res_25" value="" style="left:91.021308%;top:44.767487%;width:3.221367%;height:1.308128%;" />
+      <div id="photo-preview" class="photo-preview"></div>
       <input id="photo-input" class="pdf-field file-field" type="file" accept="image/*" name="photo-input" title="photo-input" style="left:5.071933%;top:9.738329%;width:24.468818%;height:23.885662%;" />
-      <input id="experience_round_check" class="pdf-field" type="text" name="experience_round_check" title="experience_round_check" value="" style="left:43.481848%;top:88.235278%;width:2.355039%;height:1.663759%;" />
+      <input id="experience_round_check" class="pdf-field pdf-check pdf-check-round" type="checkbox" name="experience_round_check" title="experience_round_check" style="left:43.481848%;top:88.235278%;width:2.355039%;height:1.663759%;" />
     </div>
   </div>
 </section><section class="page-wrap">
   <div id="sheet2" class="page" style="aspect-ratio:595.276001/841.890015;">
-    <img class="page-bg" src="NPCL_fillable.page2.jpg" alt="NPCL page 2" loading="lazy" />
+    <img class="page-bg" src="../assets/npcl/NPCL_fillable.page2.jpg" alt="NPCL page 2" loading="lazy" />
     <div class="fields-layer">
       <textarea id="field-p2-1" class="pdf-field" name="field_p2_1" title="field_p2_1" style="left:5.894409%;top:10.077568%;width:42.837607%;height:8.333272%;"></textarea>
       <textarea id="field-p2-2" class="pdf-field" name="field_p2_2" title="field_p2_2" style="left:51.267984%;top:10.077568%;width:42.974691%;height:8.333272%;"></textarea>
@@ -164,10 +263,10 @@
   </div>
 </section><section class="page-wrap">
   <div id="sheet3" class="page" style="aspect-ratio:595.276001/841.890015;">
-    <img class="page-bg" src="NPCL_fillable.page3.jpg" alt="NPCL page 3" loading="lazy" />
+    <img class="page-bg" src="../assets/npcl/NPCL_fillable.page3.jpg" alt="NPCL page 3" loading="lazy" />
     <div class="fields-layer">
-      <input id="field-p3-1" class="pdf-field" type="text" name="field_p3_1" title="field_p3_1" value="field-p3-1" style="left:5.551711%;top:13.517443%;width:14.941808%;height:2.374063%;" />
-      <input id="field-p3-2" class="pdf-field" type="text" name="field_p3_2" title="field_p3_2" value="field-p3-2" style="left:21.658693%;top:13.517443%;width:8.567454%;height:2.374063%;" />
+      <input id="field-p3-1" class="pdf-field" type="text" name="field_p3_1" title="field_p3_1" value="" style="left:5.551711%;top:13.517443%;width:14.941808%;height:2.374063%;" />
+      <input id="field-p3-2" class="pdf-field" type="text" name="field_p3_2" title="field_p3_2" value="" style="left:21.658693%;top:13.517443%;width:8.567454%;height:2.374063%;" />
       <input id="field-p3-3" class="pdf-field" type="text" name="field_p3_3" title="field_p3_3" value="" style="left:31.596941%;top:13.517443%;width:17.614856%;height:2.374063%;" />
       <input id="field-p3-4" class="pdf-field" type="text" name="field_p3_4" title="field_p3_4" value="" style="left:52.775853%;top:13.517443%;width:19.465427%;height:2.374063%;" />
       <input id="field-p3-5" class="pdf-field" type="text" name="field_p3_5" title="field_p3_5" value="" style="left:73.063755%;top:13.517443%;width:21.315996%;height:2.374063%;" />
@@ -230,11 +329,12 @@
   </div>
 </section><section class="page-wrap">
   <div id="sheet4" class="page" style="aspect-ratio:595.276001/841.890015;">
-    <img class="page-bg" src="NPCL_fillable.page4.jpg" alt="NPCL page 4" loading="lazy" />
+    <img class="page-bg" src="../assets/npcl/NPCL_fillable.page4.jpg" alt="NPCL page 4" loading="lazy" />
     <div class="fields-layer">
       <textarea id="field-p4-1" class="pdf-field" name="field_p4_1" title="field_p4_1" style="left:5.650824%;top:9.700435%;width:43.693347%;height:82.810226%;"></textarea><textarea id="field-p4-2" class="pdf-field" name="field_p4_2" title="field_p4_2" style="left:50.454076%;top:9.771707%;width:43.794136%;height:82.738953%;"></textarea>
     </div>
   </div>
 </section>
+<script src="NPCL_fillable.js" defer></script>
 </body>
 </html>
