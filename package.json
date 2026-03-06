@@ -7,6 +7,10 @@
     "manage:stop": "node scripts/manage.js stop",
     "manage:restart": "node scripts/manage.js restart",
     "manage:status": "node scripts/manage.js status",
+    "db:up": "docker compose up -d mongo",
+    "db:down": "docker compose down",
+    "db:logs": "docker compose logs -f mongo",
+    "seed:knowledge": "node scripts/seed-knowledge.js",
     "pdf:to-html": "node scripts/pdfjson-to-html.js",
     "pdf2htmlex:convert": "node scripts/pdf2htmlex-convert.js",
     "pdf2htmlex:npcl": "node scripts/pdf2htmlex-convert.js --input artifacts/pdf2html/input/NPCL_fillable.pdf --output-name NPCL_fillable.html"
