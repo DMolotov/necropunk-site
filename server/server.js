@@ -8,7 +8,7 @@ const path = require('path');
 const statusRouter = require('./routes/status');
 const authRouter = require('./routes/auth');
 const knowledgeRouter = require('./routes/knowledge');
-const mongo = require('./lib/mongo');
+const mysql = require('./lib/mysql');
 const { initKnowledgeCollection } = require('./lib/knowledge');
 
 const app = express();
@@ -37,11 +37,9 @@ app.use((err, req, res, next) => {
 
 (async () => {
   try {
-    const uri = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017';
-    const dbName = process.env.MONGODB_DBNAME || 'necropunk';
-
-    await mongo.connect(uri, dbName);
-    console.log(`MongoDB connected: ${dbName}`);
+    await mysql.connect();
+    await mysql.initSchema();
+    console.log(`MySQL connected: ${process.env.MYSQL_DATABASE || 'necropunk'}`);
 
     const initResult = await initKnowledgeCollection();
     if (initResult.seeded) {
@@ -56,12 +54,9 @@ app.use((err, req, res, next) => {
       server.close(async () => {
         console.log('Server stopped');
         try {
-          const client = mongo.client();
-          if (client && client.close) {
-            await client.close();
-          }
+          await mysql.close();
         } catch (e) {
-          console.error('Mongo close error', e);
+          console.error('MySQL close error', e);
         }
         process.exit(0);
       });

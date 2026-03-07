@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const crypto = require('crypto');
-const { findUserByUsername, createUser, saveUsers, readUsers } = require('../lib/users');
+const { findUserByUsername, createUser, updateUserToken } = require('../lib/users');
 
 function genId() {
   return Date.now().toString(36) + Math.random().toString(36).slice(2,8);
@@ -58,12 +58,7 @@ router.post('/login', async (req, res) => {
     if (!ok) return res.status(401).json({ error: 'invalid credentials' });
     // rotate token
     const token = genToken();
-    const users = await readUsers();
-    const idx = users.findIndex(u => u.id === user.id);
-    if (idx >= 0) {
-      users[idx].token = token;
-      await saveUsers(users);
-    }
+    await updateUserToken(user.id, token);
     return res.json({ user: { id: user.id, username: user.username }, token });
   } catch (e) { return res.status(500).json({ error: e.message || 'server error' }); }
 });
