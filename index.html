@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MY-REPO - Навигация</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Roboto+Slab:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background-color: #1a1a1a;
+      color: #c7c7c7;
+      font-family: "Roboto Slab", serif;
+      background-image: radial-gradient(ellipse at top, rgba(50, 50, 50, 0.45) 0%, rgba(26, 26, 26, 1) 65%);
+    }
+    .font-title {
+      font-family: "Playfair Display", serif;
+    }
+    .wrapper {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 48px 20px 56px;
+    }
+    h1 {
+      text-align: center;
+      margin: 0 0 10px;
+      font-size: clamp(34px, 6vw, 56px);
+      letter-spacing: 0.06em;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
+    }
+    .subtitle {
+      text-align: center;
+      margin: 0 0 36px;
+      color: #9f9f9f;
+      font-size: 18px;
+    }
+    .divider {
+      height: 1px;
+      background: linear-gradient(to right, transparent, #444, transparent);
+      margin: 0 auto 36px;
+      max-width: 640px;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 18px;
+    }
+    .card {
+      background-color: rgba(40, 40, 40, 0.8);
+      border: 1px solid #333;
+      border-radius: 8px;
+      backdrop-filter: blur(5px);
+      transition: all 0.3s ease;
+    }
+    .card:hover {
+      background-color: rgba(50, 50, 50, 0.9);
+      border-color: #8a6e2f;
+      transform: translateY(-5px);
+    }
+    .tile {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      aspect-ratio: 1 / 1;
+      text-decoration: none;
+      color: inherit;
+      padding: 14px;
+      box-sizing: border-box;
+    }
+    .tile span {
+      font-family: "Playfair Display", serif;
+      font-size: clamp(18px, 2.1vw, 26px);
+      line-height: 1.2;
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
+    }
+  </style>
+</head>
+<body>
+  <main class="wrapper">
+    <h1 class="font-title">MY-REPO</h1>
+    <p class="subtitle">Навигация по страницам проекта</p>
+    <div class="divider"></div>
+
+    <section class="grid" aria-label="Список разделов">
+      <a class="card tile" href="client/pages/index.html"><span>NecroPunk</span></a>
+      <a class="card tile" href="client/nkpunk/index.html"><span>N***Punk</span></a>
+      <a class="card tile" href="client/direct_action/index.html"><span>Прямое действие</span></a>
+      <a class="card tile" href="client/beingNC/index.html"><span>Быть Ником Кейджем</span></a>
+      <a class="card tile" href="client/editorial/index.html"><span>Редакция</span></a>
+      <a class="card tile" href="client/hotreviveLinch/index.html"><span>Как воскресить Линча</span></a>
+    </section>
+  </main>
+</body>
+</html>
