@@ -6,14 +6,14 @@
 
 - Клиентские страницы (`client/pages`) с интерфейсами игры и справочниками.
 - Node.js/Express API (`server`) для статуса, авторизации и знаний.
-- MongoDB как основное хранилище данных.
+- MySQL как основное хранилище данных.
 - Полноценный CRUD для раздела знаний (`/api/knowledge`).
 
 ## Требования
 
 - Node.js 18+
 - npm
-- Docker Desktop (для локального MongoDB через `docker compose`)
+- Docker Desktop (для локального MySQL через `docker compose`)
 
 ## Быстрый старт
 
@@ -23,7 +23,7 @@
 npm install
 ```
 
-2. Поднимите MongoDB:
+2. Поднимите MySQL:
 
 ```bash
 npm run db:up
@@ -33,9 +33,15 @@ npm run db:up
 
 ```env
 PORT=3000
-MONGODB_URI=mongodb://127.0.0.1:27017
-MONGODB_DBNAME=necropunk
+MYSQL_HOST=127.0.0.1
+MYSQL_PORT=3306
+MYSQL_USER=root
+MYSQL_PASSWORD=root
+MYSQL_DATABASE=necropunk
+MYSQL_AUTO_CREATE_DATABASE=true
 ```
+
+Если база уже создана на хостинге и у пользователя нет прав `CREATE DATABASE`, установите `MYSQL_AUTO_CREATE_DATABASE=false`.
 
 4. Запустите сервер:
 
@@ -49,8 +55,8 @@ npm start
 
 При старте сервер:
 
-- подключается к MongoDB;
-- создаёт индексы для коллекции `knowledge`;
+- подключается к MySQL;
+- создаёт таблицы и индексы для `knowledge_items`;
 - если коллекция пустая, заполняет её начальными данными из `server/data/knowledge.json`.
 
 Для принудительного пересида знаний:
@@ -67,10 +73,10 @@ npm run seed:knowledge
 - `npm run manage:stop` — остановка фонового сервера
 - `npm run manage:restart` — перезапуск фонового сервера
 - `npm run manage:status` — статус фонового сервера
-- `npm run db:up` — поднять MongoDB контейнер
+- `npm run db:up` — поднять MySQL контейнер
 - `npm run db:down` — остановить и удалить контейнеры compose
-- `npm run db:logs` — логи MongoDB
-- `npm run seed:knowledge` — пересид коллекции знаний
+- `npm run db:logs` — логи MySQL
+- `npm run seed:knowledge` — пересид таблицы знаний
 
 ## API знаний (Knowledge CRUD)
 
@@ -88,10 +94,10 @@ npm run seed:knowledge
 ## Структура (кратко)
 
 - `client/` — фронтенд страницы и скрипты
-- `server/` — API, роуты, библиотека доступа к MongoDB
+- `server/` — API, роуты, библиотека доступа к MySQL
 - `scripts/` — служебные скрипты (manage, seed)
 - `docs/` — документация
-- `docker-compose.yml` — локальная инфраструктура MongoDB
+- `docker-compose.yml` — локальная инфраструктура MySQL
 
 ## Примечание
 

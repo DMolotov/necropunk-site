@@ -1,14 +1,14 @@
-# Knowledge CRUD + MongoDB
+# Knowledge CRUD + MySQL
 
 Документ синхронизирован с `README.md` и описывает текущую реализацию API знаний.
 
-## 1. Запуск MongoDB
+## 1. Запуск MySQL
 
 ```bash
 npm run db:up
 ```
 
-MongoDB поднимается в Docker и доступна на `127.0.0.1:27017`.
+MySQL поднимается в Docker и доступна на `127.0.0.1:3306`.
 
 ## 2. Переменные окружения
 
@@ -16,9 +16,15 @@ MongoDB поднимается в Docker и доступна на `127.0.0.1:270
 
 ```env
 PORT=3000
-MONGODB_URI=mongodb://127.0.0.1:27017
-MONGODB_DBNAME=necropunk
+MYSQL_HOST=127.0.0.1
+MYSQL_PORT=3306
+MYSQL_USER=root
+MYSQL_PASSWORD=root
+MYSQL_DATABASE=necropunk
+MYSQL_AUTO_CREATE_DATABASE=true
 ```
+
+Если база уже создана и у пользователя нет прав `CREATE DATABASE`, укажите `MYSQL_AUTO_CREATE_DATABASE=false`.
 
 ## 3. Запуск сервера
 
@@ -27,8 +33,8 @@ npm start
 ```
 
 При старте сервер:
-- подключается к MongoDB;
-- создаёт индексы для коллекции `knowledge`;
+- подключается к MySQL;
+- создаёт таблицы и индексы для `knowledge_items`;
 - если коллекция пустая, загружает начальные данные из `server/data/knowledge.json`.
 
 ## 4. Пересид коллекции знаний
@@ -37,7 +43,7 @@ npm start
 npm run seed:knowledge
 ```
 
-Скрипт очищает коллекцию `knowledge` и заново загружает seed-данные.
+Скрипт очищает таблицу `knowledge_items` и заново загружает seed-данные.
 
 ## 5. Эндпоинты API
 
@@ -94,7 +100,7 @@ npm run seed:knowledge
 
 ## 7. Полезные команды
 
-- `npm run db:up` — поднять MongoDB
+- `npm run db:up` — поднять MySQL
 - `npm run db:down` — остановить и удалить compose-ресурсы
-- `npm run db:logs` — смотреть логи MongoDB
+- `npm run db:logs` — смотреть логи MySQL
 - `npm run seed:knowledge` — пересид данных знаний

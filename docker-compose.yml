@@ -1,18 +1,21 @@
-services:
-  mongo:
-    image: mongodb/mongodb-community-server:7.0-ubuntu2204
-    container_name: necropunk-mongo
+﻿services:
+  mysql:
+    image: mysql:8.4
+    container_name: necropunk-mysql
     restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: necropunk
     ports:
-      - "27017:27017"
+      - "3306:3306"
     volumes:
-      - mongo_data:/data/db
+      - mysql_data:/var/lib/mysql
     healthcheck:
-      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "-uroot", "-proot"]
       interval: 10s
       timeout: 5s
-      retries: 5
-      start_period: 20s
+      retries: 10
+      start_period: 30s
 
 volumes:
-  mongo_data:
+  mysql_data:

@@ -1,15 +1,9 @@
-const fs = require('fs/promises');
+﻿const fs = require('fs/promises');
 const path = require('path');
-const { ObjectId } = require('mongodb');
-const { getDb } = require('./mongo');
+const { pool, query, toMysqlDate, toIsoString } = require('./mysql');
 
-const COLLECTION = 'knowledge';
 const SEED_FILE = path.join(__dirname, '..', 'data', 'knowledge.json');
 const VALID_SECTIONS = new Set(['player', 'gm']);
-
-function getCollection() {
-  return getDb().collection(COLLECTION);
-}
 
 function sanitizeString(value, defaultValue = '') {
   if (typeof value !== 'string') return defaultValue;
@@ -28,56 +22,95 @@ function sanitizeSection(section) {
   return VALID_SECTIONS.has(value) ? value : '';
 }
 
-function escapeRegex(input) {
-  return input.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+function escapeLike(input) {
+  return input.replace(/[\\%_]/g, (char) => `\\${char}`);
 }
 
-function mapKnowledgeDocument(doc) {
-  if (!doc || typeof doc !== 'object') return null;
+function parseTagsValue(value) {
+  if (Array.isArray(value)) {
+    return sanitizeTags(value);
+  }
+
+  if (value == null) return [];
+
+  if (typeof value === 'string') {
+    try {
+      const parsed = JSON.parse(value);
+      return Array.isArray(parsed) ? sanitizeTags(parsed) : [];
+    } catch {
+      return [];
+    }
+  }
+
+  if (typeof value === 'object') {
+    return [];
+  }
+
+  return [];
+}
+
+function mapKnowledgeRow(row) {
+  if (!row || typeof row !== 'object') return null;
+
   return {
-    id: String(doc._id),
-    section: sanitizeSection(doc.section),
-    title: sanitizeString(doc.title),
-    available: sanitizeString(doc.available),
-    description: sanitizeString(doc.description),
-    tags: sanitizeTags(doc.tags),
-    createdAt: doc.createdAt || null,
-    updatedAt: doc.updatedAt || null,
+    id: String(row.id),
+    section: sanitizeSection(row.section),
+    title: sanitizeString(row.title),
+    available: sanitizeString(row.available),
+    description: sanitizeString(row.description),
+    tags: parseTagsValue(row.tags),
+    createdAt: toIsoString(row.created_at),
+    updatedAt: toIsoString(row.updated_at),
   };
 }
 
-function buildFilter({ section = '', q = '', tags = [] } = {}) {
-  const filter = {};
+function normalizeKnowledgeId(id) {
+  const value = String(id || '').trim();
+  if (!/^[1-9]\d*$/.test(value)) return null;
+  return Number.parseInt(value, 10);
+}
+
+function buildWhereClause({ section = '', q = '', tags = [] } = {}) {
+  const where = [];
+  const params = [];
+
   const cleanSection = sanitizeSection(section);
   const cleanQuery = sanitizeString(q);
   const cleanTags = sanitizeTags(tags);
 
-  if (cleanSection) filter.section = cleanSection;
-  if (cleanTags.length) filter.tags = { $all: cleanTags };
-  if (cleanQuery) {
-    const regex = new RegExp(escapeRegex(cleanQuery), 'i');
-    filter.$or = [
-      { title: regex },
-      { available: regex },
-      { description: regex },
-      { tags: regex },
-    ];
+  if (cleanSection) {
+    where.push('section = ?');
+    params.push(cleanSection);
   }
 
-  return filter;
-}
+  if (cleanTags.length) {
+    cleanTags.forEach((tag) => {
+      where.push('JSON_CONTAINS(tags, JSON_ARRAY(?))');
+      params.push(tag);
+    });
+  }
 
-async function ensureKnowledgeIndexes() {
-  const col = getCollection();
-  await col.createIndex({ section: 1, title: 1 });
-  await col.createIndex({ tags: 1 });
-  await col.createIndex({ updatedAt: -1 });
+  if (cleanQuery) {
+    const like = `%${escapeLike(cleanQuery)}%`;
+    where.push(
+      `(
+        title LIKE ? ESCAPE '\\\\'
+        OR available LIKE ? ESCAPE '\\\\'
+        OR description LIKE ? ESCAPE '\\\\'
+        OR CAST(tags AS CHAR) LIKE ? ESCAPE '\\\\'
+      )`,
+    );
+    params.push(like, like, like, like);
+  }
+
+  if (!where.length) return { whereSql: '', params };
+  return { whereSql: `WHERE ${where.join(' AND ')}`, params };
 }
 
 async function loadSeedItems() {
   const raw = await fs.readFile(SEED_FILE, 'utf8');
   const parsed = JSON.parse(raw);
-  const now = new Date().toISOString();
+  const now = new Date();
   const items = [];
 
   ['player', 'gm'].forEach((section) => {
@@ -98,32 +131,61 @@ async function loadSeedItems() {
   return items;
 }
 
+async function insertKnowledgeItems(items, { clearExisting = false } = {}) {
+  const conn = await pool().getConnection();
+
+  try {
+    await conn.beginTransaction();
+
+    if (clearExisting) {
+      await conn.execute('DELETE FROM knowledge_items');
+    }
+
+    for (const item of items) {
+      await conn.execute(
+        `INSERT INTO knowledge_items (section, title, available, description, tags, created_at, updated_at)
+         VALUES (?, ?, ?, ?, ?, ?, ?)`,
+        [
+          sanitizeSection(item.section),
+          sanitizeString(item.title),
+          sanitizeString(item.available),
+          sanitizeString(item.description),
+          JSON.stringify(sanitizeTags(item.tags)),
+          toMysqlDate(item.createdAt) || toMysqlDate(),
+          toMysqlDate(item.updatedAt) || toMysqlDate(),
+        ],
+      );
+    }
+
+    await conn.commit();
+  } catch (error) {
+    await conn.rollback();
+    throw error;
+  } finally {
+    conn.release();
+  }
+}
+
 async function seedKnowledgeCollectionIfEmpty() {
-  const col = getCollection();
-  const count = await col.estimatedDocumentCount();
+  const rows = await query('SELECT COUNT(*) AS total FROM knowledge_items');
+  const count = Number(rows[0] && rows[0].total ? rows[0].total : 0);
   if (count > 0) return { seeded: false, count };
 
   const seedItems = await loadSeedItems();
   if (!seedItems.length) return { seeded: false, count: 0 };
 
-  const result = await col.insertMany(seedItems);
-  return { seeded: true, count: result.insertedCount };
+  await insertKnowledgeItems(seedItems, { clearExisting: false });
+  return { seeded: true, count: seedItems.length };
 }
 
 async function reseedKnowledgeCollection() {
-  await ensureKnowledgeIndexes();
-  const col = getCollection();
   const seedItems = await loadSeedItems();
 
-  await col.deleteMany({});
-  if (!seedItems.length) return { seeded: false, count: 0 };
-
-  const result = await col.insertMany(seedItems);
-  return { seeded: true, count: result.insertedCount };
+  await insertKnowledgeItems(seedItems, { clearExisting: true });
+  return { seeded: seedItems.length > 0, count: seedItems.length };
 }
 
 async function initKnowledgeCollection() {
-  await ensureKnowledgeIndexes();
   return seedKnowledgeCollectionIfEmpty();
 }
 
@@ -169,30 +231,36 @@ function validateKnowledgePayload(payload, { partial = false } = {}) {
 }
 
 function isValidKnowledgeId(id) {
-  return ObjectId.isValid(id);
+  return normalizeKnowledgeId(id) != null;
 }
 
 async function listKnowledgeItems({ section = '', q = '', tags = [], limit = 200, offset = 0 } = {}) {
-  const col = getCollection();
   const safeLimit = Math.max(1, Math.min(Number(limit) || 200, 500));
   const safeOffset = Math.max(0, Number(offset) || 0);
-  const filter = buildFilter({ section, q, tags });
-  const docs = await col
-    .find(filter)
-    .sort({ section: 1, title: 1, _id: 1 })
-    .skip(safeOffset)
-    .limit(safeLimit)
-    .toArray();
+  const { whereSql, params } = buildWhereClause({ section, q, tags });
 
-  return docs
-    .map(mapKnowledgeDocument)
-    .filter(Boolean);
+  const rows = await query(
+    `SELECT id, section, title, available, description, tags, created_at, updated_at
+     FROM knowledge_items
+     ${whereSql}
+     ORDER BY section ASC, title ASC, id ASC
+     LIMIT ? OFFSET ?`,
+    [...params, safeLimit, safeOffset],
+  );
+
+  return rows.map(mapKnowledgeRow).filter(Boolean);
 }
 
 async function countKnowledgeItems(filters = {}) {
-  const col = getCollection();
-  const filter = buildFilter(filters);
-  return col.countDocuments(filter);
+  const { whereSql, params } = buildWhereClause(filters);
+  const rows = await query(
+    `SELECT COUNT(*) AS total
+     FROM knowledge_items
+     ${whereSql}`,
+    params,
+  );
+
+  return Number(rows[0] && rows[0].total ? rows[0].total : 0);
 }
 
 function groupKnowledgeItems(items) {
@@ -205,75 +273,123 @@ function groupKnowledgeItems(items) {
 }
 
 async function getKnowledgeById(id) {
-  if (!isValidKnowledgeId(id)) return null;
-  const col = getCollection();
-  const doc = await col.findOne({ _id: new ObjectId(id) });
-  return mapKnowledgeDocument(doc);
+  const knowledgeId = normalizeKnowledgeId(id);
+  if (!knowledgeId) return null;
+
+  const rows = await query(
+    `SELECT id, section, title, available, description, tags, created_at, updated_at
+     FROM knowledge_items
+     WHERE id = ?
+     LIMIT 1`,
+    [knowledgeId],
+  );
+
+  return mapKnowledgeRow(rows[0] || null);
 }
 
 async function createKnowledgeItem(payload) {
-  const col = getCollection();
-  const now = new Date().toISOString();
-  const doc = {
-    section: payload.section,
-    title: payload.title,
-    available: payload.available || '',
-    description: payload.description || '',
-    tags: sanitizeTags(payload.tags),
-    createdAt: now,
-    updatedAt: now,
-  };
+  const now = toMysqlDate();
+  const result = await query(
+    `INSERT INTO knowledge_items (section, title, available, description, tags, created_at, updated_at)
+     VALUES (?, ?, ?, ?, ?, ?, ?)`,
+    [
+      payload.section,
+      payload.title,
+      payload.available || '',
+      payload.description || '',
+      JSON.stringify(sanitizeTags(payload.tags)),
+      now,
+      now,
+    ],
+  );
 
-  const result = await col.insertOne(doc);
-  return getKnowledgeById(String(result.insertedId));
+  return getKnowledgeById(String(result.insertId));
 }
 
 async function replaceKnowledgeItemById(id, payload) {
-  if (!isValidKnowledgeId(id)) return null;
+  const knowledgeId = normalizeKnowledgeId(id);
+  if (!knowledgeId) return null;
 
-  const col = getCollection();
-  const objectId = new ObjectId(id);
-  const existing = await col.findOne({ _id: objectId });
+  const existing = await getKnowledgeById(String(knowledgeId));
   if (!existing) return null;
 
-  const updatedDoc = {
-    section: payload.section,
-    title: payload.title,
-    available: payload.available || '',
-    description: payload.description || '',
-    tags: sanitizeTags(payload.tags),
-    createdAt: existing.createdAt || new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-  };
+  const now = toMysqlDate();
+  const createdAt = toMysqlDate(existing.createdAt) || now;
 
-  await col.replaceOne({ _id: objectId }, updatedDoc);
-  return getKnowledgeById(id);
+  await query(
+    `UPDATE knowledge_items
+     SET section = ?, title = ?, available = ?, description = ?, tags = ?, created_at = ?, updated_at = ?
+     WHERE id = ?`,
+    [
+      payload.section,
+      payload.title,
+      payload.available || '',
+      payload.description || '',
+      JSON.stringify(sanitizeTags(payload.tags)),
+      createdAt,
+      now,
+      knowledgeId,
+    ],
+  );
+
+  return getKnowledgeById(String(knowledgeId));
 }
 
 async function updateKnowledgeItemById(id, payload) {
-  if (!isValidKnowledgeId(id)) return null;
+  const knowledgeId = normalizeKnowledgeId(id);
+  if (!knowledgeId) return null;
 
-  const col = getCollection();
-  const objectId = new ObjectId(id);
-  const updates = { ...payload, updatedAt: new Date().toISOString() };
-  if (Object.prototype.hasOwnProperty.call(updates, 'tags')) {
-    updates.tags = sanitizeTags(updates.tags);
+  const updates = [];
+  const params = [];
+
+  if (Object.prototype.hasOwnProperty.call(payload, 'section')) {
+    updates.push('section = ?');
+    params.push(payload.section);
   }
 
-  const result = await col.findOneAndUpdate(
-    { _id: objectId },
-    { $set: updates },
-    { returnDocument: 'after' },
+  if (Object.prototype.hasOwnProperty.call(payload, 'title')) {
+    updates.push('title = ?');
+    params.push(payload.title);
+  }
+
+  if (Object.prototype.hasOwnProperty.call(payload, 'available')) {
+    updates.push('available = ?');
+    params.push(payload.available || '');
+  }
+
+  if (Object.prototype.hasOwnProperty.call(payload, 'description')) {
+    updates.push('description = ?');
+    params.push(payload.description || '');
+  }
+
+  if (Object.prototype.hasOwnProperty.call(payload, 'tags')) {
+    updates.push('tags = ?');
+    params.push(JSON.stringify(sanitizeTags(payload.tags)));
+  }
+
+  if (!updates.length) return null;
+
+  updates.push('updated_at = ?');
+  params.push(toMysqlDate());
+  params.push(knowledgeId);
+
+  const result = await query(
+    `UPDATE knowledge_items
+     SET ${updates.join(', ')}
+     WHERE id = ?`,
+    params,
   );
 
-  return mapKnowledgeDocument(result.value);
+  if (!result || result.affectedRows === 0) return null;
+  return getKnowledgeById(String(knowledgeId));
 }
 
 async function deleteKnowledgeItemById(id) {
-  if (!isValidKnowledgeId(id)) return false;
-  const col = getCollection();
-  const result = await col.deleteOne({ _id: new ObjectId(id) });
-  return result.deletedCount > 0;
+  const knowledgeId = normalizeKnowledgeId(id);
+  if (!knowledgeId) return false;
+
+  const result = await query('DELETE FROM knowledge_items WHERE id = ?', [knowledgeId]);
+  return !!(result && result.affectedRows > 0);
 }
 
 module.exports = {
