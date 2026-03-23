@@ -28,9 +28,19 @@ load_nvm() {
 }
 
 use_required_node() {
+  if command -v node >/dev/null 2>&1; then
+    local node_major
+    node_major="$(node -p "process.versions.node.split('.')[0]")"
+    if [ "$node_major" -ge "$REQUIRED_NODE_MAJOR" ]; then
+      return 0
+    fi
+  fi
+
   if load_nvm; then
-    nvm install "$REQUIRED_NODE_MAJOR" --latest-npm >/dev/null
-    nvm use "$REQUIRED_NODE_MAJOR" >/dev/null
+    if ! nvm use "$REQUIRED_NODE_MAJOR" >/dev/null 2>&1; then
+      nvm install "$REQUIRED_NODE_MAJOR" --latest-npm >/dev/null
+      nvm use "$REQUIRED_NODE_MAJOR" >/dev/null
+    fi
     nvm alias default "$REQUIRED_NODE_MAJOR" >/dev/null
     return 0
   fi
@@ -68,8 +78,9 @@ const { initKnowledgeCollection } = require('./server/lib/knowledge');
 (async () => {
   await mysql.connect();
   await mysql.initSchema();
-  const result = await initKnowledgeCollection();
-  console.log('DB init complete:', result);
+  const knowledgeResult = await initKnowledgeCollection();
+  console.log('DB init complete: users table is ready');
+  console.log('Knowledge JSON loaded:', knowledgeResult);
   await mysql.close();
 })().catch((error) => {
   console.error('DB init failed:', error);

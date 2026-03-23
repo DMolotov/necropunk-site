@@ -1,21 +1,14 @@
 #!/usr/bin/env node
 require('dotenv').config();
 
-const mysql = require('../server/lib/mysql');
-const { reseedKnowledgeCollection } = require('../server/lib/knowledge');
+const { initKnowledgeCollection } = require('../server/lib/knowledge');
 
 async function main() {
-  try {
-    await mysql.connect();
-    await mysql.initSchema();
-    const result = await reseedKnowledgeCollection();
-    console.log(`Knowledge reseeded: ${result.count} item(s)`);
-  } finally {
-    await mysql.close();
-  }
+  const result = await initKnowledgeCollection({ forceReload: true });
+  console.log(`Knowledge JSON loaded: ${result.count} item(s)`);
 }
 
 main().catch((error) => {
-  console.error('Seed failed', error);
+  console.error('Knowledge JSON check failed', error);
   process.exit(1);
 });
