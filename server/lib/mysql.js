@@ -1,4 +1,4 @@
-﻿const mysql = require('mysql2/promise');
+const mysql = require('mysql2/promise');
 
 let _pool = null;
 const CREATE_DB_PERMISSION_ERRORS = new Set([
@@ -133,39 +133,6 @@ async function initSchema() {
       KEY idx_users_token (token)
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
   `);
-
-  await p.execute(`
-    CREATE TABLE IF NOT EXISTS knowledge_items (
-      id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
-      section ENUM('player', 'gm') NOT NULL,
-      title VARCHAR(255) NOT NULL,
-      available TEXT NOT NULL,
-      description TEXT NOT NULL,
-      tags JSON NOT NULL,
-      availability JSON NULL,
-      created_at DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
-      updated_at DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3),
-      PRIMARY KEY (id),
-      KEY idx_knowledge_section_title (section, title),
-      KEY idx_knowledge_updated_at (updated_at)
-    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
-  `);
-
-  const [availabilityColumns] = await p.execute("SHOW COLUMNS FROM knowledge_items LIKE 'availability'");
-  if (!Array.isArray(availabilityColumns) || availabilityColumns.length === 0) {
-    await p.execute('ALTER TABLE knowledge_items ADD COLUMN availability JSON NULL AFTER tags');
-  }
-
-  await p.execute(`
-    UPDATE knowledge_items
-    SET availability = JSON_OBJECT(
-      'infected', JSON_OBJECT('op', 'all', 'values', JSON_ARRAY()),
-      'work', JSON_OBJECT('op', 'all', 'values', JSON_ARRAY())
-    )
-    WHERE availability IS NULL
-  `);
-
-  await p.execute('ALTER TABLE knowledge_items MODIFY COLUMN availability JSON NOT NULL');
 }
 
 function toMysqlDate(value = new Date()) {

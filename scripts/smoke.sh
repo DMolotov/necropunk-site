@@ -11,10 +11,8 @@ echo "[2/3] GET ${BASE_URL}/api/knowledge/items?limit=2"
 curl -fsS "${BASE_URL}/api/knowledge/items?limit=2"
 echo
 
-echo "[3/3] POST ${BASE_URL}/api/knowledge/items"
-curl -fsS -X POST "${BASE_URL}/api/knowledge/items" \
-  -H "Content-Type: application/json" \
-  -d "{\"section\":\"player\",\"title\":\"smoke-$(date +%s)\",\"available\":\"all\",\"description\":\"smoke test\",\"tags\":[\"smoke\"]}"
+echo "[3/3] GET ${BASE_URL}/api/knowledge/items?section=player&infected=deadman&limit=2"
+curl -fsS "${BASE_URL}/api/knowledge/items?section=player&infected=deadman&limit=2"
 echo
 
 echo "Smoke checks passed."

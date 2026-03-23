@@ -31,6 +31,8 @@ app.use('/api/auth', authRouter);
 app.use('/api/knowledge', knowledgeRouter);
 
 app.use((err, req, res, next) => {
+  void req;
+  void next;
   console.error(err);
   res.status(err.status || 500).json({ error: err.message || 'Server error' });
 });
@@ -39,12 +41,10 @@ app.use((err, req, res, next) => {
   try {
     await mysql.connect();
     await mysql.initSchema();
-    console.log(`MySQL connected: ${process.env.MYSQL_DATABASE || 'necropunk'}`);
+    console.log(`MySQL connected: ${process.env.MYSQL_DATABASE || 'necropunk'} (users only)`);
 
     const initResult = await initKnowledgeCollection();
-    if (initResult.seeded) {
-      console.log(`Knowledge seeded: ${initResult.count} item(s)`);
-    }
+    console.log(`Knowledge loaded from JSON: ${initResult.count} item(s)`);
 
     const server = app.listen(port, () => {
       console.log(`Server started: http://localhost:${port}`);
