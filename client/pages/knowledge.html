@@ -115,37 +115,37 @@
             <div class="flex flex-wrap gap-4" data-knowledge-filters>
               <label class="grid gap-1 text-sm min-w-[209px]">
                 <span>Вид заражения</span>
-                <select id="tag_infected_type" class="bg-black/40 border border-[#444] px-2 py-1 focus:outline-none focus:border-[#8a6e2f]">
-                  <option value="">Без разницы</option>
-                  <option value="tag_livingboy">Живчик</option>
-                  <option value="tag_deadman">Мертвяк</option>
-                  <option value="tag_ghoul">Упырь</option>
-                  <option value="tag_scarecrow">Чучело</option>
-                  <option value="tag_twin">Близнец</option>
-                  <option value="tag_golem">Голем</option>
+                <select id="filter_infected_type" data-filter-axis="infected" class="bg-black/40 border border-[#444] px-2 py-1 focus:outline-none focus:border-[#8a6e2f]">
+                  <option value="">Любой вид</option>
+                  <option value="livingboy">Живчик</option>
+                  <option value="deadman">Мертвяк</option>
+                  <option value="ghoul">Упырь</option>
+                  <option value="scarecrow">Чучело</option>
+                  <option value="twin">Близнецы</option>
+                  <option value="golem">Голем</option>
                 </select>
               </label>
               <label class="grid gap-1 text-sm min-w-[209px]">
                 <span>Общедоступные Знания</span>
-                <select id="tag_infected_type" class="bg-black/40 border border-[#444] px-2 py-1 focus:outline-none focus:border-[#8a6e2f]">
-                  <option value="">Без разницы</option>
-                  <option value="tag_ability_bonus">Бонусы к умениям</option>
-                  <option value="tag_oz_pp_os_bonus">Бонусы к ОЗ, ПП и ОС</option>
-                  <option value="tag_society_bonus">Влияние на общество</option>
-                  <option value="tag_battle_bonus">Влияние на бой</option>
-                  <option value="tag_other_bonus">Другие бонусы</option>
+                <select id="filter_bonus_type" data-filter-kind="tag" class="bg-black/40 border border-[#444] px-2 py-1 focus:outline-none focus:border-[#8a6e2f]">
+                  <option value="">Любые знания</option>
+                  <option value="tag_ability_bonus">Умения</option>
+                  <option value="tag_oz_pp_os_bonus">ОЗ/ПП/ОС</option>
+                  <option value="tag_society_bonus">Социальные</option>
+                  <option value="tag_battle_bonus">Боевые</option>
+                  <option value="tag_other_bonus">Другие</option>
                 </select>
               </label>
               <label class="grid gap-1 text-sm min-w-[209px]">
                 <span>Рабочие Знания</span>
-                <select id="tag_infected_type" class="bg-black/40 border border-[#444] px-2 py-1 focus:outline-none focus:border-[#8a6e2f]">
-                  <option value="">Без разницы</option>
-                  <option value="tag_livingboy">Оперативник ГОМОНА</option>
-                  <option value="tag_deadman">Санкционированный</option>
-                  <option value="tag_ghoul">Торговец плотью</option>
-                  <option value="tag_scarecrow">Учёный ГИИБ</option>
-                  <option value="tag_twin">Воскреситель</option>
-                  <option value="tag_golem">Подрядчик</option>
+                <select id="filter_work_type" data-filter-axis="work" class="bg-black/40 border border-[#444] px-2 py-1 focus:outline-none focus:border-[#8a6e2f]">
+                  <option value="">Любая работа</option>
+                  <option value="gomon">Оперативник ГОМОНа</option>
+                  <option value="sanctioned">Санкционированный</option>
+                  <option value="flesh_merchant">Торговец плотью</option>
+                  <option value="giib_scientist">Учёный ГИИБ</option>
+                  <option value="resurrector">Воскреситель</option>
+                  <option value="contractor">Подрядчик</option>
                 </select>
               </label>
             </div>
@@ -174,14 +174,23 @@
             <p class="text-xs uppercase tracking-wider text-gray-400 mb-2">Фильтры</p>
             <div class="flex flex-wrap gap-4" data-knowledge-filters>
               <label class="grid gap-1 text-sm min-w-[220px]">
-                <span>Сложность контракта</span>
-                <select id="tag_infected_type_gm" class="bg-black/40 border border-[#444] px-2 py-1 focus:outline-none focus:border-[#8a6e2f]">
-                  <option value="">Без разницы</option>
-                  <option value="tag_expectable">Приемлемая</option>
-                  <option value="tag_alarming">Тревожная</option>
-                  <option value="tag_dangerous">Опасная</option>
-                  <option value="tag_impossible">Невыполнимая</option>
-                  <option value="tag_rest_in_peace">Упокой</option>
+                <span>Infected type</span>
+                <select id="filter_gm_infected_type" data-filter-axis="infected" class="bg-black/40 border border-[#444] px-2 py-1 focus:outline-none focus:border-[#8a6e2f]">
+                  <option value="">Any</option>
+                  <option value="livingboy">Livingboy</option>
+                  <option value="deadman">Deadman</option>
+                  <option value="ghoul">Ghoul</option>
+                  <option value="scarecrow">Scarecrow</option>
+                  <option value="twin">Twin</option>
+                  <option value="golem">Golem</option>
+                </select>
+              </label>
+              <label class="grid gap-1 text-sm min-w-[220px]">
+                <span>Knowledge type</span>
+                <select id="filter_gm_tag_type" data-filter-kind="tag" class="bg-black/40 border border-[#444] px-2 py-1 focus:outline-none focus:border-[#8a6e2f]">
+                  <option value="">Any</option>
+                  <option value="tag_bonus">Combat bonus</option>
+                  <option value="tag_source">Narrative source</option>
                 </select>
               </label>
             </div>
@@ -194,6 +203,6 @@
     </section>
   </main>
 
-  <script src="knowledge.js" defer></script>
+  <script src="knowledge.js?v=20260308-clean-v1" defer></script>
 </body>
 </html>

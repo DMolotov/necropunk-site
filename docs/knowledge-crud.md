@@ -88,7 +88,11 @@ npm run seed:knowledge
   "title": "Example",
   "available": "All characters",
   "description": "Description",
-  "tags": ["tag_bonus"]
+  "tags": ["tag_bonus"],
+  "availability": {
+    "infected": { "op": "all", "values": [] },
+    "work": { "op": "in", "values": ["gomon", "contractor"] }
+  }
 }
 ```
 
@@ -97,6 +101,11 @@ npm run seed:knowledge
 - `title`: обязательно, непустая строка
 - `available`, `description`: строки (опционально)
 - `tags`: массив строк (опционально)
+- `availability`: объект правил доступа по осям `infected` и `work` (опционально)
+  - `op`: `all`, `in`, `not_in`
+  - `values`: массив значений оси (для `in`/`not_in`)
+  - рекомендуемые значения `infected`: `livingboy`, `deadman`, `ghoul`, `scarecrow`, `twin`, `golem`
+  - рекомендуемые значения `work`: `gomon`, `sanctioned`, `flesh_merchant`, `giib_scientist`, `resurrector`, `contractor`
 
 ## 7. Полезные команды
 
