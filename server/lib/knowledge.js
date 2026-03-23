@@ -4,6 +4,8 @@ const { pool, query, toMysqlDate, toIsoString } = require('./mysql');
 
 const SEED_FILE = path.join(__dirname, '..', 'data', 'knowledge.json');
 const VALID_SECTIONS = new Set(['player', 'gm']);
+const AVAILABILITY_AXES = ['infected', 'work'];
+const VALID_AVAILABILITY_OPS = new Set(['all', 'in', 'not_in']);
 
 function sanitizeString(value, defaultValue = '') {
   if (typeof value !== 'string') return defaultValue;
@@ -12,9 +14,11 @@ function sanitizeString(value, defaultValue = '') {
 
 function sanitizeTags(tags) {
   if (!Array.isArray(tags)) return [];
-  return tags
-    .map((tag) => sanitizeString(tag))
-    .filter(Boolean);
+  return Array.from(new Set(tags.map((tag) => sanitizeString(tag)).filter(Boolean)));
+}
+
+function sanitizeDisplayTags(tags) {
+  return sanitizeTags(tags);
 }
 
 function sanitizeSection(section) {
@@ -26,7 +30,7 @@ function escapeLike(input) {
   return input.replace(/[\\%_]/g, (char) => `\\${char}`);
 }
 
-function parseTagsValue(value) {
+function parseRawTagsValue(value) {
   if (Array.isArray(value)) {
     return sanitizeTags(value);
   }
@@ -49,8 +53,136 @@ function parseTagsValue(value) {
   return [];
 }
 
+function normalizeAvailabilityOp(op) {
+  const value = sanitizeString(op).toLowerCase();
+  return VALID_AVAILABILITY_OPS.has(value) ? value : '';
+}
+
+function createAllRule() {
+  return { op: 'all', values: [] };
+}
+
+function normalizeAvailabilityValue(axis, value) {
+  void axis;
+  return sanitizeString(value).toLowerCase();
+}
+
+function sanitizeAvailabilityValues(axis, values) {
+  if (!Array.isArray(values)) return [];
+  return Array.from(
+    new Set(
+      values
+        .map((value) => normalizeAvailabilityValue(axis, value))
+        .filter(Boolean),
+    ),
+  );
+}
+
+function cloneRule(rule, axis) {
+  if (!rule || typeof rule !== 'object') return createAllRule();
+  const op = normalizeAvailabilityOp(rule.op) || 'all';
+  const values = op === 'all' ? [] : sanitizeAvailabilityValues(axis, rule.values);
+  if ((op === 'in' || op === 'not_in') && values.length === 0) {
+    return createAllRule();
+  }
+  return { op, values };
+}
+
+function sanitizeAvailabilityRule(rule, fallbackRule, axis) {
+  if (!rule || typeof rule !== 'object' || Array.isArray(rule)) {
+    return cloneRule(fallbackRule, axis);
+  }
+
+  const fallbackOp = normalizeAvailabilityOp(fallbackRule && fallbackRule.op) || 'all';
+  const parsedOp = normalizeAvailabilityOp(rule.op);
+  const op = parsedOp || fallbackOp;
+
+  if (op === 'all') {
+    return createAllRule();
+  }
+
+  const values = sanitizeAvailabilityValues(axis, rule.values);
+  if (!values.length) {
+    return createAllRule();
+  }
+
+  return { op, values };
+}
+
+function sanitizeAvailability(availability) {
+  let source = null;
+
+  if (availability && typeof availability === 'object' && !Array.isArray(availability)) {
+    source = availability;
+  } else if (typeof availability === 'string') {
+    try {
+      const parsed = JSON.parse(availability);
+      if (parsed && typeof parsed === 'object' && !Array.isArray(parsed)) {
+        source = parsed;
+      }
+    } catch {
+      source = null;
+    }
+  }
+
+  const result = {};
+
+  AVAILABILITY_AXES.forEach((axis) => {
+    const rule = source ? source[axis] : null;
+    result[axis] = sanitizeAvailabilityRule(rule, createAllRule(), axis);
+  });
+
+  return result;
+}
+
+function validateAvailabilityInput(value) {
+  const errors = [];
+
+  if (value == null) {
+    return { errors, data: sanitizeAvailability(null) };
+  }
+
+  if (typeof value !== 'object' || Array.isArray(value)) {
+    return {
+      errors: ['availability must be an object'],
+      data: sanitizeAvailability(null),
+    };
+  }
+
+  AVAILABILITY_AXES.forEach((axis) => {
+    if (!Object.prototype.hasOwnProperty.call(value, axis)) return;
+
+    const rule = value[axis];
+    if (rule == null) return;
+
+    if (typeof rule !== 'object' || Array.isArray(rule)) {
+      errors.push(`availability.${axis} must be an object`);
+      return;
+    }
+
+    if (Object.prototype.hasOwnProperty.call(rule, 'op')) {
+      const op = normalizeAvailabilityOp(rule.op);
+      if (!op) {
+        errors.push(`availability.${axis}.op must be one of: all, in, not_in`);
+      }
+    }
+
+    if (Object.prototype.hasOwnProperty.call(rule, 'values') && !Array.isArray(rule.values)) {
+      errors.push(`availability.${axis}.values must be an array of strings`);
+    }
+  });
+
+  return { errors, data: sanitizeAvailability(value) };
+}
+
+function parseAvailabilityValue(value) {
+  return sanitizeAvailability(value);
+}
+
 function mapKnowledgeRow(row) {
   if (!row || typeof row !== 'object') return null;
+
+  const rawTags = parseRawTagsValue(row.tags);
 
   return {
     id: String(row.id),
@@ -58,7 +190,8 @@ function mapKnowledgeRow(row) {
     title: sanitizeString(row.title),
     available: sanitizeString(row.available),
     description: sanitizeString(row.description),
-    tags: parseTagsValue(row.tags),
+    tags: sanitizeDisplayTags(rawTags),
+    availability: parseAvailabilityValue(row.availability),
     createdAt: toIsoString(row.created_at),
     updatedAt: toIsoString(row.updated_at),
   };
@@ -98,9 +231,10 @@ function buildWhereClause({ section = '', q = '', tags = [] } = {}) {
         OR available LIKE ? ESCAPE '\\\\'
         OR description LIKE ? ESCAPE '\\\\'
         OR CAST(tags AS CHAR) LIKE ? ESCAPE '\\\\'
+        OR CAST(availability AS CHAR) LIKE ? ESCAPE '\\\\'
       )`,
     );
-    params.push(like, like, like, like);
+    params.push(like, like, like, like, like);
   }
 
   if (!where.length) return { whereSql: '', params };
@@ -116,12 +250,14 @@ async function loadSeedItems() {
   ['player', 'gm'].forEach((section) => {
     const sectionItems = Array.isArray(parsed[section]) ? parsed[section] : [];
     sectionItems.forEach((item) => {
+      const sourceTags = sanitizeTags(item.tags);
       items.push({
         section,
         title: sanitizeString(item.title),
         available: sanitizeString(item.available),
         description: sanitizeString(item.description),
-        tags: sanitizeTags(item.tags),
+        tags: sanitizeDisplayTags(sourceTags),
+        availability: sanitizeAvailability(item.availability),
         createdAt: now,
         updatedAt: now,
       });
@@ -143,14 +279,15 @@ async function insertKnowledgeItems(items, { clearExisting = false } = {}) {
 
     for (const item of items) {
       await conn.execute(
-        `INSERT INTO knowledge_items (section, title, available, description, tags, created_at, updated_at)
-         VALUES (?, ?, ?, ?, ?, ?, ?)`,
+        `INSERT INTO knowledge_items (section, title, available, description, tags, availability, created_at, updated_at)
+         VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
         [
           sanitizeSection(item.section),
           sanitizeString(item.title),
           sanitizeString(item.available),
           sanitizeString(item.description),
-          JSON.stringify(sanitizeTags(item.tags)),
+          JSON.stringify(sanitizeDisplayTags(item.tags)),
+          JSON.stringify(sanitizeAvailability(item.availability)),
           toMysqlDate(item.createdAt) || toMysqlDate(),
           toMysqlDate(item.updatedAt) || toMysqlDate(),
         ],
@@ -219,8 +356,18 @@ function validateKnowledgePayload(payload, { partial = false } = {}) {
     if (source.tags != null && !Array.isArray(source.tags)) {
       errors.push('tags must be an array of strings');
     } else {
-      data.tags = sanitizeTags(source.tags);
+      data.tags = sanitizeDisplayTags(source.tags);
     }
+  }
+
+  if (!partial || hasOwn('availability')) {
+    const { errors: availabilityErrors, data: normalizedAvailability } = validateAvailabilityInput(source.availability);
+    errors.push(...availabilityErrors);
+    data.availability = sanitizeAvailability(normalizedAvailability);
+  }
+
+  if (!partial && !Object.prototype.hasOwnProperty.call(data, 'availability')) {
+    data.availability = sanitizeAvailability(null);
   }
 
   if (partial && Object.keys(data).length === 0) {
@@ -240,12 +387,12 @@ async function listKnowledgeItems({ section = '', q = '', tags = [], limit = 200
   const { whereSql, params } = buildWhereClause({ section, q, tags });
 
   const rows = await query(
-    `SELECT id, section, title, available, description, tags, created_at, updated_at
+    `SELECT id, section, title, available, description, tags, availability, created_at, updated_at
      FROM knowledge_items
      ${whereSql}
      ORDER BY section ASC, title ASC, id ASC
-     LIMIT ? OFFSET ?`,
-    [...params, safeLimit, safeOffset],
+     LIMIT ${safeLimit} OFFSET ${safeOffset}`,
+    params,
   );
 
   return rows.map(mapKnowledgeRow).filter(Boolean);
@@ -277,7 +424,7 @@ async function getKnowledgeById(id) {
   if (!knowledgeId) return null;
 
   const rows = await query(
-    `SELECT id, section, title, available, description, tags, created_at, updated_at
+    `SELECT id, section, title, available, description, tags, availability, created_at, updated_at
      FROM knowledge_items
      WHERE id = ?
      LIMIT 1`,
@@ -289,15 +436,19 @@ async function getKnowledgeById(id) {
 
 async function createKnowledgeItem(payload) {
   const now = toMysqlDate();
+  const tags = sanitizeDisplayTags(payload.tags);
+  const availability = sanitizeAvailability(payload.availability);
+
   const result = await query(
-    `INSERT INTO knowledge_items (section, title, available, description, tags, created_at, updated_at)
-     VALUES (?, ?, ?, ?, ?, ?, ?)`,
+    `INSERT INTO knowledge_items (section, title, available, description, tags, availability, created_at, updated_at)
+     VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
     [
       payload.section,
       payload.title,
       payload.available || '',
       payload.description || '',
-      JSON.stringify(sanitizeTags(payload.tags)),
+      JSON.stringify(tags),
+      JSON.stringify(availability),
       now,
       now,
     ],
@@ -315,17 +466,20 @@ async function replaceKnowledgeItemById(id, payload) {
 
   const now = toMysqlDate();
   const createdAt = toMysqlDate(existing.createdAt) || now;
+  const tags = sanitizeDisplayTags(payload.tags);
+  const availability = sanitizeAvailability(payload.availability);
 
   await query(
     `UPDATE knowledge_items
-     SET section = ?, title = ?, available = ?, description = ?, tags = ?, created_at = ?, updated_at = ?
+     SET section = ?, title = ?, available = ?, description = ?, tags = ?, availability = ?, created_at = ?, updated_at = ?
      WHERE id = ?`,
     [
       payload.section,
       payload.title,
       payload.available || '',
       payload.description || '',
-      JSON.stringify(sanitizeTags(payload.tags)),
+      JSON.stringify(tags),
+      JSON.stringify(availability),
       createdAt,
       now,
       knowledgeId,
@@ -364,7 +518,12 @@ async function updateKnowledgeItemById(id, payload) {
 
   if (Object.prototype.hasOwnProperty.call(payload, 'tags')) {
     updates.push('tags = ?');
-    params.push(JSON.stringify(sanitizeTags(payload.tags)));
+    params.push(JSON.stringify(sanitizeDisplayTags(payload.tags)));
+  }
+
+  if (Object.prototype.hasOwnProperty.call(payload, 'availability')) {
+    updates.push('availability = ?');
+    params.push(JSON.stringify(sanitizeAvailability(payload.availability)));
   }
 
   if (!updates.length) return null;

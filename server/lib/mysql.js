@@ -142,6 +142,7 @@ async function initSchema() {
       available TEXT NOT NULL,
       description TEXT NOT NULL,
       tags JSON NOT NULL,
+      availability JSON NULL,
       created_at DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
       updated_at DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3),
       PRIMARY KEY (id),
@@ -149,6 +150,22 @@ async function initSchema() {
       KEY idx_knowledge_updated_at (updated_at)
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
   `);
+
+  const [availabilityColumns] = await p.execute("SHOW COLUMNS FROM knowledge_items LIKE 'availability'");
+  if (!Array.isArray(availabilityColumns) || availabilityColumns.length === 0) {
+    await p.execute('ALTER TABLE knowledge_items ADD COLUMN availability JSON NULL AFTER tags');
+  }
+
+  await p.execute(`
+    UPDATE knowledge_items
+    SET availability = JSON_OBJECT(
+      'infected', JSON_OBJECT('op', 'all', 'values', JSON_ARRAY()),
+      'work', JSON_OBJECT('op', 'all', 'values', JSON_ARRAY())
+    )
+    WHERE availability IS NULL
+  `);
+
+  await p.execute('ALTER TABLE knowledge_items MODIFY COLUMN availability JSON NOT NULL');
 }
 
 function toMysqlDate(value = new Date()) {
