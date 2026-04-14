@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Выбирай клан пацана</title>
+  <style>
+    :root {
+      --bg: #0f130c;
+      --bg-mid: #1a2114;
+      --line: #5b6a3b;
+      --text: #e8eadf;
+      --muted: #b7bea2;
+      --accent: #73923d;
+      --accent-strong: #d0a133;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      background:
+        radial-gradient(circle at 12% 0%, rgba(126, 151, 71, 0.22) 0%, rgba(16, 20, 12, 0) 45%),
+        radial-gradient(circle at 88% 100%, rgba(143, 76, 36, 0.2) 0%, rgba(16, 20, 12, 0) 50%),
+        linear-gradient(140deg, #0d120b 0%, var(--bg-mid) 52%, #11140d 100%);
+      color: var(--text);
+      font-family: "Roboto Slab", serif;
+      padding: 24px;
+    }
+
+    .page-shell {
+      width: min(1480px, 100%);
+      display: grid;
+      grid-template-columns: 172px minmax(0, 1120px) 172px;
+      gap: 14px;
+      align-items: center;
+    }
+
+    .side-nav {
+      display: flex;
+      justify-content: center;
+    }
+
+    .side-nav-btn {
+      width: 164px;
+      min-height: 52px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      border: 1px solid rgba(115, 146, 61, 0.95);
+      border-radius: 8px;
+      padding: 8px 10px;
+      background: linear-gradient(165deg, rgba(30, 39, 22, 0.9), rgba(59, 42, 25, 0.6));
+      color: #edf0e3;
+      text-decoration: none;
+      font: inherit;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      cursor: pointer;
+      transition: border-color 0.18s ease, color 0.18s ease, transform 0.12s ease;
+    }
+
+    .side-nav-btn:hover {
+      border-color: rgba(208, 161, 51, 0.95);
+      color: #fff8dd;
+      transform: translateY(-1px);
+    }
+
+    .side-nav-btn:focus-visible {
+      outline: 2px solid rgba(208, 161, 51, 0.95);
+      outline-offset: 1px;
+    }
+
+    .box {
+      width: min(1120px, 100%);
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background:
+        linear-gradient(145deg, rgba(53, 66, 41, 0.94) 0%, rgba(31, 35, 24, 0.95) 58%, rgba(48, 38, 25, 0.92) 100%);
+      box-shadow:
+        0 14px 36px rgba(0, 0, 0, 0.45),
+        inset 0 0 0 1px rgba(145, 111, 50, 0.17);
+      padding: 22px;
+    }
+
+    h1 {
+      margin: 0 0 8px;
+      text-align: center;
+      font-family: "Playfair Display", serif;
+      color: #eceee2;
+      text-shadow: 0 1px 0 #26291f;
+      font-size: clamp(1.6rem, 3.7vw, 2.2rem);
+    }
+
+    .intro {
+      margin: 0 0 10px;
+      text-align: center;
+      color: var(--muted);
+      line-height: 1.45;
+    }
+
+    .status {
+      margin: 0 0 14px;
+      border: 1px solid rgba(91, 106, 59, 0.9);
+      border-radius: 8px;
+      background: rgba(18, 24, 14, 0.56);
+      padding: 10px 12px;
+      text-align: center;
+      font-size: 0.96rem;
+      color: #e3e6d8;
+    }
+
+    .status.is-ready {
+      border-color: rgba(208, 161, 51, 0.95);
+      color: #f7f0d6;
+    }
+
+    .action-row {
+      display: flex;
+      justify-content: center;
+      margin: 0 0 12px;
+    }
+
+    .reset-btn {
+      border: 1px solid rgba(115, 146, 61, 0.95);
+      border-radius: 8px;
+      padding: 8px 12px;
+      background: linear-gradient(165deg, rgba(30, 39, 22, 0.9), rgba(59, 42, 25, 0.6));
+      color: #edf0e3;
+      font: inherit;
+      font-weight: 700;
+      letter-spacing: 0.01em;
+      cursor: pointer;
+      transition: border-color 0.18s ease, color 0.18s ease, transform 0.12s ease;
+    }
+
+    .reset-btn:hover {
+      border-color: rgba(208, 161, 51, 0.95);
+      color: #fff8dd;
+      transform: translateY(-1px);
+    }
+
+    .reset-btn:focus-visible {
+      outline: 2px solid rgba(208, 161, 51, 0.95);
+      outline-offset: 1px;
+    }
+
+    .clan-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .clan-card {
+      border: 1px solid rgba(91, 106, 59, 0.85);
+      border-radius: 9px;
+      background: rgba(15, 20, 12, 0.5);
+      padding: 12px;
+      display: grid;
+      gap: 8px;
+      cursor: pointer;
+      transition: border-color 0.18s ease, box-shadow 0.18s ease, transform 0.22s ease, opacity 0.22s ease;
+    }
+
+    .clan-card > * {
+      transition: font-size 0.22s ease, line-height 0.22s ease, width 0.22s ease, height 0.22s ease;
+    }
+
+    .clan-card:hover {
+      border-color: rgba(208, 161, 51, 0.8);
+      transform: translateY(-1px);
+      box-shadow: inset 0 0 0 1px rgba(208, 161, 51, 0.2);
+    }
+
+    .clan-card:focus-visible {
+      outline: 2px solid rgba(208, 161, 51, 0.95);
+      outline-offset: 1px;
+    }
+
+    .clan-card.is-selected {
+      border-color: rgba(208, 161, 51, 0.95);
+      box-shadow:
+        inset 0 0 0 1px rgba(208, 161, 51, 0.34),
+        0 0 14px rgba(208, 161, 51, 0.2);
+      background: linear-gradient(155deg, rgba(30, 39, 22, 0.86), rgba(66, 45, 24, 0.6));
+    }
+
+    .clan-grid.is-locked .clan-card:not(.is-selected) {
+      opacity: 0;
+      transform: scale(0.9);
+      pointer-events: none;
+    }
+
+    .clan-grid.is-locked .clan-card.is-selected {
+      position: absolute;
+      inset: 0;
+      z-index: 2;
+      padding: 16px;
+      overflow: auto;
+      transform: scale(1);
+      animation: pop-selected 0.24s ease;
+    }
+
+    .clan-grid.is-locked .clan-card.is-selected .clan-icon {
+      position: absolute;
+      left: 16px;
+      top: 16px;
+      width: 264px;
+      height: 264px;
+    }
+
+    .clan-grid.is-locked .clan-card.is-selected > :not(.clan-icon) {
+      margin-left: 284px;
+      width: calc(100% - 284px);
+      font-size: 1.24rem;
+    }
+
+    .clan-grid.is-locked .clan-card.is-selected .clan-name {
+      font-size: 2.06rem;
+      line-height: 1.15;
+    }
+
+    .clan-grid.is-locked .clan-card.is-selected .clan-quote {
+      font-size: 1.72rem;
+      line-height: 1.28;
+    }
+
+    .clan-grid.is-locked .clan-card.is-selected .block-title {
+      font-size: 1.42rem;
+      line-height: 1.25;
+    }
+
+    .clan-grid.is-locked .clan-card.is-selected .block-text {
+      font-size: 1.28rem;
+      line-height: 1.52;
+    }
+
+    .clan-icon {
+      width: 88px;
+      height: 88px;
+      object-fit: contain;
+      border: 1px solid rgba(91, 106, 59, 0.9);
+      border-radius: 8px;
+      background: rgba(10, 14, 9, 0.7);
+      padding: 8px;
+    }
+
+    .clan-name {
+      margin: 0;
+      font-size: 1.18rem;
+      color: #f2f4ea;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .clan-quote {
+      margin: 0;
+      color: #f1e3bc;
+      font-style: italic;
+      font-weight: 700;
+    }
+
+    .block-title {
+      margin: 0;
+      color: #f2f4ea;
+      font-weight: 700;
+    }
+
+    .block-text {
+      margin: 0;
+      color: #dce0cf;
+      line-height: 1.4;
+      white-space: pre-line;
+    }
+
+    @keyframes pop-selected {
+      from {
+        transform: scale(0.98);
+        opacity: 0.86;
+      }
+      to {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+
+    @media (max-width: 980px) {
+      .page-shell {
+        grid-template-columns: 1fr;
+        gap: 10px;
+      }
+
+      .side-nav {
+        justify-content: stretch;
+      }
+
+      .side-nav-btn {
+        width: 100%;
+      }
+
+      .side-nav-left {
+        order: 1;
+      }
+
+      .box {
+        order: 2;
+      }
+
+      .side-nav-right {
+        order: 3;
+      }
+    }
+
+    @media (max-width: 900px) {
+      .clan-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .clan-grid.is-locked .clan-card.is-selected {
+        padding: 14px;
+      }
+
+      .clan-grid.is-locked .clan-card.is-selected .clan-icon {
+        position: static;
+        display: block;
+        width: 198px;
+        height: 198px;
+        margin: 0 auto 8px;
+      }
+
+      .clan-grid.is-locked .clan-card.is-selected > :not(.clan-icon) {
+        margin-left: 0;
+        width: 100%;
+      }
+
+      .clan-grid.is-locked .clan-card.is-selected .clan-quote {
+        font-size: 1.42rem;
+      }
+
+      .clan-grid.is-locked .clan-card.is-selected .block-title {
+        font-size: 1.22rem;
+      }
+
+      .clan-grid.is-locked .clan-card.is-selected .block-text {
+        font-size: 1.12rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page-shell">
+    <aside class="side-nav side-nav-left" aria-label="Назад">
+      <a class="side-nav-btn" href="./strenghts.html">Бырее взад!</a>
+    </aside>
+
+    <main class="box">
+      <h1>Выбирай клан пацана</h1>
+      <p class="intro">Клик по карточке фиксирует выбор.</p>
+      <p class="status" id="clan-status" aria-live="polite">Пацан пока без клана.</p>
+      <div class="action-row">
+        <button type="button" class="reset-btn" id="clan-reset-btn" hidden>Не, чёта чмошна</button>
+      </div>
+
+      <section class="clan-grid" id="clan-grid" aria-label="Список кланов">
+        <article
+          class="clan-card"
+          tabindex="0"
+          data-clan="goff"
+          data-label="ГОФФЫ"
+          data-bonus="+1 к СИЛИЩЕ в ближнем бою против врагов меньше размером."
+          data-passive="Если ты первым врываешься в махач, твоя первая атака получает +1 урон.">
+          <img class="clan-icon" src="./Goff.webp" alt="Иконка клана ГОФФЫ">
+          <h2 class="clan-name">ГОФФЫ</h2>
+          <p class="clan-quote">«БИТЬ — ЭТА ЛУДШАЯ ХИТРАСТЬ»</p>
+          <p class="block-title">Бонус:</p>
+          <p class="block-text">+1 к СИЛИЩЕ в ближнем бою против врагов меньше размером</p>
+          <p class="block-title">Пассивка:</p>
+          <p class="block-text">Если ты первым врываешься в махач, твоя первая атака получает +1 урон</p>
+          <p class="block-title">Игровой стиль:</p>
+          <p class="block-text">ломать лица
+идти первым
+не останавливаться</p>
+        </article>
+
+        <article
+          class="clan-card"
+          tabindex="0"
+          data-clan="sunz"
+          data-label="ЗЛЫИ СОНЦА"
+          data-bonus="+1 к ХИТРОСТИ в погонях, вождении и резких манёврах."
+          data-passive="В начале боя можешь сделать дополнительное перемещение.">
+          <img class="clan-icon" src="./Evil-Sunz.webp" alt="Иконка клана ЗЛЫИ СОНЦА">
+          <h2 class="clan-name">ЗЛЫИ СОНЦА</h2>
+          <p class="clan-quote">«ЧЕМ БЫРЕЕ, ТЕМА ВЕСЕЛЕЯ»</p>
+          <p class="block-title">Бонус:</p>
+          <p class="block-text">+1 к ХИТРОСТИ в погонях, вождении и резких манёврах</p>
+          <p class="block-title">Пассивка:</p>
+          <p class="block-text">В начале боя можешь сделать дополнительное перемещение</p>
+          <p class="block-title">Игровой стиль:</p>
+          <p class="block-text">двигаться всегда
+давить мелозгу
+врываться и уходить</p>
+        </article>
+
+        <article
+          class="clan-card"
+          tabindex="0"
+          data-clan="deathskulls"
+          data-label="СМЕРТАЧИРЕПА"
+          data-bonus="+1 к ГРАААА! когда полагаешься на удачу, юзаешь странную штуку и действуешь «на авось»."
+          data-passive="Один раз за сцену можешь перебросить любой куб.">
+          <img class="clan-icon" src="./deathskulls.png" alt="Иконка клана СМЕРТАЧИРЕПА">
+          <h2 class="clan-name">СМЕРТАЧИРЕПА</h2>
+          <p class="clan-quote">«ЕСЛИ НАШЁЛ — НАЧИТ МАЁ»</p>
+          <p class="block-title">Бонус:</p>
+          <p class="block-text">+1 к ГРАААА! когда полагаешься на удачу, юзаешь странную штуку и действуешь «на авось»</p>
+          <p class="block-title">Пассивка:</p>
+          <p class="block-text">Один раз за сцену можешь перебросить любой куб</p>
+          <p class="block-title">Игровой стиль:</p>
+          <p class="block-text">воровать всё
+надеяться на фарт
+нажимать подозрительные кнопки</p>
+        </article>
+
+        <article
+          class="clan-card"
+          tabindex="0"
+          data-clan="moons"
+          data-label="ПЛАХИЕ ЛУНЫ"
+          data-bonus="+1 к БАХАЛУ при стрельбе из тяжёлого и прокаченного оружия."
+          data-passive="В конце боя получи 2 Жуба дополнительно.">
+          <img class="clan-icon" src="./bad-moons.png" alt="Иконка клана ПЛАХИЕ ЛУНЫ">
+          <h2 class="clan-name">ПЛАХИЕ ЛУНЫ</h2>
+          <p class="clan-quote">«БАХАЛА МНОГА НЕ БЫВАИТ»</p>
+          <p class="block-title">Бонус:</p>
+          <p class="block-text">+1 к БАХАЛУ при стрельбе из тяжёлого и прокаченного оружия</p>
+          <p class="block-title">Пассивка:</p>
+          <p class="block-text">В конце боя получи 2 Жуба дополнительно</p>
+          <p class="block-title">Игровой стиль:</p>
+          <p class="block-text">стрелять больше всех
+тратить больше всех
+выглядеть как «настоящий пацан»</p>
+        </article>
+      </section>
+    </main>
+
+    <aside class="side-nav side-nav-right" aria-label="Готово">
+      <a class="side-nav-btn" href="./boyz.html" id="clan-ready-btn">Пацан гатов</a>
+    </aside>
+  </div>
+
+  <script src="./clan.js" defer></script>
+</body>
+</html>

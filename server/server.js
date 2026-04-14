@@ -13,6 +13,10 @@ const { initKnowledgeCollection } = require('./lib/knowledge');
 
 const app = express();
 const port = process.env.PORT || 3000;
+const allowStartWithoutMysql = ['1', 'true', 'yes', 'on'].includes(
+  String(process.env.ALLOW_START_WITHOUT_MYSQL || '').trim().toLowerCase(),
+);
+let mysqlReady = false;
 
 app.use(helmet());
 app.use(cors());
@@ -27,6 +31,10 @@ if (typeof statusRouter === 'function') {
   app.use('/api/status', statusRouter);
 }
 
+app.use('/api/auth', (req, res, next) => {
+  if (mysqlReady) return next();
+  return res.status(503).json({ error: 'auth is unavailable: mysql is not connected' });
+});
 app.use('/api/auth', authRouter);
 app.use('/api/knowledge', knowledgeRouter);
 
@@ -39,9 +47,19 @@ app.use((err, req, res, next) => {
 
 (async () => {
   try {
-    await mysql.connect();
-    await mysql.initSchema();
-    console.log(`MySQL connected: ${process.env.MYSQL_DATABASE || 'necropunk'} (users only)`);
+    try {
+      await mysql.connect();
+      await mysql.initSchema();
+      mysqlReady = true;
+      console.log(`MySQL connected: ${process.env.MYSQL_DATABASE || 'necropunk'} (users only)`);
+    } catch (dbError) {
+      if (!allowStartWithoutMysql) {
+        throw dbError;
+      }
+      mysqlReady = false;
+      console.warn('MySQL unavailable, starting in limited mode (knowledge + static only).');
+      console.warn(dbError && dbError.message ? dbError.message : dbError);
+    }
 
     const initResult = await initKnowledgeCollection();
     console.log(`Knowledge loaded from JSON: ${initResult.count} item(s)`);

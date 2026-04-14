@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Генерим себе пацана</title>
+  <style>
+    :root {
+      --bg: #0f130c;
+      --bg-mid: #1a2114;
+      --panel: rgba(42, 51, 33, 0.93);
+      --line: #5b6a3b;
+      --text: #e8eadf;
+      --muted: #b7bea2;
+      --accent: #73923d;
+      --accent-strong: #d0a133;
+      --rust: #7a4a2b;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at 12% 0%, rgba(126, 151, 71, 0.22) 0%, rgba(16, 20, 12, 0) 45%),
+        radial-gradient(circle at 88% 100%, rgba(143, 76, 36, 0.2) 0%, rgba(16, 20, 12, 0) 50%),
+        linear-gradient(140deg, #0d120b 0%, var(--bg-mid) 52%, #11140d 100%);
+      color: var(--text);
+      font-family: "Roboto Slab", serif;
+      padding: 28px 16px;
+      display: grid;
+      place-items: center;
+    }
+
+    .page-shell {
+      width: min(1480px, 100%);
+      display: grid;
+      grid-template-columns: 172px minmax(0, 1120px) 172px;
+      gap: 14px;
+      align-items: center;
+    }
+
+    .side-nav {
+      display: flex;
+      justify-content: center;
+    }
+
+    .side-nav-btn {
+      width: 164px;
+      min-height: 52px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      border: 1px solid rgba(115, 146, 61, 0.95);
+      border-radius: 8px;
+      padding: 8px 10px;
+      background: linear-gradient(165deg, rgba(30, 39, 22, 0.9), rgba(59, 42, 25, 0.6));
+      color: #edf0e3;
+      text-decoration: none;
+      font: inherit;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      cursor: pointer;
+      transition: border-color 0.18s ease, color 0.18s ease, transform 0.12s ease;
+    }
+
+    .side-nav-btn:hover {
+      border-color: rgba(208, 161, 51, 0.95);
+      color: #fff8dd;
+      transform: translateY(-1px);
+    }
+
+    .side-nav-btn:focus-visible {
+      outline: 2px solid rgba(208, 161, 51, 0.95);
+      outline-offset: 1px;
+    }
+
+    .panel {
+      width: min(1120px, 100%);
+      background:
+        linear-gradient(145deg, rgba(53, 66, 41, 0.94) 0%, rgba(31, 35, 24, 0.95) 58%, rgba(48, 38, 25, 0.92) 100%);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 24px;
+      box-shadow:
+        0 14px 36px rgba(0, 0, 0, 0.45),
+        inset 0 0 0 1px rgba(145, 111, 50, 0.17);
+    }
+
+    h1 {
+      margin: 0 0 10px;
+      font-family: "Playfair Display", serif;
+      font-size: clamp(1.75rem, 4vw, 2.4rem);
+      text-align: center;
+      color: #eceee2;
+      text-shadow: 0 1px 0 #26291f;
+    }
+
+    .lead {
+      margin: 0 0 14px;
+      text-align: center;
+      color: var(--muted);
+    }
+
+    .full-name-box {
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 12px 14px;
+      background: linear-gradient(170deg, rgba(28, 34, 22, 0.82), rgba(53, 39, 26, 0.7));
+      margin-bottom: 14px;
+      text-align: center;
+      box-shadow: inset 0 0 0 1px rgba(126, 151, 71, 0.13);
+    }
+
+    .full-name-label {
+      margin: 0 0 4px;
+      color: var(--muted);
+      font-size: 0.94rem;
+      letter-spacing: 0.02em;
+    }
+
+    .full-name-value {
+      margin: 0;
+      color: #f4f6ed;
+      font-size: clamp(1.02rem, 2.2vw, 1.28rem);
+      font-weight: 700;
+      line-height: 1.35;
+    }
+
+    .generators {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
+    .generator {
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 12px;
+      background: linear-gradient(160deg, rgba(27, 33, 21, 0.78), rgba(22, 21, 16, 0.72));
+      display: grid;
+      gap: 8px;
+      align-content: start;
+      box-shadow: inset 0 0 0 1px rgba(115, 146, 61, 0.08);
+    }
+
+    .generator h2 {
+      margin: 0;
+      font-size: 1.04rem;
+      font-weight: 700;
+      text-align: center;
+    }
+
+    .roll-meta {
+      margin: 0;
+      text-align: center;
+      font-size: 0.9rem;
+      color: var(--muted);
+    }
+
+    .roll-value {
+      font-weight: 700;
+      color: #eef0e4;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .mini-reel {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: rgba(14, 17, 12, 0.72);
+      padding: 8px;
+      display: grid;
+      gap: 6px;
+      min-height: 124px;
+      overflow: hidden;
+      position: relative;
+      cursor: pointer;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .mini-reel:hover {
+      border-color: rgba(208, 161, 51, 0.76);
+      box-shadow: inset 0 0 0 1px rgba(208, 161, 51, 0.24);
+    }
+
+    .mini-reel:focus-visible {
+      outline: 2px solid rgba(208, 161, 51, 0.88);
+      outline-offset: 1px;
+    }
+
+    .lane {
+      border: 1px solid #444f31;
+      background: linear-gradient(170deg, #20261a, #1a1f16);
+      border-radius: 6px;
+      padding: 7px 8px;
+      min-height: 31px;
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      transition: transform 0.2s ease, opacity 0.2s ease, filter 0.2s ease;
+    }
+
+    .lane-prev,
+    .lane-next {
+      opacity: 0.4;
+      transform: scale(0.93);
+      filter: saturate(0.65) brightness(0.85);
+      pointer-events: none;
+    }
+
+    .lane-current {
+      border-color: rgba(208, 161, 51, 0.8);
+      background: linear-gradient(165deg, rgba(115, 146, 61, 0.28), rgba(93, 62, 33, 0.3));
+      color: #f6f7ef;
+      font-weight: 700;
+      position: relative;
+      z-index: 2;
+      box-shadow:
+        inset 0 0 0 1px rgba(208, 161, 51, 0.34),
+        0 0 12px rgba(208, 161, 51, 0.18);
+    }
+
+    .mini-reel.is-rolling .lane-current {
+      animation: pulse-current 0.15s linear infinite alternate;
+    }
+
+    .mini-reel.is-rolling {
+      cursor: progress;
+    }
+
+    .slot-code {
+      color: var(--accent-strong);
+      font-variant-numeric: tabular-nums;
+      font-weight: 700;
+      min-width: 22px;
+    }
+
+    .slot-text {
+      min-width: 0;
+      word-break: break-word;
+      overflow-wrap: anywhere;
+    }
+
+    @keyframes pulse-current {
+      from {
+        transform: scale(0.98);
+      }
+      to {
+        transform: scale(1);
+      }
+    }
+
+    @media (max-width: 980px) {
+      .page-shell {
+        grid-template-columns: 1fr;
+        gap: 10px;
+      }
+
+      .side-nav {
+        justify-content: stretch;
+      }
+
+      .side-nav-btn {
+        width: 100%;
+      }
+
+      .side-nav-left {
+        order: 1;
+      }
+
+      .panel {
+        order: 2;
+      }
+
+      .side-nav-right {
+        order: 3;
+      }
+
+      .panel {
+        padding: 18px;
+      }
+
+      .generators {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 680px) {
+      .generators {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page-shell">
+    <aside class="side-nav side-nav-left" aria-label="Назад">
+      <a class="side-nav-btn" href="../../index.html">Быра взад!</a>
+    </aside>
+
+    <main class="panel">
+      <h1>Генерим себе пацана</h1>
+      <p class="lead">Три броска d66, собираем настоящее орочье погоняло.</p>
+
+      <section class="full-name-box" aria-live="polite">
+        <p class="full-name-label">Что вышло у игрока</p>
+        <p class="full-name-value" id="full-name">Имя "Кликуха", Откуда</p>
+      </section>
+
+      <section class="generators">
+        <article class="generator">
+          <h2>Имя</h2>
+          <p class="roll-meta">Бросок d66: <span class="roll-value" data-roll="name">--</span></p>
+          <div class="mini-reel" data-reel="name" role="button" tabindex="0" aria-label="Сгенерить имя">
+            <div class="lane lane-prev" data-slot="prev">Предыдущий вариант</div>
+            <div class="lane lane-current" data-slot="current">Кликни по барабану</div>
+            <div class="lane lane-next" data-slot="next">Следующий вариант</div>
+          </div>
+        </article>
+
+        <article class="generator">
+          <h2>Кликуха</h2>
+          <p class="roll-meta">Бросок d66: <span class="roll-value" data-roll="nickname">--</span></p>
+          <div class="mini-reel" data-reel="nickname" role="button" tabindex="0" aria-label="Сгенерить кликуху">
+            <div class="lane lane-prev" data-slot="prev">Предыдущий вариант</div>
+            <div class="lane lane-current" data-slot="current">Кликни по барабану</div>
+            <div class="lane lane-next" data-slot="next">Следующий вариант</div>
+          </div>
+        </article>
+
+        <article class="generator">
+          <h2>Откуда</h2>
+          <p class="roll-meta">Бросок d66: <span class="roll-value" data-roll="origin">--</span></p>
+          <div class="mini-reel" data-reel="origin" role="button" tabindex="0" aria-label="Сгенерить откуда">
+            <div class="lane lane-prev" data-slot="prev">Предыдущий вариант</div>
+            <div class="lane lane-current" data-slot="current">Кликни по барабану</div>
+            <div class="lane lane-next" data-slot="next">Следующий вариант</div>
+          </div>
+        </article>
+      </section>
+    </main>
+
+    <aside class="side-nav side-nav-right" aria-label="Дальше">
+      <a class="side-nav-btn" href="./strengths.html">Рвём дальше!</a>
+    </aside>
+  </div>
+
+  <script src="./index.js" defer></script>
+</body>
+</html>

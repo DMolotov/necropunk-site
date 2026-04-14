@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>В чёма ты силён?</title>
+  <style>
+    :root {
+      --bg: #0f130c;
+      --bg-mid: #1a2114;
+      --line: #5b6a3b;
+      --text: #e8eadf;
+      --muted: #b7bea2;
+      --accent: #73923d;
+      --accent-strong: #d0a133;
+      --danger: #b85a44;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      background:
+        radial-gradient(circle at 12% 0%, rgba(126, 151, 71, 0.22) 0%, rgba(16, 20, 12, 0) 45%),
+        radial-gradient(circle at 88% 100%, rgba(143, 76, 36, 0.2) 0%, rgba(16, 20, 12, 0) 50%),
+        linear-gradient(140deg, #0d120b 0%, var(--bg-mid) 52%, #11140d 100%);
+      color: var(--text);
+      font-family: "Roboto Slab", serif;
+      padding: 24px;
+    }
+
+    .page-shell {
+      width: min(1480px, 100%);
+      display: grid;
+      grid-template-columns: 172px minmax(0, 980px) 172px;
+      gap: 14px;
+      align-items: center;
+    }
+
+    .side-nav {
+      display: flex;
+      justify-content: center;
+    }
+
+    .side-nav-btn {
+      width: 164px;
+      min-height: 52px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      border: 1px solid rgba(115, 146, 61, 0.95);
+      border-radius: 8px;
+      padding: 8px 10px;
+      background: linear-gradient(165deg, rgba(30, 39, 22, 0.9), rgba(59, 42, 25, 0.6));
+      color: #edf0e3;
+      text-decoration: none;
+      font: inherit;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      cursor: pointer;
+      transition: border-color 0.18s ease, color 0.18s ease, transform 0.12s ease;
+    }
+
+    .side-nav-btn:hover {
+      border-color: rgba(208, 161, 51, 0.95);
+      color: #fff8dd;
+      transform: translateY(-1px);
+    }
+
+    .side-nav-btn:focus-visible {
+      outline: 2px solid rgba(208, 161, 51, 0.95);
+      outline-offset: 1px;
+    }
+
+    .box {
+      width: min(980px, 100%);
+      border: 1px solid var(--line);
+      background:
+        linear-gradient(145deg, rgba(53, 66, 41, 0.94) 0%, rgba(31, 35, 24, 0.95) 58%, rgba(48, 38, 25, 0.92) 100%);
+      border-radius: 10px;
+      padding: 22px;
+      box-shadow:
+        0 14px 36px rgba(0, 0, 0, 0.45),
+        inset 0 0 0 1px rgba(145, 111, 50, 0.17);
+    }
+
+    h1 {
+      margin: 0 0 8px;
+      text-align: center;
+      font-family: "Playfair Display", serif;
+      color: #eceee2;
+      text-shadow: 0 1px 0 #26291f;
+      font-size: clamp(1.6rem, 3.7vw, 2.2rem);
+    }
+
+    .intro {
+      margin: 0 0 12px;
+      text-align: center;
+      color: var(--muted);
+      line-height: 1.45;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 278px minmax(0, 1fr);
+      gap: 12px;
+      align-items: start;
+    }
+
+    .hp-panel {
+      border: 1px solid rgba(91, 106, 59, 0.9);
+      border-radius: 8px;
+      background: rgba(16, 21, 13, 0.62);
+      padding: 12px;
+      box-shadow: inset 0 0 0 1px rgba(115, 146, 61, 0.12);
+      transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+    }
+
+    .hp-title {
+      margin: 0 0 6px;
+      font-size: 1.14rem;
+      color: #f3f4ee;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .hp-formula {
+      margin: 0 0 8px;
+      color: var(--muted);
+      font-size: 0.86rem;
+    }
+
+    .hp-formula span {
+      border-bottom: 1px dotted rgba(208, 161, 51, 0.82);
+      cursor: help;
+    }
+
+    .hp-emblem-wrap {
+      border: 1px solid rgba(91, 106, 59, 0.82);
+      border-radius: 8px;
+      background: linear-gradient(165deg, rgba(30, 39, 22, 0.85), rgba(59, 42, 25, 0.55));
+      padding: 10px;
+      margin-bottom: 10px;
+      text-align: center;
+    }
+
+    .hp-emblem {
+      width: 110px;
+      height: 110px;
+      margin: 0 auto 8px;
+      border: 1px solid rgba(91, 106, 59, 0.9);
+      border-radius: 10px;
+      background: rgba(13, 18, 11, 0.74);
+      display: grid;
+      place-items: center;
+      box-shadow: inset 0 0 0 1px rgba(91, 106, 59, 0.25);
+      transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
+    }
+
+    .hp-emblem img {
+      width: 80px;
+      height: 80px;
+      display: block;
+      object-fit: contain;
+      filter: grayscale(0.12) contrast(1.06);
+    }
+
+    .hp-number {
+      margin: 0;
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: #f2f4ea;
+    }
+
+    .hp-rank {
+      margin: 4px 0 0;
+      font-size: 0.9rem;
+      color: var(--muted);
+    }
+
+    .hp-panel[data-tier="unknown"] .hp-emblem {
+      filter: grayscale(0.7);
+      opacity: 0.72;
+    }
+
+    .hp-panel[data-tier="6"] .hp-emblem {
+      transform: scale(0.96);
+      box-shadow: inset 0 0 0 1px rgba(115, 146, 61, 0.25);
+    }
+
+    .hp-panel[data-tier="7"] .hp-emblem {
+      transform: scale(1);
+      box-shadow: inset 0 0 0 1px rgba(115, 146, 61, 0.3), 0 0 12px rgba(115, 146, 61, 0.16);
+    }
+
+    .hp-panel[data-tier="8"] .hp-emblem {
+      transform: scale(1.03);
+      box-shadow: inset 0 0 0 1px rgba(208, 161, 51, 0.3), 0 0 14px rgba(208, 161, 51, 0.2);
+    }
+
+    .hp-panel[data-tier="9"] .hp-emblem {
+      transform: scale(1.06);
+      box-shadow: inset 0 0 0 1px rgba(208, 161, 51, 0.4), 0 0 18px rgba(208, 161, 51, 0.35);
+      filter: saturate(1.15);
+    }
+
+    .stats-panel {
+      min-width: 0;
+    }
+
+    .status {
+      margin: 0 0 14px;
+      border: 1px solid rgba(91, 106, 59, 0.9);
+      border-radius: 8px;
+      background: rgba(18, 24, 14, 0.56);
+      padding: 10px 12px;
+      text-align: center;
+      font-size: 0.96rem;
+      color: #e3e6d8;
+    }
+
+    .status[data-tone="ok"] {
+      border-color: rgba(115, 146, 61, 0.95);
+      color: #f1f3e9;
+    }
+
+    .status[data-tone="warn"] {
+      border-color: rgba(184, 90, 68, 0.95);
+      color: #f1dbd5;
+    }
+
+    .stat-list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .stat-row {
+      border: 1px solid rgba(91, 106, 59, 0.85);
+      border-radius: 8px;
+      background: rgba(15, 20, 12, 0.45);
+      padding: 10px 12px;
+      display: grid;
+      grid-template-columns: minmax(168px, 220px) minmax(0, 1fr);
+      gap: 10px 12px;
+      align-items: center;
+    }
+
+    .stat-name {
+      position: relative;
+      font-weight: 700;
+      letter-spacing: 0.03em;
+      cursor: help;
+      color: #f2f4ea;
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      width: fit-content;
+      line-height: 1.3;
+    }
+
+    .stat-name::after {
+      content: attr(data-tooltip);
+      position: absolute;
+      left: 0;
+      top: calc(100% + 7px);
+      min-width: 220px;
+      max-width: 360px;
+      padding: 8px 9px;
+      border: 1px solid rgba(115, 146, 61, 0.85);
+      border-radius: 7px;
+      background: rgba(14, 19, 12, 0.96);
+      color: #e8eadf;
+      font-weight: 400;
+      font-size: 0.9rem;
+      letter-spacing: 0;
+      opacity: 0;
+      transform: translateY(-2px);
+      pointer-events: none;
+      transition: opacity 0.18s ease, transform 0.18s ease;
+      z-index: 10;
+    }
+
+    .stat-name:hover::after,
+    .stat-name:focus-visible::after {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .dot-track {
+      display: grid;
+      grid-template-columns: repeat(7, minmax(0, 1fr));
+      gap: 8px;
+      width: 100%;
+    }
+
+    .stat-dot {
+      position: relative;
+      min-height: 41px;
+      border-radius: 999px;
+      border: 1px solid rgba(112, 128, 80, 0.95);
+      background: rgba(20, 26, 16, 0.9);
+      color: #d8dccb;
+      font: inherit;
+      font-size: 0.84rem;
+      cursor: pointer;
+      transition: transform 0.12s ease, border-color 0.18s ease, background 0.18s ease, opacity 0.18s ease;
+      overflow: hidden;
+    }
+
+    .stat-dot:hover {
+      transform: translateY(-1px);
+      border-color: rgba(208, 161, 51, 0.95);
+      background: rgba(42, 52, 29, 0.95);
+    }
+
+    .stat-dot:focus-visible {
+      outline: 2px solid rgba(208, 161, 51, 0.95);
+      outline-offset: 1px;
+    }
+
+    .stat-dot.is-filled {
+      border-color: rgba(208, 161, 51, 0.95);
+      background: #dedbc8;
+      color: transparent;
+      box-shadow: inset 0 0 0 1px rgba(208, 161, 51, 0.23);
+    }
+
+    .stat-dot.is-filled::after {
+      content: "";
+      position: absolute;
+      inset: 5px;
+      background-image: url("./ork-face.webp");
+      background-repeat: no-repeat;
+      background-size: contain;
+      background-position: center;
+      mix-blend-mode: multiply;
+      opacity: 0.96;
+    }
+
+    .stat-dot.is-blocked {
+      border-color: rgba(184, 90, 68, 0.8);
+      color: rgba(230, 200, 194, 0.9);
+      background: rgba(20, 26, 16, 0.9);
+    }
+
+    .stat-dot.is-overcap {
+      border-style: dashed;
+      border-color: rgba(112, 128, 80, 0.5);
+      color: rgba(183, 190, 162, 0.56);
+      background: rgba(18, 23, 15, 0.45);
+    }
+
+    .legend {
+      margin: 12px 0 0;
+      color: var(--muted);
+      font-size: 0.9rem;
+      text-align: center;
+    }
+
+    @media (max-width: 840px) {
+      .page-shell {
+        grid-template-columns: 1fr;
+        gap: 10px;
+      }
+
+      .side-nav {
+        justify-content: stretch;
+      }
+
+      .side-nav-btn {
+        width: 100%;
+      }
+
+      .side-nav-left {
+        order: 1;
+      }
+
+      .box {
+        order: 2;
+      }
+
+      .side-nav-right {
+        order: 3;
+      }
+
+      .layout {
+        grid-template-columns: 1fr;
+      }
+
+      .stat-row {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page-shell">
+    <aside class="side-nav side-nav-left" aria-label="Назад">
+      <a class="side-nav-btn" href="./index.html">Быра взад!</a>
+    </aside>
+
+    <main class="box">
+    <h1>Вчёма пацан силён?</h1>
+    <p class="intro">У каждого Орка есть четыре основные характеристики, определяющие количество d6 в пуле:</p>
+
+    <section class="layout">
+      <aside class="hp-panel" id="hp-panel" data-tier="unknown">
+        <h2 class="hp-title">Хиты</h2>
+        <p class="hp-formula">Равны значению СИЛИЩИ+5.</p>
+        <div class="hp-emblem-wrap">
+          <div class="hp-emblem">
+            <img id="hp-image" src="./ork-face.webp" alt="" aria-hidden="true">
+          </div>
+          <p class="hp-number"><span id="hp-value">Грот знает скока у тебя</span> Хитов</p>
+          <p class="hp-rank" id="hp-rank">Жмакни сперва СИЛИЩУ</p>
+        </div>
+      </aside>
+
+      <section class="stats-panel">
+        <p class="status" id="distribution-status" aria-live="polite" data-tone="neutral">Свободные значения: 4, 3, 2, 1.</p>
+        <section id="stat-list" class="stat-list" aria-label="Характеристики орка"></section>
+        <p class="legend">На старте распредели между статами значения: 4, 3, 2, 1. </p>
+      </section>
+    </section>
+    </main>
+
+    <aside class="side-nav side-nav-right" aria-label="Дальше">
+      <a class="side-nav-btn" href="./clan.html">Рвём дальше!</a>
+    </aside>
+  </div>
+
+  <script src="./strengths.js" defer></script>
+</body>
+</html>

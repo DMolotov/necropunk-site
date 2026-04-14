@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Карточка пацана</title>
+  <style>
+    :root {
+      --bg: #0f130c;
+      --bg-mid: #1a2114;
+      --line: #5b6a3b;
+      --text: #e8eadf;
+      --muted: #b7bea2;
+      --accent: #73923d;
+      --accent-strong: #d0a133;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      background:
+        radial-gradient(circle at 12% 0%, rgba(126, 151, 71, 0.22) 0%, rgba(16, 20, 12, 0) 45%),
+        radial-gradient(circle at 88% 100%, rgba(143, 76, 36, 0.2) 0%, rgba(16, 20, 12, 0) 50%),
+        linear-gradient(140deg, #0d120b 0%, var(--bg-mid) 52%, #11140d 100%);
+      color: var(--text);
+      font-family: "Roboto Slab", serif;
+      padding: 24px;
+    }
+
+    .box {
+      width: min(980px, 100%);
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background:
+        linear-gradient(145deg, rgba(53, 66, 41, 0.94) 0%, rgba(31, 35, 24, 0.95) 58%, rgba(48, 38, 25, 0.92) 100%);
+      box-shadow:
+        0 14px 36px rgba(0, 0, 0, 0.45),
+        inset 0 0 0 1px rgba(145, 111, 50, 0.17);
+      padding: 22px;
+    }
+
+    h1 {
+      margin: 0 0 8px;
+      text-align: center;
+      font-family: "Playfair Display", serif;
+      color: #eceee2;
+      text-shadow: 0 1px 0 #26291f;
+      font-size: clamp(1.6rem, 3.7vw, 2.2rem);
+    }
+
+    .full-name {
+      margin: 0 0 2px;
+      text-align: center;
+      color: #f3f5ea;
+      font-size: clamp(1.15rem, 2.5vw, 1.5rem);
+      font-weight: 700;
+    }
+
+    .origin {
+      margin: 0 0 14px;
+      text-align: center;
+      color: var(--muted);
+    }
+
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .panel {
+      border: 1px solid rgba(91, 106, 59, 0.85);
+      border-radius: 9px;
+      background: rgba(15, 20, 12, 0.5);
+      padding: 12px;
+    }
+
+    .panel h2 {
+      margin: 0 0 8px;
+      color: #f2f4ea;
+      font-size: 1.2rem;
+    }
+
+    .stats {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      display: grid;
+      gap: 6px;
+    }
+
+    .stats li {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      color: #dde1d1;
+    }
+
+    .stats strong {
+      color: #f8efcf;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .hp-wrap {
+      margin-top: 10px;
+      border-top: 1px solid rgba(91, 106, 59, 0.6);
+      padding-top: 10px;
+      display: grid;
+      grid-template-columns: 92px minmax(0, 1fr);
+      gap: 10px;
+      align-items: center;
+    }
+
+    .hp-wrap img {
+      width: 92px;
+      height: 92px;
+      object-fit: contain;
+      border: 1px solid rgba(91, 106, 59, 0.85);
+      border-radius: 8px;
+      background: rgba(10, 14, 9, 0.7);
+      padding: 8px;
+    }
+
+    .hp-main {
+      margin: 0;
+      font-size: 1.1rem;
+      color: #f3f5ea;
+      font-weight: 700;
+    }
+
+    .hp-rank {
+      margin: 4px 0 0;
+      color: var(--muted);
+    }
+
+    .clan-icon {
+      width: 92px;
+      height: 92px;
+      object-fit: contain;
+      border: 1px solid rgba(91, 106, 59, 0.85);
+      border-radius: 8px;
+      background: rgba(10, 14, 9, 0.7);
+      padding: 8px;
+      margin-bottom: 8px;
+    }
+
+    .clan-name {
+      margin: 0 0 6px;
+      font-size: 1.16rem;
+      color: #f2f4ea;
+      text-transform: uppercase;
+    }
+
+    .block-title {
+      margin: 10px 0 4px;
+      color: #f2f4ea;
+      font-weight: 700;
+    }
+
+    .block-text {
+      margin: 0;
+      color: #dce0cf;
+      line-height: 1.4;
+      white-space: pre-line;
+    }
+
+    .top-nav {
+      display: flex;
+      justify-content: flex-start;
+      margin-bottom: 10px;
+    }
+
+    .top-nav a {
+      border: 1px solid rgba(115, 146, 61, 0.95);
+      border-radius: 8px;
+      padding: 8px 12px;
+      background: linear-gradient(165deg, rgba(30, 39, 22, 0.9), rgba(59, 42, 25, 0.6));
+      color: #edf0e3;
+      text-decoration: none;
+      font-weight: 700;
+      transition: border-color 0.18s ease, color 0.18s ease;
+    }
+
+    .top-nav a:hover {
+      border-color: rgba(208, 161, 51, 0.95);
+      color: #fff8dd;
+    }
+
+    @media (max-width: 860px) {
+      .card-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="box">
+    <nav class="top-nav" aria-label="Назад">
+      <a href="./clan.html">Бырее взад!</a>
+    </nav>
+
+    <h1>Карточка пацана</h1>
+    <p class="full-name" id="boyz-full-name">Безымянный "без кликухи"</p>
+    <p class="origin" id="boyz-origin">Откуда-то из WAAAGH!</p>
+
+    <section class="card-grid">
+      <article class="panel">
+        <h2>Статы и Хиты</h2>
+        <ul class="stats">
+          <li><span>СИЛИЩА</span><strong id="stat-might">—</strong></li>
+          <li><span>БАХАЛО</span><strong id="stat-bahalo">—</strong></li>
+          <li><span>ХИТРОСТЬ</span><strong id="stat-cunning">—</strong></li>
+          <li><span>ГРААА!</span><strong id="stat-waagh">—</strong></li>
+        </ul>
+
+        <div class="hp-wrap">
+          <img id="boyz-hp-image" src="./ork-face.webp" alt="Иконка Хитов">
+          <div>
+            <p class="hp-main"><span id="boyz-hits">—</span> Хитов</p>
+            <p class="hp-rank" id="boyz-hp-rank">Характер стойкости не определён</p>
+          </div>
+        </div>
+      </article>
+
+      <article class="panel">
+        <h2>Клан</h2>
+        <img class="clan-icon" id="boyz-clan-icon" src="./ork-face.webp" alt="Иконка клана">
+        <p class="clan-name" id="boyz-clan-name">Клан не выбран</p>
+
+        <p class="block-title">Бонус:</p>
+        <p class="block-text" id="boyz-clan-bonus">—</p>
+
+        <p class="block-title">Пассивка:</p>
+        <p class="block-text" id="boyz-clan-passive">—</p>
+      </article>
+    </section>
+  </main>
+
+  <script src="./boyz.js" defer></script>
+</body>
+</html>
